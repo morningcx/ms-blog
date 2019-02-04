@@ -3365,13 +3365,15 @@
 
     // Emoji graphics files url path
     editormd.emoji     = {
-        path  : "http://www.emoji-cheat-sheet.com/graphics/emojis/",
+        // 修改github emoji表情资源地址
+        path  : "https://raw.githubusercontent.com/WebpageFX/emoji-cheat-sheet.com/master/public/graphics/emojis/",
         ext   : ".png"
     };
 
     // Twitter Emoji (Twemoji)  graphics files url path    
     editormd.twemoji = {
-        path : "http://twemoji.maxcdn.com/36x36/",
+        // 修改twitter emoji表情资源地址
+        path : "https://raw.githubusercontent.com/twitter/twemoji/gh-pages/36x36/",
         ext  : ".png"
     };
 

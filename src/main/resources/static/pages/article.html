@@ -33,7 +33,7 @@
 <body>
 <div id="editormd"></div>
 <!--<button id="update" style="position: fixed; left: 0; top: 0; z-index: 999999">update</button>-->
-<div id="tocContainer" class="markdown-body editormd-preview-container"></div>
+<div id="tocContainer" class="markdown-body editormd-preview-container" hidden></div>
 </body>
 </html>
 
@@ -57,32 +57,33 @@
             data: {id: articleId},
             type: "get",
             success: function (res) {
-                /*editor = editormd("editormd", {
+                editor = editormd("editormd", {
                     path: "../other/editor.md-master/editor.md-master/lib/",
                     width: "100%",
                     height: 700,
+                    emoji: true,
                     markdown: res.content,
                     imageUpload : false, // 禁止本地上传图片
                     // 设置为true会添加一个textarea，里面包含md转化成的html，默认为false
-                    /!*saveHTMLToTextarea: false *!/
-                    /!*theme : "dark",
+                    /*saveHTMLToTextarea: false */
+                    /*theme : "dark",
                     previewTheme : "dark",
-                    editorTheme : "pastel-on-dark"*!/
-                });*/
-                editor = editormd.markdownToHTML("editormd", {
+                    editorTheme : "pastel-on-dark"*/
+                });
+                /*editor = editormd.markdownToHTML("editormd", {
                     markdown: res.content,
                     // 解析html元素，更加灵活但是不安全，默认是关闭的
-                    /*htmlDecode      : "style,script,iframe",*/
+                    /!*htmlDecode      : "style,script,iframe",*!/
                     tocContainer: "#tocContainer", // toc容器
                     codeFold: true, // 每一个标题或者代码行折叠
-                    emoji: true, // 表情图标
+                    emoji: false, // 表情图标
                     tocm: true, // tocm
                     taskList: true, // 任务列表，未完成已完成
                     tex: true,  // 科学公式，默认不解析
                     flowChart: true,  // 流程图，默认不解析
                     sequenceDiagram: true,  // 序列图，默认不解析
-                    /*markdownSourceCode: false*/ // textarea中是否保留md源码，默认就是false
-                });
+                    /!*markdownSourceCode: false*!/ // textarea中是否保留md源码，默认就是false
+                });*/
 
 
             }
