@@ -3984,13 +3984,14 @@
         {
             div.tocContainer = this.markdownToCRenderer(markdownToC, tocContainer, settings.tocDropdown, settings.tocStartLevel);
             
-            if (settings.tocDropdown || div.find("." + this.classPrefix + "toc-menu").length > 0)
+            if (settings.tocDropdown || tocContainer.find("." + this.classPrefix + "toc-menu").length > 0)
             {
-                this.tocDropdownMenu(div, settings.tocTitle);
+                this.tocDropdownMenu(tocContainer, settings.tocTitle);
             }
             
             if (settings.tocContainer !== "")
             {
+                // 因为把toc转移到了tocContainer，所以原div中toc可以删除
                 div.find(".editormd-toc-menu, .editormd-markdown-toc").remove();
             }
         }
