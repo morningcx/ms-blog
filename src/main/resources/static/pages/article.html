@@ -4,10 +4,14 @@
     <meta charset="UTF-8">
     <title>markdown editor</title>
     <link rel="stylesheet" href="../other/editor.md-master/editor.md-master/css/editormd.css">
-    <link rel="stylesheet" href="../other/editor.md-master/editor.md-master/css/editormd.preview.css"/>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
 </head>
 <body>
-</div>
 <div id="editormd">
     <textarea hidden>
 # Editor.md
@@ -403,7 +407,6 @@ Andrew->>China: I am good thanks!
         var editor;
         editor = editormd("editormd", {
             path: "../other/editor.md-master/editor.md-master/lib/",
-            height: 600,
             emoji: true,
             tocm: true,
             codeFold: true, // 每一个标题或者代码行折叠
