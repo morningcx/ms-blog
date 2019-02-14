@@ -13,8 +13,8 @@ a:hover, a:visited, a:link, a:active {
     text-decoration: none;
 }
 
-ul {
-    list-style-type: none;
+.fa {
+    padding-right: 3px;
 }
 
 /*导航*/
@@ -176,7 +176,8 @@ ul {
 }
 
 #main > .left > .introduction {
-    font-size: 15px;
+    font-size: 14px;
+    margin-top: 5px;
 }
 
 #main > .left > .address {
@@ -185,7 +186,11 @@ ul {
     color: #9a9ea3;
 }
 
+#main > .left > .address .fa-map-marker {
+    font-size: 13px;
+}
 
+/*关注按钮*/
 #main > .left > .follow {
     display: inline-block;
     width: 100px;
@@ -231,6 +236,7 @@ ul {
 
 /*链接*/
 #main > .left > .link {
+    list-style-type: none;
     width: 85%;
     margin: 0 auto;
 }
@@ -243,7 +249,7 @@ ul {
 }
 
 #main > .left > .link > li i {
-    color: grey;
+    color: #ef9024;
     font-size: 24px;
 }
 
@@ -256,5 +262,72 @@ ul {
 /*右侧其他信息*/
 #main > .right {
     width: 20%;
-    height: 400px;
 }
+
+#main > .right > div {
+    padding: 15px;
+}
+
+/*热门文章*/
+#main > .right .popular > .title {
+    color: #e84d1c;
+    text-align: center;
+}
+
+#main > .right .popular .content article {
+    overflow: hidden;
+    border-bottom: 1px #e0e0e0 solid;
+    padding: 10px;
+}
+
+#main > .right .popular .content article:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+/*文章标题*/
+#main > .right .popular .content article .title {
+    font-size: 14px;
+    color: #565a5f;
+}
+/*文章信息*/
+#main > .right .popular .content article .info {
+    font-size: 0;/*防止子元素span换行造成的间隔*/
+    color: #9b9b9b;
+    padding: 5px 0 2px 0;
+}
+
+#main > .right .popular .content article .info span {
+    font-size: 13px;
+}
+
+#main > .right .popular .content article .info span:not(:last-of-type):after {
+    content: "·";
+    margin: 0 4px;
+}
+
+/*标签云*/
+#main > .right .tag-cloud .title {
+    text-align: center;
+    margin-bottom: 5px;
+    color: #e84d1c;
+}
+
+#main > .right .tag-cloud .content a {
+    line-height: 23px;
+    color: #777;
+}
+
+#main > .right .tag-cloud .content a:hover /*,
+#main > .right .tag-cloud .content a:visited*/
+{
+    color: #e84d1c;
+}
+
+
+
+
+
+
+
+

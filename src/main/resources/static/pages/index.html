@@ -16,8 +16,10 @@
             <a href="">分类</a>
             <a href="">标签</a>
             <a href="">归档</a>
+            <a href="">项目</a>
             <a href="">关于</a>
-            <input type="text" placeholder="搜索"><i class="fa fa-search"></i>
+            <input type="text" placeholder="搜索">
+            <i class="fa fa-search"></i>
         </nav>
         <nav class="right">
             <a href="" class="write"><i class="pen">✎</i>创作</a>
@@ -30,23 +32,14 @@
     <!--左侧个人信息-->
     <aside class="left">
         <img src="image/ic_launcher.png" class="head-img">
-        <p class="name">晨星 | Ms</p>
-        <p class="introduction">Morning Star</p>
-        <p class="address"><i class="fa fa-map-marker">&nbsp;</i><span>浙江 杭州</span></p>
+        <p class="name">晨星 | MStar</p>
+        <p class="introduction">博客制作ing......</p>
+        <p class="address"><i class="fa fa-map-marker"></i><span>浙江 杭州</span></p>
         <a href="" class="follow">关注</a>
         <div class="profile">
-            <a class="article" href="">
-                <p>96</p>
-                <p>文章</p>
-            </a>
-            <a class="category" href="">
-                <p>12</p>
-                <p>分类</p>
-            </a>
-            <a class="tag" href="">
-                <p>223</p>
-                <p>标签</p>
-            </a>
+            <a class="article" href=""><p>96</p>文章</a>
+            <a class="category" href=""><p>12</p>分类</a>
+            <a class="tag" href=""><p>223</p>标签</a>
         </div>
         <ul class="link">
             <li><a href=""><i class="fa fa-github-alt"></i><!--<br>Github--></a></li>
@@ -57,18 +50,81 @@
     </aside>
     <!--中间内容-->
     <section class="middle">
-        
+
     </section>
     <!--右侧-->
     <aside class="right">
-
+        <div class="popular">
+            <p class="title">热门文章</p>
+            <div class="content">
+                <article>
+                    <p class="title">JAVA高并发修炼手册，高并发的概念</p>
+                    <p class="info">
+                        <span class="author">admin</span>
+                        <span class="date">2019-2-14</span>
+                        <span class="category">java</span>
+                        <span class="views">3786</span>
+                        <!--<i class="fa fa-user"></i><span class="author">admin</span>-->
+                        <!--<i class="fa fa-calendar"></i><time class="date">2019-2-14</time>
+                        <i class="fa fa-folder"></i> <span class="category">java</span>
+                        <i class="fa fa-eye"></i><span class="views">3786</span>-->
+                    </p>
+                </article>
+                <article>
+                    <p class="title">SPRING CLOUD FOR ALIBABA 发布</p>
+                    <p class="info">
+                        <span class="author">xx877699</span>
+                        <span class="date">2019-2-15</span>
+                        <span class="category">SpringBoot</span>
+                        <span class="views">2232</span>
+                    </p>
+                </article>
+                <article>
+                    <p class="title">Java多线程同步中为何使用while循环来调用await()方法</p>
+                    <p class="info">
+                        <span class="author">admin</span>
+                        <span class="date">2019-2-15</span>
+                        <span class="category">多线程</span>
+                        <span class="views">1952</span>
+                    </p>
+                </article>
+            </div>
+        </div>
+        <div class="tag-cloud">
+            <p class="title">标签云</p>
+            <div class="content">
+                <!--<a href="" style="font-size: 10px">java</a>
+                <a href="" style="font-size: 15px">springboot</a>
+                <a href="" style="font-size: 13px">spring</a>
+                <a href="" style="font-size: 18px">mybatis</a>
+                <a href="" style="font-size: 11px">springdata</a>
+                <a href="" style="font-size: 20px">c++</a>
+                <a href="" style="font-size: 12px">c</a>
+                <a href="" style="font-size: 13px">sringcloud</a>
+                <a href="" style="font-size: 12px">springmvc</a>-->
+            </div>
+        </div>
     </aside>
 </main>
 
 
 <!---->
 <footer style="height: 2000px;background: greenyellow;">
-ssssssssssss
+    底部
 </footer>
 </body>
 </html>
+<script src="js/jquery.min.js"></script>
+<script>
+    $(function () {
+        var data = ["JAVA", "SpringBoot", "Spring", "Mybatis", "JPA",
+            "C++", "Python", "SpringCloud", "MVC", "Angular"];
+        var content = $("#main .right .tag-cloud .content");
+        for (var i = 0; i < 100; ++i) {
+            var fontSize = Math.random() * 6 + 10;
+            var fontData = data[Math.floor(Math.random() * 10)];
+            content.append("<a href=\"\" style=\"font-size: " + fontSize + "px\">" + fontData + " </a>");
+        }
+
+    });
+</script>
