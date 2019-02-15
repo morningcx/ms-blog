@@ -1,3 +1,4 @@
+@charset "UTF-8"; /*指定css文件编码，解决伪元素content出现Â乱码*/
 body {
     background: #f5f8f9;
     font-family: "Microsoft Yahei";
@@ -11,10 +12,6 @@ body {
 a:hover, a:visited, a:link, a:active {
     color: #565a5f;
     text-decoration: none;
-}
-
-.fa {
-    padding-right: 3px;
 }
 
 /*导航*/
@@ -249,19 +246,59 @@ a:hover, a:visited, a:link, a:active {
 }
 
 #main > .left > .link > li i {
-    color: #ef9024;
+    /*color: #ef9024;*/
+    color: #898d92;
     font-size: 24px;
 }
 
 /*中间主体*/
 #main > .middle {
     width: 57%;
-    height: 800px;
 }
 
-/*右侧其他信息*/
+/*文章列表*/
+#main > .middle .article-list {
+    color: #565a5f;
+    padding: 0 15px;
+}
+
+#main > .middle .article-list article {
+    border-bottom: 1px #e0e0e0 solid
+}
+
+/*文章标题*/
+#main > .middle .article-list article .title {
+    font-size: 17px;
+    padding: 10px 0;
+}
+
+#main > .middle .article-list article .title:hover {
+    color: #38b7ea;
+    cursor: pointer;
+}
+
+/*文章信息*/
+#main > .middle .article-list article .info {
+    padding: 10px 0;
+    font-size: 15px;
+}
+
+#main > .middle .article-list article .info .fa {
+    color: #898d92;
+}
+
+#main > .middle .article-list article .info a:hover {
+    color: #38b7ea;
+}
+
+#main > .middle .article-list article .info .tags a:before {
+    content: "#";
+}
+
+/*右侧其他信息(热门文章、标签云)*/
 #main > .right {
     width: 20%;
+    padding: 10px 0;
 }
 
 #main > .right > div {
@@ -275,13 +312,14 @@ a:hover, a:visited, a:link, a:active {
 }
 
 #main > .right .popular .content article {
+    transition: opacity .2s;
     overflow: hidden;
     border-bottom: 1px #e0e0e0 solid;
     padding: 10px;
 }
 
 #main > .right .popular .content article:hover {
-    opacity: 0.9;
+    opacity: 0.85;
     cursor: pointer;
 }
 
@@ -290,9 +328,10 @@ a:hover, a:visited, a:link, a:active {
     font-size: 14px;
     color: #565a5f;
 }
+
 /*文章信息*/
 #main > .right .popular .content article .info {
-    font-size: 0;/*防止子元素span换行造成的间隔*/
+    font-size: 0; /*防止子元素span换行造成的间隔*/
     color: #9b9b9b;
     padding: 5px 0 2px 0;
 }
@@ -309,7 +348,7 @@ a:hover, a:visited, a:link, a:active {
 /*标签云*/
 #main > .right .tag-cloud .title {
     text-align: center;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
     color: #e84d1c;
 }
 
