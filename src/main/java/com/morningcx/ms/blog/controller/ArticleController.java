@@ -1,11 +1,11 @@
 package com.morningcx.ms.blog.controller;
 
 import com.morningcx.ms.blog.entity.Article;
+import com.morningcx.ms.blog.entity.User;
 import com.morningcx.ms.blog.jpa.ArticleJpa;
+import com.morningcx.ms.blog.jpa.UserJpa;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +24,12 @@ import java.util.Map;
 @Slf4j
 @RestController
 public class ArticleController {
+
     @Autowired
     private ArticleJpa articleJpa;
+
+    @Autowired
+    private UserJpa userJpa;
 
     @PostMapping("insertArticle")
     public Article insertArticle(Article article) {
@@ -35,8 +39,19 @@ public class ArticleController {
 
     @GetMapping("getArticle")
     public Article getArticle(Integer id) {
-        return articleJpa.findById(id).orElse(null);
+        Article article = articleJpa.findById(id).get();
+        return article;
     }
+
+    @GetMapping("getUser")
+    public User getUser(Integer id) {
+        return userJpa.findById(id).orElse(null);
+    }
+
+    /*@GetMapping("findByAuthor")
+    public List<Article> findByAuthor(Integer author) {
+        return articleJpa.findByAuthor(author);
+    }*/
 
     @PostMapping("updateArticle")
     public Article updateArticle(Article article, String test) {
@@ -74,7 +89,7 @@ public class ArticleController {
      * 上传文件
      * 消费者，媒体类型
      */
-    @PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    /*@PostMapping(value = "/file", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void uploadFile(@RequestParam("file_name") MultipartFile file) throws Exception {
         log.debug(file.getOriginalFilename());
         OutputStream out = new FileOutputStream("target" + File.separator + file.getOriginalFilename());
@@ -90,5 +105,5 @@ public class ArticleController {
         byte[] bytes = new byte[(int) file.length()];
         IOUtils.readFully(is, bytes);
         return bytes;
-    }
+    }*/
 }

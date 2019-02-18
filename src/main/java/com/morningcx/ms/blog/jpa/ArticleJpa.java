@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @date 2019/2/3
  */
 public interface ArticleJpa extends JpaRepository<Article, Integer> {
+
+
 }
