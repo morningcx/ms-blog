@@ -1,11 +1,9 @@
 package com.morningcx.ms.blog.base.exception;
 
+import com.morningcx.ms.blog.base.BasicResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 全局异常处理器
@@ -24,10 +22,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler
     @ResponseStatus
-    public Map<String, Object> exceptionHandler(Exception e) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("code", 500);
-        map.put("msg", e.getMessage());
-        return map;
+    public BasicResult exceptionHandler(Exception e) {
+        return new BasicResult(e);
     }
 }

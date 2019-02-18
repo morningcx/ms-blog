@@ -161,7 +161,7 @@ a:hover, a:visited, a:link, a:active {
 }
 
 #main > .left > .head-img {
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    /*box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);*/
     margin: 20px 0 10px 0;
     width: 128px;
     height: 128px;
@@ -251,6 +251,29 @@ a:hover, a:visited, a:link, a:active {
     font-size: 24px;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*中间主体*/
 #main > .middle {
     width: 57%;
@@ -268,7 +291,7 @@ a:hover, a:visited, a:link, a:active {
 
 /*文章标题*/
 #main > .middle .article-list article .title {
-    font-size: 17px;
+    font-size: 16px;
     padding: 10px 0;
 }
 
@@ -280,7 +303,7 @@ a:hover, a:visited, a:link, a:active {
 /*文章信息*/
 #main > .middle .article-list article .info {
     padding: 10px 0;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 #main > .middle .article-list article .info .fa {
@@ -294,6 +317,30 @@ a:hover, a:visited, a:link, a:active {
 #main > .middle .article-list article .info .tags a:before {
     content: "#";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*右侧其他信息(热门文章、标签云)*/
 #main > .right {

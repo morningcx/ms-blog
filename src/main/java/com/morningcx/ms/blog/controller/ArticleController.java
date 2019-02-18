@@ -1,5 +1,6 @@
 package com.morningcx.ms.blog.controller;
 
+import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.entity.User;
 import com.morningcx.ms.blog.jpa.ArticleJpa;
@@ -45,6 +46,7 @@ public class ArticleController {
 
     @GetMapping("getUser")
     public User getUser(Integer id) {
+        BizException.cause("我测试的");
         return userJpa.findById(id).orElse(null);
     }
 
