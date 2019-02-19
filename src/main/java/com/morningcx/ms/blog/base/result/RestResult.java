@@ -1,4 +1,4 @@
-package com.morningcx.ms.blog.base;
+package com.morningcx.ms.blog.base.result;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * @date 2019/2/18
  */
 @Data
-public class BasicResult<T> {
+public class RestResult {
 
     public static final int SUCCESS = 0;
 
@@ -19,15 +19,15 @@ public class BasicResult<T> {
 
     private String msg;
 
-    private T data;
+    private Object data;
 
-    public BasicResult() {}
+    public RestResult() {}
 
-    public BasicResult(T data) {
+    public RestResult(Object data) {
         this.data = data;
     }
 
-    public BasicResult(Exception e) {
+    public RestResult(Exception e) {
         this.msg = e.getMessage();
         this.code = FAIL;
     }

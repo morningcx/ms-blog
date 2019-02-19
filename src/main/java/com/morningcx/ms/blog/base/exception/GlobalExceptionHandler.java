@@ -1,6 +1,6 @@
 package com.morningcx.ms.blog.base.exception;
 
-import com.morningcx.ms.blog.base.BasicResult;
+import com.morningcx.ms.blog.base.result.RestResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler
     @ResponseStatus
-    public BasicResult exceptionHandler(Exception e) {
-        return new BasicResult(e);
+    public RestResult exceptionHandler(Exception e) {
+        return new RestResult(e);
     }
 }

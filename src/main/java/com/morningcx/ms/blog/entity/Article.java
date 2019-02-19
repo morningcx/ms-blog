@@ -23,20 +23,14 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer author;
+    @Column(name = "author_id")
+    private Integer authorId;
 
     private String title;
 
     private String introduction;
 
-    /**
-     * @Lob 代表是长字段类型，默认的话，是longtext类型，所以需要下面这个属性来指定对应的类型。
-     * columnDefinition="text"里面的类型可以随意改，后面mysql可能会有新的类型，
-     * 只要是对应java的String类型，就可以在这里动态配置。
-     */
-    @Lob
-    @Column(columnDefinition="text")
-    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "content_id")
     private String content;
 
     @Column(name = "create_time")
