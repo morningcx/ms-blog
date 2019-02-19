@@ -1,10 +1,9 @@
 package com.morningcx.ms.blog.controller;
 
-import com.morningcx.ms.blog.base.exception.BizException;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.entity.Article;
-import com.morningcx.ms.blog.entity.User;
-import com.morningcx.ms.blog.jpa.ArticleJpa;
-import com.morningcx.ms.blog.jpa.UserJpa;
+import com.morningcx.ms.blog.mapper.ArticleMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
@@ -16,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,28 +27,31 @@ import java.util.Map;
 public class ArticleController {
 
     @Autowired
-    private ArticleJpa articleJpa;
-
-    @Autowired
-    private UserJpa userJpa;
+    private ArticleMapper articleMapper;
 
     @PostMapping("insertArticle")
     public Article insertArticle(Article article) {
-        articleJpa.save(article);
+        articleMapper.insert(article);
         return article;
+    }
+
+    @GetMapping("getArticlesByCondition")
+    public List<Article> getArticlesByCondition(Article article, Integer curr, Integer size) {
+        //
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>(article);
+        return articleMapper.selectPage(new Page<>(curr, size), queryWrapper).getRecords();
     }
 
     @GetMapping("getArticle")
     public Article getArticle(Integer id) {
-        Article article = articleJpa.findById(id).get();
-        return article;
+        return articleMapper.selectById(id);
     }
 
-    @GetMapping("getUser")
+    /*@GetMapping("getUser")
     public User getUser(Integer id) {
         BizException.cause("我测试的");
-        return userJpa.findById(id).orElse(null);
-    }
+
+    }*/
 
     /*@GetMapping("findByAuthor")
     public List<Article> findByAuthor(Integer author) {
@@ -58,7 +61,8 @@ public class ArticleController {
     @PostMapping("updateArticle")
     public Article updateArticle(Article article, String test) {
         log.info(test);
-        return articleJpa.save(article);
+        articleMapper.updateById(article);
+        return article;
     }
 
     @PostMapping("mdImageUpload")
