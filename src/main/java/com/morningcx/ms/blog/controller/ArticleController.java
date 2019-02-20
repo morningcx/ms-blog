@@ -7,10 +7,7 @@ import com.morningcx.ms.blog.mapper.ArticleMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -30,23 +27,28 @@ public class ArticleController {
     private ArticleMapper articleMapper;
 
     @PostMapping("insertArticle")
-    public Article insertArticle(Article article) {
+    public Article insertArticle(@RequestBody Article article) {
         articleMapper.insert(article);
         return article;
     }
 
     @GetMapping("getArticlesByCondition")
     public List<Article> getArticlesByCondition(Article article, Integer curr, Integer size) {
-        //
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>(article);
-        return articleMapper.selectPage(new Page<>(curr, size), queryWrapper).getRecords();
+        return articleMapper.selectPage(
+                new Page<>(curr == null ? 1 : curr, size == null ? 10 : size),
+                queryWrapper).getRecords();
     }
 
     @GetMapping("getArticle")
-    public Article getArticle(Integer id) {
-        return articleMapper.selectById(id);
+    public List<Article> getArticle(Integer id) {
+        return articleMapper.getAll();
     }
 
+    @PostMapping("deleteArticle")
+    public Integer deleteArticle(Integer id) {
+        return articleMapper.deleteById(id);
+    }
     /*@GetMapping("getUser")
     public User getUser(Integer id) {
         BizException.cause("我测试的");

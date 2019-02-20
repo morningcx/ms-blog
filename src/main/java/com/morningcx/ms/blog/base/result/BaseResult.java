@@ -7,7 +7,7 @@ import lombok.Data;
  * @date 2019/2/18
  */
 @Data
-public class RestResult {
+public class BaseResult {
 
     public static final int SUCCESS = 0;
 
@@ -21,13 +21,13 @@ public class RestResult {
 
     private Object data;
 
-    public RestResult() {}
+    public BaseResult() {}
 
-    public RestResult(Object data) {
+    public BaseResult(Object data) {
         this.data = data;
     }
 
-    public RestResult(Exception e) {
+    public BaseResult(Exception e) {
         this.msg = e.getMessage();
         this.code = FAIL;
     }
