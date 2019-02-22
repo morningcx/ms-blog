@@ -1,16 +1,13 @@
 package com.morningcx.ms.blog.entity;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.SqlCondition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.morningcx.ms.blog.base.result.EnumJSONParser;
-import com.morningcx.ms.blog.entity.enums.StateEnum;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author guochenxiao
@@ -18,35 +15,32 @@ import java.util.Date;
  */
 @Data
 @TableName("t_article")
-@Accessors(chain = true)
 public class Article {
 
     private Integer id;
-
     private Integer authorId;
-
     @TableField(condition = SqlCondition.LIKE)
     private String title;
-
     private String introduction;
-
     private Integer contentId;
-
     private Integer categoryId;
-
     private Date createTime;
-
     private Date updateTime;
-
     private Integer type;
-
     private Integer likes;
-
     private Integer views;
-
-    @JSONField(deserializeUsing = EnumJSONParser.class)
-    private StateEnum state;
-
+    private Integer state;
+    private Integer modifier;
     @TableLogic
     private Integer deleted;
+
+
+    @TableField(exist = false)
+    private User author;
+    @TableField(exist = false)
+    private Content content;
+    @TableField(exist = false)
+    private Category category;
+    @TableField(exist = false)
+    private List<Tag> tags;
 }

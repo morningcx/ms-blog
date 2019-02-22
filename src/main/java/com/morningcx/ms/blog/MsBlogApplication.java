@@ -1,5 +1,6 @@
 package com.morningcx.ms.blog;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.baomidou.mybatisplus.core.injector.ISqlInjector;
@@ -25,6 +26,23 @@ public class MsBlogApplication extends SpringBootServletInitializer {
     }
 
     /**
+     * fast json
+     *
+     * @return
+     */
+    @Bean
+    public HttpMessageConverters fastJsonConfig() {
+        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
+        // 日期格式化，需要PrettyFormat支持
+        fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        converter.setFastJsonConfig(fastJsonConfig);
+        return new HttpMessageConverters(converter);
+    }
+
+
+    /**
      * mybatis-plus分页插件
      */
     @Bean
@@ -34,33 +52,14 @@ public class MsBlogApplication extends SpringBootServletInitializer {
 
     /**
      * mybatis-plus逻辑删除
+     *
      * @return
      */
     @Bean
-    public ISqlInjector sqlInjector(){
+    public ISqlInjector sqlInjector() {
         return new LogicSqlInjector();
     }
 
-    /**
-     * fast json
-     * @return
-     */
-    @Bean
-    public HttpMessageConverters fastJsonConfig(){
-        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
-        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-        /*fastJsonConfig.setSerializerFeatures(
-                // 日期格式化
-                SerializerFeature.PrettyFormat
-                // 枚举类使用toString
-                *//*SerializerFeature.WriteEnumUsingToString,*//*
-                *//*SerializerFeature.WriteEnumUsingName*//*
-        );*/
-        // 日期格式化，需要PrettyFormat支持
-        /*fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");*/
-        converter.setFastJsonConfig(fastJsonConfig);
-        return new HttpMessageConverters(converter);
-    }
 
     /**
      * 打成war包时需要配置继承SpringBootServletInitializer，相当于一个web.xml

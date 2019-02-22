@@ -5,13 +5,12 @@ import lombok.Data;
 
 /**
  * @author guochenxiao
- * @date 2019/2/19
+ * @date 2019/2/21
  */
 @Data
-@TableName("t_content")
-public class Content {
-
+@TableName("t_article_tag")
+public class ArticleTag {
     private Integer id;
-
-    private String content;
+    private Integer articleId;
+    private Integer tagId;
 }

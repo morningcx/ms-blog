@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.mapper.ArticleMapper;
+import com.morningcx.ms.blog.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
@@ -26,10 +27,17 @@ public class ArticleController {
     @Autowired
     private ArticleMapper articleMapper;
 
+    @Autowired
+    private ArticleService articleService;
+
+    @GetMapping("getArticleById")
+    public Article getArticleMetaById(Integer id) {
+        return articleService.getArticleById(id, true, true);
+    }
+
     @PostMapping("insertArticle")
-    public Article insertArticle(@RequestBody Article article) {
-        articleMapper.insert(article);
-        return article;
+    public int insertArticle(Article article) {
+        return articleService.insertArticle(article);
     }
 
     @GetMapping("getArticlesByCondition")
@@ -40,18 +48,13 @@ public class ArticleController {
                 queryWrapper).getRecords();
     }
 
-    @GetMapping("getArticle")
-    public List<Article> getArticle(Integer id) {
-        return articleMapper.getAll();
-    }
-
     @PostMapping("deleteArticle")
     public Integer deleteArticle(Integer id) {
         return articleMapper.deleteById(id);
     }
     /*@GetMapping("getUser")
     public User getUser(Integer id) {
-        BizException.cause("我测试的");
+        BaseException.cause("我测试的");
 
     }*/
 
