@@ -4,7 +4,7 @@ package com.morningcx.ms.blog.base.exception;
 /**
  * 异常类
  *
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/18
  */
 public class BaseException extends RuntimeException {
@@ -24,7 +24,7 @@ public class BaseException extends RuntimeException {
     }
 
     public static void throwIfNull(Object o, String msg) {
-        throwIf(o == null || "".equals(o), msg);
+        throwIf(o == null || "".equals(o.toString().trim()), msg);
     }
 
 }

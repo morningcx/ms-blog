@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
  * fast json 枚举类反序列化解析，前端json可以直接传递中文值(@RequestBody)
  * 实现枚举实例含有EnumDesc注解的反向绑定，更好的配合了mybatis-plus
  *
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/20
  */
 public class EnumJSONParser implements ObjectDeserializer {

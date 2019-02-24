@@ -2,10 +2,11 @@ package com.morningcx.ms.blog.service;
 
 import com.morningcx.ms.blog.base.exception.BaseException;
 import com.morningcx.ms.blog.entity.Article;
-import com.morningcx.ms.blog.entity.Category;
 import com.morningcx.ms.blog.entity.Tag;
-import com.morningcx.ms.blog.entity.User;
-import com.morningcx.ms.blog.mapper.*;
+import com.morningcx.ms.blog.mapper.ArticleMapper;
+import com.morningcx.ms.blog.mapper.ArticleTagMapper;
+import com.morningcx.ms.blog.mapper.CategoryMapper;
+import com.morningcx.ms.blog.mapper.ContentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import java.util.List;
 
 
 /**
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/21
  */
 @Service
@@ -44,14 +45,9 @@ public class ArticleService {
      */
     public Article getArticleById(Integer id, boolean loadTags, boolean loadContent) {
         Article article = articleMapper.selectById(id);
-        // id和昵称
-        User author = userService.getUserById(article.getAuthorId(), false);
-        Category category = categoryMapper.selectById(article.getCategoryId());
-        article.setAuthor(author);
-        article.setCategory(category);
+        BaseException.throwIfNull(article, "文章不存在");
         if (loadTags) {
-            List<Tag> tags = articleTagMapper.listTagsByArticleId(id);
-            article.setTags(tags);
+            article.setTags(articleTagMapper.listTagsByArticleId(id));
         }
         if (loadContent) {
             // 更新浏览次数

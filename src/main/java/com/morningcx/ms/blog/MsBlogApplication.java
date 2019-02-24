@@ -14,6 +14,9 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.MediaType;
+
+import java.util.Collections;
 
 @Slf4j
 @MapperScan("com.morningcx.ms.blog.mapper")
@@ -38,6 +41,8 @@ public class MsBlogApplication extends SpringBootServletInitializer {
         // 日期格式化，需要PrettyFormat支持
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         converter.setFastJsonConfig(fastJsonConfig);
+        // 解决返回json中文乱码
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON_UTF8));
         return new HttpMessageConverters(converter);
     }
 

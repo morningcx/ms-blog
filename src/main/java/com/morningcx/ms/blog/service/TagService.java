@@ -23,8 +23,8 @@ public class TagService {
 
 
     public Tag insertTag(Tag tag) {
-        BaseException.throwIfNull(tag.getTag(), "标签内容不能为空");
-        Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("tag", tag.getTag()));
+        BaseException.throwIfNull(tag.getName(), "标签内容不能为空");
+        Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("tag", tag.getName()));
         if (oldTag == null) {
             tagMapper.insert(tag);
             return tag;

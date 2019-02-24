@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/20
  */
 @Getter

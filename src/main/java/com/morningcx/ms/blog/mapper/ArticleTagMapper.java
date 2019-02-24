@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/21
  */
 public interface ArticleTagMapper extends BaseMapper<ArticleTag> {

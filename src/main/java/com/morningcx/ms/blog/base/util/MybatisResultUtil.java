@@ -6,7 +6,7 @@ import com.morningcx.ms.blog.entity.Article;
 import java.lang.reflect.Field;
 
 /**
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/21
  */
 public class MybatisResultUtil {

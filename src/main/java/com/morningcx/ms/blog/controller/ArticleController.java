@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/3
  */
 @Slf4j
@@ -31,7 +31,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @GetMapping("getArticleById")
-    public Article getArticleMetaById(Integer id) {
+    public Article getArticleById(Integer id) {
         return articleService.getArticleById(id, true, true);
     }
 

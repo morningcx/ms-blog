@@ -3,7 +3,7 @@ package com.morningcx.ms.blog.base.result;
 import lombok.Data;
 
 /**
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/18
  */
 @Data

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/19
  */
 @Data
@@ -12,6 +12,5 @@ import lombok.Data;
 public class Content {
 
     private Integer id;
-
     private String content;
 }

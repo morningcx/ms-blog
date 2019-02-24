@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * RestControllerAdvice中annotations指向所有带有注解@RestController的控制器
  * 也就是只有添加了@RestController注解的控制器才会进入全局异常处理
  *
- * @author guochenxiao
+ * @author gcx
  * @date 2019/2/18
  */
 @RestControllerAdvice
