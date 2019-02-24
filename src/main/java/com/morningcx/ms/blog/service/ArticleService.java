@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -30,9 +31,6 @@ public class ArticleService {
     private ContentMapper contentMapper;
     @Autowired
     private ArticleTagMapper articleTagMapper;
-    @Autowired
-    private TagMapper tagMapper;
-
     @Autowired
     private CategoryMapper categoryMapper;
 
@@ -67,10 +65,23 @@ public class ArticleService {
     public int insertArticle(Article article) {
         // todo 判断用户登录
         BaseException.throwIfNull(article.getTitle(), "文章标题不能为空");
-        // todo introduction再说
-
+        // todo introduction再说 content也再说
+        BaseException.throwIfNull(article.getContent().getContent(), "文章内容不能为空");
         BaseException.throwIfNull(article.getCategoryId(), "文章分类不能为空");
-
+        BaseException.throwIfNull(article.getType(), "文章类型不能为空");
+        BaseException.throwIfNull(article.getState(), "文章状态不能为空");
+        BaseException.throwIfNull(article.getModifier(), "文章修饰符不能为空");
+        List<Tag> tags = article.getTags();
+        BaseException.throwIf(tags == null || tags.size() == 0, "文章标签不能为空");
+        BaseException.throwIf(tags.size() > 5, "文章最多5个标签");
+        // 插入内容
+        contentMapper.insert(article.getContent());
+        // 插入文章
+        article.setCategoryId(article.getContent().getId());
+        article.setCreateTime(new Date());
+        article.setDeleted(0);
+        articleMapper.insert(article);
+        // 插入标签
         return 0;
     }
 

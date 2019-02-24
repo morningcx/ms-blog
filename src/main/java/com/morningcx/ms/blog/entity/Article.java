@@ -25,6 +25,7 @@ public class Article {
     private Integer contentId;
     private Integer categoryId;
     private Date createTime;
+    @TableField(update = "now()")
     private Date updateTime;
     private Integer type;
     private Integer likes;

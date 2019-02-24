@@ -1,5 +1,6 @@
 package com.morningcx.ms.blog.base.exception;
 
+
 /**
  * 异常类
  *
