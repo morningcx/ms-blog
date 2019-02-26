@@ -1,18 +1,20 @@
 package com.morningcx.ms.blog.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.morningcx.ms.blog.base.exception.BaseException;
+import com.morningcx.ms.blog.base.util.EntityUtil;
 import com.morningcx.ms.blog.entity.Article;
+import com.morningcx.ms.blog.entity.ArticleTag;
+import com.morningcx.ms.blog.entity.Content;
 import com.morningcx.ms.blog.entity.Tag;
-import com.morningcx.ms.blog.mapper.ArticleMapper;
-import com.morningcx.ms.blog.mapper.ArticleTagMapper;
-import com.morningcx.ms.blog.mapper.CategoryMapper;
-import com.morningcx.ms.blog.mapper.ContentMapper;
+import com.morningcx.ms.blog.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
@@ -23,62 +25,74 @@ import java.util.List;
 public class ArticleService {
 
     @Autowired
-    private UserService userService;
-
-
-    @Autowired
     private ArticleMapper articleMapper;
     @Autowired
     private ContentMapper contentMapper;
+    @Autowired
+    private TagMapper tagMapper;
     @Autowired
     private ArticleTagMapper articleTagMapper;
     @Autowired
     private CategoryMapper categoryMapper;
 
+
     /**
      * 根据id查询文章信息
      *
      * @param id
-     * @param loadTags    是否加载标签
-     * @param loadContent 是否加载文章内容
      * @return
      */
-    public Article getArticleById(Integer id, boolean loadTags, boolean loadContent) {
+    public Article getArticleById(Integer id) {
+        // 登录判断，
         Article article = articleMapper.selectById(id);
         BaseException.throwIfNull(article, "文章不存在");
-        if (loadTags) {
-            article.setTags(articleTagMapper.listTagsByArticleId(id));
-        }
-        if (loadContent) {
-            // 更新浏览次数
-            articleMapper.updateViewsById(id);
-            article.setContent(contentMapper.selectById(article.getContentId()));
-        }
+        article.setTags(articleTagMapper.listTagsByArticleId(id));
+        // 更新浏览次数
+        articleMapper.updateViewsById(id);
+        article.setContent(contentMapper.selectById(article.getContentId()));
         return article;
     }
 
+    /**
+     * 创建新文章
+     *
+     * @param article
+     */
     @Transactional
     public int insertArticle(Article article) {
         // todo 判断用户登录
-        BaseException.throwIfNull(article.getTitle(), "文章标题不能为空");
-        // todo introduction再说 content也再说
-        BaseException.throwIfNull(article.getContent().getContent(), "文章内容不能为空");
-        BaseException.throwIfNull(article.getCategoryId(), "文章分类不能为空");
-        BaseException.throwIfNull(article.getType(), "文章类型不能为空");
-        BaseException.throwIfNull(article.getState(), "文章状态不能为空");
-        BaseException.throwIfNull(article.getModifier(), "文章修饰符不能为空");
-        List<Tag> tags = article.getTags();
-        BaseException.throwIf(tags == null || tags.size() == 0, "文章标签不能为空");
-        BaseException.throwIf(tags.size() > 5, "文章最多5个标签");
-        // 插入内容
-        contentMapper.insert(article.getContent());
-        // 插入文章
-        article.setCategoryId(article.getContent().getId());
+        // 插入文章内容，markdown内容开头或结尾可能存在空格，所以不需要进行trim操作
+        Content content = article.getContent();
+        contentMapper.insert(content);
+        // 插入文章，对简介和标题字符串进行修剪
+        EntityUtil.trim(article);
+        article.setContentId(content.getId());
         article.setCreateTime(new Date());
+        article.setViews(0);
+        article.setLikes(0);
         article.setDeleted(0);
         articleMapper.insert(article);
         // 插入标签
-        return 0;
+        ArticleTag articleTag = new ArticleTag();
+        articleTag.setArticleId(article.getId());
+        Set<String> set = new HashSet<>();
+        for (Tag tag : article.getTags()) {
+            // 对标签名称进行修剪
+            EntityUtil.trim(tag);
+            // 标签去重
+            if (set.add(tag.getName())) {
+                Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("name", tag.getName()));
+                // 若原标签不存在，则插入
+                if (oldTag == null) {
+                    tagMapper.insert(tag);
+                    articleTag.setTagId(tag.getId());
+                } else {
+                    articleTag.setTagId(oldTag.getId());
+                }
+                articleTagMapper.insert(articleTag);
+            }
+        }
+        return article.getId();
     }
 
 

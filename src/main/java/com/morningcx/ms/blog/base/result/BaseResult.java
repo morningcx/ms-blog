@@ -13,9 +13,9 @@ public class BaseResult {
 
     public static final int FAIL = 1;
 
-    public static final int NO_PERMISSION = 2;
+    /*public static final int NO_PERMISSION = 2;*/
 
-    private int code = SUCCESS;
+    private int code;
 
     private String msg;
 
@@ -23,12 +23,17 @@ public class BaseResult {
 
     public BaseResult() {}
 
-    public BaseResult(Object data) {
-        this.data = data;
+    public static BaseResult success(Object data) {
+        BaseResult result = new BaseResult();
+        result.setCode(SUCCESS);
+        result.setData(data);
+        return result;
     }
 
-    public BaseResult(Exception e) {
-        this.msg = e.getMessage();
-        this.code = FAIL;
+    public static BaseResult fail(String msg) {
+        BaseResult result = new BaseResult();
+        result.setCode(FAIL);
+        result.setMsg(msg);
+        return result;
     }
 }

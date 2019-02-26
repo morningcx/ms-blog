@@ -16,6 +16,7 @@ public class Category {
     private Integer pid;
     private Integer userId;
     private String name;
+    private String note;
     private Date createTime;
     private Date updateTime;
 }

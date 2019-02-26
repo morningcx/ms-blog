@@ -23,8 +23,25 @@ public class BaseException extends RuntimeException {
         }
     }
 
+    /**
+     * 判断对象是否为null
+     *
+     * @param o
+     * @param msg
+     */
     public static void throwIfNull(Object o, String msg) {
-        throwIf(o == null || "".equals(o.toString().trim()), msg);
+        throwIf(o == null, msg);
+    }
+
+    /**
+     * 判断字符串是否为空，返回格式化后的字符串
+     *
+     * @param s
+     * @param msg
+     * @return
+     */
+    public static void throwIfEmpty(String s, String msg) {
+        throwIf(s == null || "".equals(s.trim()), msg);
     }
 
 }

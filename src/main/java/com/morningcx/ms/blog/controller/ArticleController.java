@@ -8,9 +8,13 @@ import com.morningcx.ms.blog.service.ArticleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -32,11 +36,11 @@ public class ArticleController {
 
     @GetMapping("getArticleById")
     public Article getArticleById(Integer id) {
-        return articleService.getArticleById(id, true, true);
+        return articleService.getArticleById(id);
     }
 
     @PostMapping("insertArticle")
-    public int insertArticle(Article article) {
+    public int insertArticle(@Valid Article article) {
         return articleService.insertArticle(article);
     }
 

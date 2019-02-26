@@ -1,16 +1,13 @@
 package com.morningcx.ms.blog.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.morningcx.ms.blog.base.exception.BaseException;
 import com.morningcx.ms.blog.entity.Tag;
+import com.morningcx.ms.blog.mapper.ArticleTagMapper;
 import com.morningcx.ms.blog.mapper.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author gcx
@@ -20,23 +17,31 @@ import java.util.Set;
 public class TagService {
     @Autowired
     private TagMapper tagMapper;
-
-
-    public Tag insertTag(Tag tag) {
-        BaseException.throwIfNull(tag.getName(), "标签内容不能为空");
-        Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("tag", tag.getName()));
-        if (oldTag == null) {
-            tagMapper.insert(tag);
-            return tag;
-        }
-        return oldTag;
-    }
+    @Autowired
+    private ArticleTagMapper articleTagMapper;
 
     @Transactional
-    public Collection<Tag> insertTags(Collection<Tag> tags) {
-        // lombok重写了hashcode和equals方法，可以直接添加
-        Set<Tag> tagsSet = new HashSet<>(tags);
-        tagsSet.forEach(this::insertTag);
-        return tagsSet;
+    public void insertArticleTags(Integer articleId, Collection<Tag> tags) {
+        /*ArticleTag articleTag = new ArticleTag();
+        articleTag.setArticleId(articleId);
+        Set<String> set = new HashSet<>();
+        for (Tag tag : tags) {
+            // 标签名称消除两边空格
+            String tagName = BaseException.throwIfEmpty(tag.getName(), "标签内容不能为空");
+            tag.setName(tagName);
+            // 消除重复标签
+            if (set.add(tagName)) {
+                Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("name", tagName));
+                // 若原标签不存在，则插入
+                if (oldTag == null) {
+                    tag.setId(null);
+                    tagMapper.insert(tag);
+                    articleTag.setTagId(tag.getId());
+                } else {
+                    articleTag.setTagId(oldTag.getId());
+                }
+            }
+            articleTagMapper.insert(articleTag);
+        }*/
     }
 }
