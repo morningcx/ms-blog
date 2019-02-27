@@ -2,7 +2,6 @@ package com.morningcx.ms.blog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.morningcx.ms.blog.entity.Article;
-import org.apache.ibatis.annotations.Update;
 
 /**
  * @author gcx
@@ -16,7 +15,14 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param id
      * @return
      */
-    @Update("update t_article set views = views + 1 where id = #{id}")
     int updateViewsById(Integer id);
 
+
+    /**
+     * 根据文章id获取文章基本信息、作者、类别
+     *
+     * @param id
+     * @return
+     */
+    Article getMetaById(Integer id);
 }

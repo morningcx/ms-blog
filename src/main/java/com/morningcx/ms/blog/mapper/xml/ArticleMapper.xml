@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.morningcx.ms.blog.mapper.ArticleMapper">
+
+    <update id="updateViewsById" parameterType="int">
+        update t_article set views = views + 1 where id = #{id}
+    </update>
+
+    <select id="getMetaById" resultType="com.morningcx.ms.blog.entity.Article" parameterType="int">
+        SELECT
+            a.*,
+            u.`name` as author,
+            c.`name` as category
+        from t_article as a
+        INNER JOIN t_user as u on a.author_id = u.id
+        INNER JOIN t_category as c on a.category_id = c.id
+        where a.deleted = 0 and a.modifier = 0 and a.id = #{id}
+    </select>
+</mapper>

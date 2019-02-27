@@ -36,10 +36,9 @@ public class Article {
     private Integer views;
     @NotNull(message = "类型不能为空")
     private Integer type;
-    @NotNull(message = "状态不能为空")
-    private Integer state;
     @NotNull(message = "修饰符不能为空")
     private Integer modifier;
+    private Integer recycle;
     @TableLogic
     @TableField(select = false)
     private Integer deleted;
@@ -47,10 +46,10 @@ public class Article {
 
 
     @TableField(exist = false)
-    private User author;
+    private String author;
 
     @TableField(exist = false)
-    private Category category;
+    private String category;
 
     @NotNull(message = "内容不能为空")
     @TableField(exist = false)

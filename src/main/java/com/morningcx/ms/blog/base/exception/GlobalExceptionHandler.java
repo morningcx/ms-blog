@@ -1,6 +1,6 @@
 package com.morningcx.ms.blog.base.exception;
 
-import com.morningcx.ms.blog.base.result.BaseResult;
+import com.morningcx.ms.blog.base.result.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public BaseResult handleBindException(BindException e) {
+    public Result handleBindException(BindException e) {
         e.printStackTrace();
         // valid验证集合中的元素时可能会重复报错，需要裁剪
         Set<String> set = new HashSet<>();
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
                 sb.append(error.getDefaultMessage()).append("\n");
             }
         });
-        return BaseResult.fail(sb.toString());
+        return Result.fail(sb.toString());
     }
 
     /**
@@ -52,9 +52,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResult exceptionHandler(Exception e) {
+    public Result exceptionHandler(Exception e) {
         e.printStackTrace();
-        return BaseResult.fail(e.getMessage());
+        return Result.fail(e.getMessage());
     }
 
 }

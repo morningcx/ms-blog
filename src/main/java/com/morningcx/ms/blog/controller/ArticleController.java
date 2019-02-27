@@ -2,6 +2,7 @@ package com.morningcx.ms.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.mapper.ArticleMapper;
 import com.morningcx.ms.blog.service.ArticleService;
@@ -39,9 +40,10 @@ public class ArticleController {
         return articleService.getArticleById(id);
     }
 
+
     @PostMapping("insertArticle")
-    public int insertArticle(@Valid Article article) {
-        return articleService.insertArticle(article);
+    public Result insertArticle(@Valid Article article) {
+        return Result.success(articleService.insertArticle(article));
     }
 
     @GetMapping("getArticlesByCondition")
@@ -58,7 +60,7 @@ public class ArticleController {
     }
     /*@GetMapping("getUser")
     public User getUser(Integer id) {
-        BaseException.cause("我测试的");
+        BusinessException.cause("我测试的");
 
     }*/
 

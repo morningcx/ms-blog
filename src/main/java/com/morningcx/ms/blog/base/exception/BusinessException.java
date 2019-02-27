@@ -7,14 +7,14 @@ package com.morningcx.ms.blog.base.exception;
  * @author gcx
  * @date 2019/2/18
  */
-public class BaseException extends RuntimeException {
+public class BusinessException extends RuntimeException {
 
-    private BaseException(String msg) {
+    private BusinessException(String msg) {
         super(msg);
     }
 
     public static void throwBy(String msg) {
-        throw new BaseException(msg);
+        throw new BusinessException(msg);
     }
 
     public static void throwIf(boolean b, String msg) {
