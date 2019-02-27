@@ -1,12 +1,9 @@
 package com.morningcx.ms.blog.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.morningcx.ms.blog.base.exception.BaseException;
-import com.morningcx.ms.blog.base.util.EntityUtil;
-import com.morningcx.ms.blog.entity.Article;
-import com.morningcx.ms.blog.entity.ArticleTag;
-import com.morningcx.ms.blog.entity.Content;
-import com.morningcx.ms.blog.entity.Tag;
+import com.morningcx.ms.blog.base.exception.BusinessException;
+import com.morningcx.ms.blog.base.util.BaseUtil;
+import com.morningcx.ms.blog.entity.*;
 import com.morningcx.ms.blog.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,7 +42,7 @@ public class ArticleService {
     public Article getArticleById(Integer id) {
         // 登录判断，
         Article article = articleMapper.selectById(id);
-        BaseException.throwIfNull(article, "文章不存在");
+        BusinessException.throwIfNull(article, "文章不存在");
         article.setTags(articleTagMapper.listTagsByArticleId(id));
         // 更新浏览次数
         articleMapper.updateViewsById(id);
@@ -60,16 +57,19 @@ public class ArticleService {
      */
     @Transactional
     public int insertArticle(Article article) {
-        // todo 判断用户登录
+        User user = BaseUtil.getCurrentUser();
+        BusinessException.throwIfNull(user, "登录超时");
+        article.setAuthorId(user.getId());
         // 插入文章内容，markdown内容开头或结尾可能存在空格，所以不需要进行trim操作
         Content content = article.getContent();
         contentMapper.insert(content);
         // 插入文章，对简介和标题字符串进行修剪
-        EntityUtil.trim(article);
+        BaseUtil.trimEntity(article);
         article.setContentId(content.getId());
         article.setCreateTime(new Date());
         article.setViews(0);
         article.setLikes(0);
+        article.setRecycle(0);
         article.setDeleted(0);
         articleMapper.insert(article);
         // 插入标签
@@ -78,7 +78,7 @@ public class ArticleService {
         Set<String> set = new HashSet<>();
         for (Tag tag : article.getTags()) {
             // 对标签名称进行修剪
-            EntityUtil.trim(tag);
+            BaseUtil.trimEntity(tag);
             // 标签去重
             if (set.add(tag.getName())) {
                 Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("name", tag.getName()));
