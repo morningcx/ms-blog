@@ -58,7 +58,7 @@ public class ArticleController {
     }
     /*@GetMapping("getUser")
     public User getUser(Integer id) {
-        BusinessException.cause("我测试的");
+        BaseException.cause("我测试的");
 
     }*/
 

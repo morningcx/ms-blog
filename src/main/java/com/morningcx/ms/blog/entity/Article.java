@@ -34,17 +34,12 @@ public class Article {
     private Date updateTime;
     private Integer likes;
     private Integer views;
-    /**
-     * 类型：0原创1转载
-     */
     @NotNull(message = "类型不能为空")
     private Integer type;
-    /**
-     * 修饰符：0可见public，1不可见private
-     */
+    @NotNull(message = "状态不能为空")
+    private Integer state;
     @NotNull(message = "修饰符不能为空")
     private Integer modifier;
-    private Integer recycle;
     @TableLogic
     @TableField(select = false)
     private Integer deleted;
@@ -52,10 +47,10 @@ public class Article {
 
 
     @TableField(exist = false)
-    private String author;
+    private User author;
 
     @TableField(exist = false)
-    private String category;
+    private Category category;
 
     @NotNull(message = "内容不能为空")
     @TableField(exist = false)

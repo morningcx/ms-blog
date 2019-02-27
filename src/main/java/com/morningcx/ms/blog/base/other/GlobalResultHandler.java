@@ -23,7 +23,7 @@ public class GlobalResultHandler implements ResponseBodyAdvice {
 
     @Override
     public Object beforeBodyWrite(Object o, MethodParameter methodParameter, MediaType mediaType, Class aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
-        return new Result(o);
+        return new BaseResult(o);
     }
 }
 */
