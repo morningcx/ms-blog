@@ -15,7 +15,7 @@ public class Result {
 
     /*public static final int NO_PERMISSION = 2;*/
 
-    private static final String DEFAULT_MSG = "操作成功";
+    /*private static final String DEFAULT_MSG = "操作成功";*/
 
     private int code;
 
@@ -25,8 +25,8 @@ public class Result {
 
     public Result() {}
 
-    public static Result success(Object data) {
-        return new Result().code(SUCCESS).data(data).msg(DEFAULT_MSG);
+    public static Result ok(Object data) {
+        return new Result().code(SUCCESS).data(data);
     }
 
     public static Result fail(String msg) {

@@ -30,6 +30,7 @@ public class EnumJSONParser implements ObjectDeserializer {
                     break;
                 }
             }
+
             Method method = targetClass.getMethod("get" + desc.substring(0, 1).toUpperCase() + desc.substring(1));
             Object[] objects = targetClass.getEnumConstants();
             for (Object obj : objects) {
