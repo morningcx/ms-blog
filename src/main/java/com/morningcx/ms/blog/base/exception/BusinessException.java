@@ -34,13 +34,13 @@ public class BusinessException extends RuntimeException {
     }
 
     /**
-     * 判断字符串是否为空，返回格式化后的字符串
+     * 判断字符串是否为null或者为""
      *
      * @param s
      * @param msg
      * @return
      */
-    public static void throwIfEmpty(String s, String msg) {
+    public static void throwIfBlank(String s, String msg) {
         throwIf(s == null || "".equals(s.trim()), msg);
     }
 

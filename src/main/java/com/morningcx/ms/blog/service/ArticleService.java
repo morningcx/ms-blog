@@ -50,6 +50,7 @@ public class ArticleService {
         return article;
     }
 
+
     /**
      * 创建新文章
      *
@@ -68,7 +69,9 @@ public class ArticleService {
         // 插入文章，对简介和标题字符串进行修剪
         EntityUtil.trim(article);
         article.setContentId(content.getId());
-        article.setCreateTime(new Date());
+        Date now = new Date();
+        article.setCreateTime(now);
+        article.setUpdateTime(now);
         article.setViews(0);
         article.setLikes(0);
         article.setRecycle(0);

@@ -24,31 +24,6 @@ public class ImageController {
         return imageService.mdImageUpload(file);
     }
 
-    /*@PostMapping("mdImageUpload")
-    public Map<String, Object> mdImageUpload(@RequestParam("editormd-image-file") MultipartFile file) {
-        Map<String, Object> resultMap = new HashMap<>();
-        try {
-            String staticPath = ResourceUtils.getURL("classpath:").getPath() + "/static/";
-            String targetPath = "/upload/";
-            String fullPath = staticPath + targetPath;
-            String fileName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
-            File targetFile = new File(fullPath, fileName);
-            if (!targetFile.getParentFile().exists()) {
-                targetFile.getParentFile().mkdirs();
-            }
-            log.info(fullPath);
-            log.info(fileName);
-            file.transferTo(targetFile);
-            resultMap.put("success", 1);
-            resultMap.put("message", "上传成功！");
-            resultMap.put("url", targetPath + fileName);
-        } catch (Exception e) {
-            resultMap.put("success", 0);
-            resultMap.put("message", "上传失败！" + e.getMessage());
-            e.printStackTrace();
-        }
-        return resultMap;
-    }*/
 
     /**
      * 上传文件

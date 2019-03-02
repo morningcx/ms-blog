@@ -28,12 +28,19 @@ public class QiNiuUtil {
     private static StringMap imagePutPolicy = null;
 
 
+    /**
+     * 上传图片至七牛云
+     *
+     * @param imageFile
+     * @return
+     * @throws IOException
+     */
     public static Image uploadImage(MultipartFile imageFile) throws IOException {
         // 构造一个带指定Zone对象的配置类，zone0代表华东
         Configuration config = new Configuration(Zone.zone0());
         UploadManager uploadManager = new UploadManager(config);
         // 指定文件前缀以及名称，不指定默认用hash值作为文件名
-        String key = "image/" + UUID.randomUUID();
+        String key = "article/image/" + UUID.randomUUID();
         // 验证密钥，生成上传凭证
         Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
         // token有效时长3600s，策略为<bucket>:<key>则同名文件覆盖，为<bucket>则报错
@@ -41,8 +48,12 @@ public class QiNiuUtil {
         Response response = uploadManager.put(imageFile.getBytes(), key, token);
         Image image = JSON.parseObject(response.bodyString(), Image.class);
         image.setPath(PATH);
+        log.info(image.toString());
         return image;
     }
+
+
+
 
     /**
      * 获取image的json获取策略

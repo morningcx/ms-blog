@@ -16,6 +16,12 @@ import java.util.Map;
 @Service
 public class ImageService {
 
+    /**
+     * markdown上传图片到七牛
+     *
+     * @param file
+     * @return
+     */
     public Map<String, Object> mdImageUpload(MultipartFile file) {
         BusinessException.throwIf(file == null || file.isEmpty(), "上传图片不能为空");
         Map<String, Object> result = new HashMap<>(3);
