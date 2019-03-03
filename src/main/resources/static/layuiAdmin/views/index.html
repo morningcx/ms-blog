@@ -28,13 +28,13 @@
                     </a>
                 </li>
                 <li class="layui-nav-item" lay-unselect>
-                    <a href="javascript:;" layadmin-event="refresh" title="刷新">
-                        <i class="layui-icon layui-icon-refresh-3"></i>
+                    <a href="http://www.morningcx.com" target="_blank" title="MS">
+                        <i class="layui-icon layui-icon-star-fill"></i>
                     </a>
                 </li>
                 <li class="layui-nav-item" lay-unselect>
-                    <a href="http://www.morningcx.com" target="_blank" title="MS">
-                        <i class="layui-icon layui-icon-star"></i>
+                    <a href="javascript:;" layadmin-event="refresh" title="刷新">
+                        <i class="layui-icon layui-icon-refresh-3"></i>
                     </a>
                 </li>
             </ul>
@@ -65,7 +65,7 @@
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
-                        <cite>贤心</cite>
+                        <cite>晨星</cite>
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="set/user/info.html">基本资料</a></dd>
@@ -89,7 +89,7 @@
         <div class="layui-side layui-side-menu">
             <div class="layui-side-scroll">
                 <div class="layui-logo" lay-href="home/console.html">
-                    <span>layuiAdmin</span>
+                    <span>MS</span>
                 </div>
 
                 <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
@@ -111,6 +111,32 @@
                             </dd>
                         </dl>
                     </li>
+
+
+
+
+                    <!--文章管理-->
+                    <li data-name="article" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="文章管理" lay-direction="2">
+                            <i class="layui-icon layui-icon-edit"></i>
+                            <cite>文章管理</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd data-name="list">
+                                <a lay-href="article/list.html">文章列表</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd data-name="recycleBin">
+                                <a lay-href="article/recycleBin.html">回收站</a>
+                            </dd>
+                        </dl>
+                    </li>
+
+
+
+
+
                     <li data-name="component" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="组件" lay-direction="2">
                             <i class="layui-icon layui-icon-component"></i>

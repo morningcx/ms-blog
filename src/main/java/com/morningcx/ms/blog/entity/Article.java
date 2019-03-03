@@ -31,6 +31,7 @@ public class Article {
     @NotNull(message = "分类不能为空")
     private Integer categoryId;
     private Date createTime;
+    @TableField(update = "now()")
     private Date updateTime;
     private Integer likes;
     private Integer views;

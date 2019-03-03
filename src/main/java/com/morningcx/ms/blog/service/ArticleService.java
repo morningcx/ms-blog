@@ -1,9 +1,12 @@
 package com.morningcx.ms.blog.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BusinessException;
 import com.morningcx.ms.blog.base.util.EntityUtil;
 import com.morningcx.ms.blog.base.util.RequestUtil;
+import com.morningcx.ms.blog.base.util.SelectUtil;
 import com.morningcx.ms.blog.entity.*;
 import com.morningcx.ms.blog.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -100,6 +104,81 @@ public class ArticleService {
         return article.getId();
     }
 
+    /**
+     * 普通文章列表
+     *
+     * @param article
+     * @param page
+     * @param limit
+     * @return
+     */
+    public IPage<Article> listArticlesByCondition(Article article, Integer page, Integer limit) {
+        page = page == null ? 1 : page;
+        limit = limit == null ? 10 : limit;
+        Page<Article> articlePage = new Page<>(page, limit);
+        // 基础未删除的查询条件
+        QueryWrapper<Article> wrapper = SelectUtil.baseWrapper();
+        // 额外自定义查询条件
+        wrapper.setEntity(article);
+        return articleMapper.selectPage(articlePage, wrapper);
+    }
+
+    /**
+     * 回收站文章列表
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    public IPage<Article> listRecycleBin(Integer page, Integer limit) {
+        page = page == null ? 1 : page;
+        limit = limit == null ? 10 : limit;
+        Page<Article> articlePage = new Page<>(page, limit);
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        // 回收站中的文章
+        wrapper.eq("recycle", 1);
+        // todo 用户id判断
+        // todo 回收站返回的数据不需要这么多，限定查询列名
+        return articleMapper.selectPage(articlePage, wrapper);
+    }
+
+    /**
+     * 回收文章
+     *
+     * @param recycleIds
+     * @return
+     */
+    public Integer recycleArticle(List<Integer> recycleIds) {
+        // RequestBody所上传的数据一般不为null
+        BusinessException.throwIf(recycleIds.size() == 0, "删除文章ID不能为空");
+        // todo 只允许当前登录用户，操作自己的文章
+        return articleMapper.recycleBatchIds(recycleIds);
+    }
+
+
+    /**
+     * 恢复文章
+     *
+     * @param recoverIds
+     * @return
+     */
+    public Integer recoverArticle(List<Integer> recoverIds) {
+        BusinessException.throwIf(recoverIds.size() == 0, "恢复文章ID不能为空");
+        // todo 只允许当前登录用户，操作自己的文章
+        return articleMapper.recoverBatchIds(recoverIds);
+    }
+
+    /**
+     * 彻底删除id
+     *
+     * @param deleteIds
+     * @return
+     */
+    public Integer deleteArticle(List<Integer> deleteIds) {
+        BusinessException.throwIf(deleteIds.size() == 0, "彻底删除文章ID不能为空");
+        // todo 只允许当前登录用户，操作自己的文章
+        return articleMapper.deleteBatchIds(deleteIds);
+    }
 
     /*public List<Tag> listTagsByArticleId(Integer id) {
         QueryWrapper<ArticleTag> wrapper = new QueryWrapper<>();

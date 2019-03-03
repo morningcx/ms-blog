@@ -19,9 +19,10 @@ public class SelectUtil {
      */
     public static QueryWrapper<Article> baseWrapper() {
         User author = RequestUtil.getCurrentUser();
-        return new QueryWrapper<Article>()
-                //.eq("deleted", 0) mp自动添加
-                .eq("recycle", 0)
-                .eq("author_id", author.getId());
+        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
+        // queryWrapper.eq("deleted", 0); mp自动添加
+        queryWrapper.eq("recycle", 0);
+       //  queryWrapper.eq("author_id", author.getId());
+        return queryWrapper;
     }
 }

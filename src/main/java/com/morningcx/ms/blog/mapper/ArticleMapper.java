@@ -2,6 +2,9 @@ package com.morningcx.ms.blog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.morningcx.ms.blog.entity.Article;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Collection;
 
 /**
  * @author gcx
@@ -25,4 +28,20 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @return
      */
     Article getMetaById(Integer id);
+
+    /**
+     * 根据id回收文章
+     *
+     * @param ids
+     * @return
+     */
+    int recycleBatchIds(@Param("ids") Collection<Integer> ids);
+
+    /**
+     * 根据id恢复回收站中的文章
+     *
+     * @param ids
+     * @return
+     */
+    int recoverBatchIds(@Param("ids") Collection<Integer> ids);
 }

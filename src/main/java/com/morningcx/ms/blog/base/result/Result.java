@@ -1,5 +1,6 @@
 package com.morningcx.ms.blog.base.result;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.Data;
 
 /**
@@ -23,10 +24,19 @@ public class Result {
 
     private Object data;
 
+    /**
+     * 分页大小
+     */
+    private Long count;
+
     public Result() {}
 
     public static Result ok(Object data) {
         return new Result().code(SUCCESS).data(data);
+    }
+
+    public static Result ok(IPage page) {
+        return ok(page.getRecords()).count(page.getTotal());
     }
 
     public static Result fail(String msg) {
@@ -48,4 +58,8 @@ public class Result {
         return this;
     }
 
+    public Result count(Long count) {
+        this.count = count;
+        return this;
+    }
 }

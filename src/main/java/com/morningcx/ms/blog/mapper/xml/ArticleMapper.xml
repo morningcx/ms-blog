@@ -6,6 +6,20 @@
         update t_article set views = views + 1 where id = #{id}
     </update>
 
+    <update id="recycleBatchIds" parameterType="int">
+        update t_article set recycle = 1 where recycle = 0 and id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="recoverBatchIds" parameterType="int">
+        update t_article set recycle = 0 where recycle = 1 and id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+
     <select id="getMetaById" resultType="com.morningcx.ms.blog.entity.Article" parameterType="int">
         SELECT
             a.*,
