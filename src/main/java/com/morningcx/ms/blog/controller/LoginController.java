@@ -1,6 +1,7 @@
 package com.morningcx.ms.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.morningcx.ms.blog.base.annotation.FreeAuth;
 import com.morningcx.ms.blog.base.exception.BusinessException;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.base.util.RequestUtil;
@@ -20,6 +21,7 @@ public class LoginController {
     @Autowired
     private UserMapper userMapper;
 
+    @FreeAuth
     @PostMapping("login")
     public Result login(String account, String password) {
         User user = userMapper.selectOne(new QueryWrapper<User>().

@@ -152,6 +152,7 @@ public class ArticleService {
         // RequestBody所上传的数据一般不为null
         BusinessException.throwIf(recycleIds.size() == 0, "删除文章ID不能为空");
         // todo 只允许当前登录用户，操作自己的文章
+        // todo 更新update_time 作为删除时间
         return articleMapper.recycleBatchIds(recycleIds);
     }
 
@@ -165,6 +166,7 @@ public class ArticleService {
     public Integer recoverArticle(List<Integer> recoverIds) {
         BusinessException.throwIf(recoverIds.size() == 0, "恢复文章ID不能为空");
         // todo 只允许当前登录用户，操作自己的文章
+        // todo 更新update_time 作为恢复时间
         return articleMapper.recoverBatchIds(recoverIds);
     }
 
@@ -177,6 +179,7 @@ public class ArticleService {
     public Integer deleteArticle(List<Integer> deleteIds) {
         BusinessException.throwIf(deleteIds.size() == 0, "彻底删除文章ID不能为空");
         // todo 只允许当前登录用户，操作自己的文章
+        // todo 更新update_time 作为彻底删除时间
         return articleMapper.deleteBatchIds(deleteIds);
     }
 

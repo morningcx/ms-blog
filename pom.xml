@@ -34,6 +34,12 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!--aop-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
         <!--mysql-->
         <dependency>
             <groupId>mysql</groupId>
@@ -62,14 +68,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!--热部署 容易和mybatis-plus发生冲突
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-devtools</artifactId>
-            &lt;!&ndash;其他项目以本项目为父项目时依赖不会传递&ndash;&gt;
-            <optional>true</optional>
-        </dependency>-->
-
         <!-- fast json -->
         <dependency>
             <groupId>com.alibaba</groupId>
@@ -84,12 +82,14 @@
             <version>[7.2.0, 7.2.99]</version>
         </dependency>
 
-        <!-- google图片处理 -->
-        <dependency>
+
+
+        <!-- google图片处理 和七牛不太契合-->
+        <!--<dependency>
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
             <version>0.4.8</version>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 

@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("article")
 public class ArticleController {
+
     @Autowired
     private ArticleMapper articleMapper;
 
