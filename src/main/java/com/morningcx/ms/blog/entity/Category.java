@@ -1,5 +1,6 @@
 package com.morningcx.ms.blog.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -16,7 +17,9 @@ public class Category {
     private Integer pid;
     private Integer userId;
     private String name;
-    private String note;
+    private String description;
     private Date createTime;
     private Date updateTime;
+    @TableLogic
+    private Integer deleted;
 }

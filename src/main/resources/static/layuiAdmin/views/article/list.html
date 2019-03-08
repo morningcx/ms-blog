@@ -32,8 +32,8 @@
                         <a class="layui-btn  layui-btn-primary layui-btn-sm" lay-event="refresh">刷新列表</a>
                     </script>
 
-                    <table class="layui-table" lay-data="{page: true, height: 'full', toolbar: '#table-toolbar'}"
-                           lay-filter="article-list" id="article-list">
+                    <table class="layui-table" lay-filter="article-list" id="article-list"
+                           lay-data="{page: true, height: 'full', toolbar: '#table-toolbar'}">
                         <thead>
                         <tr>
                             <th lay-data="{checkbox:true, fixed:'left'}"></th>
@@ -63,35 +63,11 @@
     </div>
 </div>
 <script src="../../layuiadmin/layui/layui.js"></script>
+<script src="/base/ajax.js"></script>
 <script>
-    layui.use(['table'], function () {
+    layui.use(['table', 'jquery', 'layer'], function () {
         var $ = layui.$, table = layui.table;
         table.init('article-list', {url: '/article/listArticlesByCondition'});
-
-        /**
-         * 删除回收文章
-         * @param idList
-         */
-        function recycleArticle(idList) {
-            layer.confirm('确认要删除ID为' + idList + "，共" + idList.length + "条数据？",
-                function (index) {
-                    layer.close(index);
-                    $.ajax({
-                        url: "/article/recycleArticle",
-                        type: "POST",
-                        data: JSON.stringify(idList),
-                        contentType: "application/json",
-                        dataType: "json",
-                        success: function (res) {
-                            layer.alert("成功删除" + res.data + "条数据！");
-                            toolbarActive.refresh();
-                        },
-                        error: function (data) {
-                            layer.alert(data.responseJSON.msg, {icon: 2});
-                        }
-                    });
-                });
-        }
 
         // 工具栏点击事件
         var toolbarActive = {
@@ -112,8 +88,9 @@
                 table.reload('article-list', {});
             }
         };
+
         table.on('toolbar(article-list)', function (obj) {
-            toolbarActive[obj.event](obj);
+            toolbarActive[obj.event] ? toolbarActive[obj.event](obj) : '';
         });
 
         // 操作按钮点击事件
@@ -128,9 +105,31 @@
                 recycleArticle([obj.data.id]);
             }
         };
+
         table.on('tool(article-list)', function (obj) {
-            operationActive[obj.event](obj);
+            operationActive[obj.event] ? operationActive[obj.event](obj) : '';
         });
+
+
+        /**
+         * 删除回收文章
+         * @param idList
+         */
+        function recycleArticle(idList) {
+            layer.confirm('确认要删除ID为' + idList + "，共" + idList.length + "条数据？", function (index) {
+                layer.close(index);
+                ajax.post({
+                    url: "/article/recycleArticle",
+                    data: JSON.stringify(idList),
+                    contentType: "application/json",
+                    success: function (res) {
+                        layer.alert("成功删除" + res.data + "条数据！");
+                        toolbarActive.refresh();
+                    }
+                });
+            });
+        }
+
     });
 </script>
 </body>

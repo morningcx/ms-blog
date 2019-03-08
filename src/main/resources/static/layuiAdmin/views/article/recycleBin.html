@@ -59,11 +59,11 @@
     </div>
 </div>
 <script src="../../layuiadmin/layui/layui.js"></script>
+<script src="/base/ajax.js"></script>
 <script>
-    layui.use(['table'], function () {
+    layui.use(['table', 'jquery', 'layer'], function () {
         var $ = layui.$, table = layui.table;
         table.init('recycle-list', {url: '/article/listRecycleBin'});
-
 
         // 工具栏点击事件
         var toolbarActive = {
@@ -80,7 +80,7 @@
                 }
                 recoverArticle(ids);
             },
-            batchDel: function(obj) {
+            batchDel: function (obj) {
                 var checkStatus = table.checkStatus(obj.config.id);
                 var data = checkStatus.data;
                 if (data.length === 0) {
@@ -98,64 +98,12 @@
             }
         };
         table.on('toolbar(recycle-list)', function (obj) {
-            toolbarActive[obj.event](obj);
+            toolbarActive[obj.event] ? toolbarActive[obj.event](obj) : '';
         });
 
 
-        /**
-         * 恢复文章
-         * @param idList
-         */
-        function recoverArticle(idList) {
-            layer.confirm('确认要恢复ID为' + idList + "，共" + idList.length + "条数据？",
-                function (index) {
-                    layer.close(index);
-                    $.ajax({
-                        url: "/article/recoverArticle",
-                        type: "POST",
-                        data: JSON.stringify(idList),
-                        contentType: "application/json",
-                        dataType: "json",
-                        success: function (res) {
-                            layer.alert("成功恢复" + res.data + "条数据！");
-                            toolbarActive.refresh();
-                        },
-                        error: function (data) {
-                            layer.alert(data.responseJSON.msg, {icon: 2});
-                        }
-                    });
-                });
-        }
-
-        /**
-         * 彻底删除文章
-         * @param idList
-         */
-        function deleteArticleCompletely(idList) {
-            layer.confirm("确认要彻底删除ID为" + idList + "，共" + idList.length + "条数据？" +
-                "<br>彻底删除之后数据将不可恢复！",
-                function (index) {
-                    layer.close(index);
-                    $.ajax({
-                        url: "/article/deleteArticle",
-                        type: "POST",
-                        data: JSON.stringify(idList),
-                        contentType: "application/json",
-                        dataType: "json",
-                        success: function (res) {
-                            layer.alert("成功彻底删除" + res.data + "条数据！");
-                            toolbarActive.refresh();
-                        },
-                        error: function (data) {
-                            layer.alert(data.responseJSON.msg, {icon: 2});
-                        }
-                    });
-                });
-        }
-
-
         // 操作按钮点击事件
-        var operationEvent = {
+        var operationActive = {
             detail: function (obj) {
                 layer.msg('ID：' + obj.data.id + ' 的查看操作');
             },
@@ -167,8 +115,48 @@
             }
         };
         table.on('tool(recycle-list)', function (obj) {
-            operationEvent[obj.event](obj);
+            operationActive[obj.event] ? operationActive[obj.event](obj) : '';
         });
+
+        /**
+         * 恢复文章
+         * @param idList
+         */
+        function recoverArticle(idList) {
+            layer.confirm('确认要恢复ID为' + idList + "，共" + idList.length + "条数据？", function (index) {
+                layer.close(index);
+                ajax.post({
+                    url: "/article/recoverArticle",
+                    data: JSON.stringify(idList),
+                    contentType: "application/json",
+                    success: function (res) {
+                        layer.alert("成功恢复" + res.data + "条数据！");
+                        toolbarActive.refresh();
+                    }
+                });
+            });
+        }
+
+        /**
+         * 彻底删除文章
+         * @param idList
+         */
+        function deleteArticleCompletely(idList) {
+            layer.confirm("确认要彻底删除ID为" + idList + "，共" + idList.length + "条数据？" +
+                "<br>彻底删除之后数据将不可恢复！", function (index) {
+                layer.close(index);
+                ajax.post({
+                    url: "/article/deleteArticle",
+                    data: JSON.stringify(idList),
+                    contentType: "application/json",
+                    success: function (res) {
+                        layer.alert("成功彻底删除" + res.data + "条数据！");
+                        toolbarActive.refresh();
+                    }
+                });
+            });
+        }
+
     });
 </script>
 </body>

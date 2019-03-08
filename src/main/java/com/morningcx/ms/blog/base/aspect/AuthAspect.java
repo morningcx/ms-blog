@@ -1,7 +1,6 @@
 package com.morningcx.ms.blog.base.aspect;
 
 import com.morningcx.ms.blog.base.annotation.FreeAuth;
-import com.morningcx.ms.blog.base.exception.BusinessException;
 import com.morningcx.ms.blog.base.util.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -42,7 +41,7 @@ public class AuthAspect {
         MethodSignature sign = (MethodSignature) joinPoint.getSignature();
         // 如果没有免登录注解，则需要登录认证
         if (!sign.getMethod().isAnnotationPresent(FreeAuth.class)) {
-            BusinessException.throwIfNull(RequestUtil.getCurrentUser(), "未登录");
+            RequestUtil.getCurrentUser();
         }
     }
 }

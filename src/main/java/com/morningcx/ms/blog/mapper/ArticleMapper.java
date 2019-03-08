@@ -30,18 +30,20 @@ public interface ArticleMapper extends BaseMapper<Article> {
     Article getMetaById(Integer id);
 
     /**
-     * 根据id回收文章
+     * 根据文章id以及登录用户id回收文章
      *
      * @param ids
+     * @param authorId
      * @return
      */
-    int recycleBatchIds(@Param("ids") Collection<Integer> ids);
+    int recycleBatchIds(@Param("ids") Collection<Integer> ids, @Param("authorId") Integer authorId);
 
     /**
-     * 根据id恢复回收站中的文章
+     * 根据文章id以及登录用户id恢复回收站中的文章
      *
      * @param ids
+     * @param authorId
      * @return
      */
-    int recoverBatchIds(@Param("ids") Collection<Integer> ids);
+    int recoverBatchIds(@Param("ids") Collection<Integer> ids, @Param("authorId") Integer authorId);
 }

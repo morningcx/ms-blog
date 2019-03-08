@@ -1,5 +1,6 @@
 package com.morningcx.ms.blog.base.util;
 
+import com.morningcx.ms.blog.base.exception.BusinessException;
 import com.morningcx.ms.blog.entity.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,8 +31,9 @@ public class RequestUtil {
      */
     public static User getCurrentUser() {
         HttpSession session = getCurrentAttributes().getRequest().getSession();
-        Object attribute = session.getAttribute(LOGIN_USER_INFO);
-        return attribute == null ? null : (User) attribute;
+        User user = (User) session.getAttribute(LOGIN_USER_INFO);
+        BusinessException.throwNull(user, "未登录");
+        return user;
     }
 
     /**

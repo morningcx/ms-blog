@@ -2,25 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.morningcx.ms.blog.mapper.ArticleMapper">
 
-    <update id="updateViewsById" parameterType="int">
+    <update id="updateViewsById">
         update t_article set views = views + 1 where id = #{id}
     </update>
 
-    <update id="recycleBatchIds" parameterType="int">
-        update t_article set recycle = 1 where recycle = 0 and id in
+    <update id="recycleBatchIds">
+        update t_article set recycle = 1, update_time = now()
+        where recycle = 0 and author_id = #{authorId} and id in
         <foreach collection="ids" open="(" close=")" separator="," item="id">
             #{id}
         </foreach>
     </update>
 
-    <update id="recoverBatchIds" parameterType="int">
-        update t_article set recycle = 0 where recycle = 1 and id in
+    <update id="recoverBatchIds">
+        update t_article set recycle = 0, update_time = now()
+        where recycle = 1 and author_id = #{authorId} and id in
         <foreach collection="ids" open="(" close=")" separator="," item="id">
             #{id}
         </foreach>
     </update>
 
-    <select id="getMetaById" resultType="com.morningcx.ms.blog.entity.Article" parameterType="int">
+    <select id="getMetaById" resultType="com.morningcx.ms.blog.entity.Article">
         SELECT
             a.*,
             u.`name` as author,

@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BusinessException;
 import com.morningcx.ms.blog.base.util.EntityUtil;
 import com.morningcx.ms.blog.base.util.RequestUtil;
-import com.morningcx.ms.blog.base.util.SelectUtil;
-import com.morningcx.ms.blog.entity.*;
+import com.morningcx.ms.blog.entity.Article;
+import com.morningcx.ms.blog.entity.ArticleTag;
+import com.morningcx.ms.blog.entity.Content;
+import com.morningcx.ms.blog.entity.Tag;
 import com.morningcx.ms.blog.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,7 @@ public class ArticleService {
      */
     public Article getArticleById(Integer id) {
         Article article = articleMapper.getMetaById(id);
-        BusinessException.throwIfNull(article, "文章不存在");
+        BusinessException.throwNull(article, "文章不存在");
         article.setTags(articleTagMapper.listTagsByArticleId(id));
         // 更新浏览次数
         articleMapper.updateViewsById(id);
@@ -62,11 +64,8 @@ public class ArticleService {
      */
     @Transactional
     public int insertArticle(Article article) {
-        // 检测登录
-        User user = RequestUtil.getCurrentUser();
-        BusinessException.throwIfNull(user, "登录超时");
         // 设置作者id
-        article.setAuthorId(user.getId());
+        article.setAuthorId(RequestUtil.getCurrentUser().getId());
         // 插入文章内容，markdown内容开头或结尾可能存在空格，所以不需要进行trim操作
         Content content = article.getContent();
         contentMapper.insert(content);
@@ -113,14 +112,13 @@ public class ArticleService {
      * @return
      */
     public IPage<Article> listArticlesByCondition(Article article, Integer page, Integer limit) {
-        page = page == null ? 1 : page;
-        limit = limit == null ? 10 : limit;
-        Page<Article> articlePage = new Page<>(page, limit);
-        // 基础未删除的查询条件
-        QueryWrapper<Article> wrapper = SelectUtil.baseWrapper();
-        // 额外自定义查询条件
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        // 当前登录用户未回收的文章，未删除mp将自动添加
+        wrapper.eq("recycle", 0);
+        wrapper.eq("author_id", RequestUtil.getCurrentUser().getId());
+        // 其他条件
         wrapper.setEntity(article);
-        return articleMapper.selectPage(articlePage, wrapper);
+        return articleMapper.selectPage(new Page<>(page, limit), wrapper);
     }
 
     /**
@@ -131,15 +129,12 @@ public class ArticleService {
      * @return
      */
     public IPage<Article> listRecycleBin(Integer page, Integer limit) {
-        page = page == null ? 1 : page;
-        limit = limit == null ? 10 : limit;
-        Page<Article> articlePage = new Page<>(page, limit);
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         // 回收站中的文章
         wrapper.eq("recycle", 1);
-        // todo 用户id判断
+        wrapper.eq("author_id", RequestUtil.getCurrentUser().getId());
         // todo 回收站返回的数据不需要这么多，限定查询列名
-        return articleMapper.selectPage(articlePage, wrapper);
+        return articleMapper.selectPage(new Page<>(page, limit), wrapper);
     }
 
     /**
@@ -148,12 +143,13 @@ public class ArticleService {
      * @param recycleIds
      * @return
      */
+    @Transactional
     public Integer recycleArticle(List<Integer> recycleIds) {
-        // RequestBody所上传的数据一般不为null
-        BusinessException.throwIf(recycleIds.size() == 0, "删除文章ID不能为空");
-        // todo 只允许当前登录用户，操作自己的文章
-        // todo 更新update_time 作为删除时间
-        return articleMapper.recycleBatchIds(recycleIds);
+        BusinessException.throwIf(recycleIds == null || recycleIds.size() == 0, "删除文章ID不能为空");
+        Integer authorId = RequestUtil.getCurrentUser().getId();
+        int count = articleMapper.recycleBatchIds(recycleIds, authorId);
+        BusinessException.throwIf(count == 0 || count != recycleIds.size(), "删除失败");
+        return count;
     }
 
 
@@ -163,11 +159,13 @@ public class ArticleService {
      * @param recoverIds
      * @return
      */
+    @Transactional
     public Integer recoverArticle(List<Integer> recoverIds) {
-        BusinessException.throwIf(recoverIds.size() == 0, "恢复文章ID不能为空");
-        // todo 只允许当前登录用户，操作自己的文章
-        // todo 更新update_time 作为恢复时间
-        return articleMapper.recoverBatchIds(recoverIds);
+        BusinessException.throwIf(recoverIds == null || recoverIds.size() == 0, "恢复文章ID不能为空");
+        Integer authorId = RequestUtil.getCurrentUser().getId();
+        int count = articleMapper.recoverBatchIds(recoverIds, authorId);
+        BusinessException.throwIf(count == 0 || count != recoverIds.size(), "删除失败");
+        return count;
     }
 
     /**
@@ -176,11 +174,13 @@ public class ArticleService {
      * @param deleteIds
      * @return
      */
+    @Transactional
     public Integer deleteArticle(List<Integer> deleteIds) {
+        // todo 彻底删除文章没有update_time，没有作者id判断
         BusinessException.throwIf(deleteIds.size() == 0, "彻底删除文章ID不能为空");
-        // todo 只允许当前登录用户，操作自己的文章
-        // todo 更新update_time 作为彻底删除时间
-        return articleMapper.deleteBatchIds(deleteIds);
+        int count = articleMapper.deleteBatchIds(deleteIds);
+        BusinessException.throwIf(count == 0 || count != deleteIds.size(), "删除失败");
+        return count;
     }
 
     /*public List<Tag> listTagsByArticleId(Integer id) {

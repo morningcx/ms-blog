@@ -40,21 +40,17 @@ public class Article {
     private Integer modifier;
     private Integer recycle;
     @TableLogic
-    @TableField(select = false)
     private Integer deleted;
 
 
 
     @TableField(exist = false)
     private String author;
-
     @TableField(exist = false)
     private String category;
-
     @NotNull(message = "内容不能为空")
     @TableField(exist = false)
     private Content content;
-
     @Valid
     @NotEmpty(message = "标签个数不能为0")
     @Size(min = 1, max = 5, message = "标签个数不能超过5")

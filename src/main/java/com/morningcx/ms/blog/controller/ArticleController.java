@@ -1,7 +1,6 @@
 package com.morningcx.ms.blog.controller;
 
 import com.morningcx.ms.blog.base.result.Result;
-import com.morningcx.ms.blog.base.util.SelectUtil;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.mapper.ArticleMapper;
 import com.morningcx.ms.blog.service.ArticleService;
@@ -31,12 +30,6 @@ public class ArticleController {
     public Article getFullById(Integer id) {
         return articleService.getArticleById(id);
     }
-
-    @GetMapping("getMiniById")
-    public Article getMiniById(Integer id) {
-        return articleMapper.selectOne(SelectUtil.baseWrapper().eq("id", id));
-    }
-
 
     @PostMapping("insertArticle")
     public Result insertArticle(@Valid Article article) {
