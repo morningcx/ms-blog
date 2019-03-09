@@ -1,7 +1,6 @@
 package com.morningcx.ms.blog.base.util;
 
 import com.morningcx.ms.blog.base.exception.BusinessException;
-import com.morningcx.ms.blog.entity.User;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -13,35 +12,35 @@ import javax.servlet.http.HttpSession;
  */
 public class RequestUtil {
 
-    private static final String LOGIN_USER_INFO = "loginUserInfo";
+    private static final String LOGIN_USER_ID = "loginId";
 
     /**
      * 获取当前请求属性
      *
      * @return
      */
-    public static ServletRequestAttributes getCurrentAttributes() {
+    public static ServletRequestAttributes getAttributes() {
         return (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
     }
 
     /**
-     * 获取当前登录用户
+     * 获取当前登录用户的id
      *
      * @return
      */
-    public static User getCurrentUser() {
-        HttpSession session = getCurrentAttributes().getRequest().getSession();
-        User user = (User) session.getAttribute(LOGIN_USER_INFO);
-        BusinessException.throwNull(user, "未登录");
-        return user;
+    public static Integer getLoginId() {
+        HttpSession session = getAttributes().getRequest().getSession();
+        Integer loginId = (Integer) session.getAttribute(LOGIN_USER_ID);
+        BusinessException.throwIfNull(loginId, "未登录");
+        return loginId;
     }
 
     /**
-     * 保存登录用户
+     * 保存登录用户的id
      *
-     * @param user
+     * @param loginId
      */
-    public static void setCurrentUser(User user) {
-        getCurrentAttributes().getRequest().getSession().setAttribute(LOGIN_USER_INFO, user);
+    public static void setLoginId(Integer loginId) {
+        getAttributes().getRequest().getSession().setAttribute(LOGIN_USER_ID, loginId);
     }
 }

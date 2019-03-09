@@ -29,7 +29,7 @@ public class BusinessException extends RuntimeException {
      * @param o
      * @param msg
      */
-    public static void throwNull(Object o, String msg) {
+    public static void throwIfNull(Object o, String msg) {
         throwIf(o == null, msg);
     }
 
@@ -40,7 +40,7 @@ public class BusinessException extends RuntimeException {
      * @param msg
      * @return
      */
-    public static void throwBlank(String s, String msg) {
+    public static void throwIfBlank(String s, String msg) {
         throwIf(s == null || "".equals(s.trim()), msg);
     }
 

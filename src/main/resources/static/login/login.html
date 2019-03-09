@@ -41,7 +41,7 @@
                 data: {account: $("#username").val(), password: $("#password").val()},
                 dataType: "json",
                 success: function (res) {
-                    window.location.href = "../layuiAdmin/views/index.html";
+                    window.location.href = "../views/index.html";
                 },
                 error: function (data) {
                     alert(data.responseJSON.msg);

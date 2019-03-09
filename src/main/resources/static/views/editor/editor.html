@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>markdown编辑器</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../library/editor/css/editormd.css">
+    <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<!--<div style="width: 100%;height: 10vh">
+    <input type="text" >
+</div>-->
+<div id="editor"></div>
+<button id="btn">asdsad</button>
+
+
+<script src="../../base/plugin/jquery.min.js"></script>
+<script src="../../library/editor/editormd.js"></script>
+<script src="../../library/layuiAdmin/layui/layui.js"></script>
+<script src="../../base/js/ajax.js"></script>
+<script>
+    layui.use(["jquery", "layer"], function () {
+        var $ = layui.$, layer = layui.layer;
+        layer.ready(function () {
+            layer.open({
+                type: 2,
+                title: "新建文章",
+                skin: 'layui-layer-admin',
+                closeBtn: 0,
+                area: '350px',
+                anim: 0,
+                shadeClose: false, // 禁止关闭
+                content: './meta.html'
+            });
+        });
+
+
+
+
+        /*$.get('./test.md', function (md) {
+            var editor = editormd("editor", {
+                height: "100vh",
+                markdown: md,
+                path: "../../library/editor/lib/",
+                emoji: true,
+                tocm: true,
+                codeFold: true, // 每一个标题或者代码行折叠
+                imageUpload: false, // 禁止本地上传图片
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                syncScrolling: "single",
+                toolbarIcons : function() {
+                    // Or return editormd.toolbarModes[name]; // full, simple, mini
+                    // Using "||" set icons align right.
+                    return [
+                        "undo", "redo", "|",
+                        "bold", "del", "italic", "quote", "ucwords", "uppercase", "lowercase", "|",
+                        "h1", "h2", "h3", "h4", "h5", "h6", "|",
+                        "list-ul", "list-ol", "hr", "|",
+                        "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
+                        /!*"goto-line",*!/ "watch", "preview", "fullscreen", "clear", "search", "|",
+                        /!*"help", "info",*!/ "save", "history", "book", "setting","|",
+                        "publish"
+                    ];
+                },
+                onload : function() {
+                    // this.fullscreen();
+                    //this.unwatch();
+                    //this.watch().fullscreen();
+
+                    //this.setMarkdown("#PHP");
+                    //this.width("100%");
+                    //this.height(480);
+                    //this.resize("100%", 640);
+                },
+                toolbarIconsClass: {
+                    save: "fa fa-save",
+                    history: "fa fa-history",
+                    book: "fa fa-book",
+                    setting: "fa fa-gear",
+                    publish: "fa fa-mail-forward"
+                },
+                toolbarHandlers: {
+                    save: function () {
+                        alert("save")
+                    },
+                    history() {
+                        alert("历史")
+                    },
+                    publish() {
+                        alert("发布")
+                    }
+                },
+                lang : {
+                    toolbar : {
+                        save: "保存",
+                        history: "历史",
+                        book: "信息",
+                        publish: "发布"
+                    }
+                }
+                // imageUploadURL: "../mdImageUpload",
+                // dialogLockScreen : false,   // 设置弹出层对话框不锁屏，全局通用，默认为 true
+                // dialogShowMask : true,     // 设置弹出层对话框显示透明遮罩层，全局通用，默认为 true
+                // dialogDraggable : false,    // 设置弹出层对话框不可拖动，全局通用，默认为 true
+                // dialogMaskOpacity : 0.4,    // 设置透明遮罩层的透明度，全局通用，默认值为 0.1
+                // dialogMaskBgColor : "#000", // 设置透明遮罩层的背景颜色，全局通用，默认为 #fff
+                /!*toolbarIcons: function () {
+                    return editormd.toolbarModes.simple; // 自定义工具栏
+                }*!/
+                // 设置为true会添加一个textarea，里面包含md转化成的html，默认为false
+                /!*saveHTMLToTextarea: false *!/
+                /!*theme : "dark",
+                previewTheme : "dark",
+                editorTheme : "pastel-on-dark"*!/
+            });
+
+
+        });*/
+    });
+</script>
+</body>
+</html>

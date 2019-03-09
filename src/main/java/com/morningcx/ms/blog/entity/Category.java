@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -16,7 +17,9 @@ public class Category {
     private Integer id;
     private Integer pid;
     private Integer userId;
+    @NotBlank(message = "名称不能为空")
     private String name;
+    @NotBlank(message = "描述不能为空")
     private String description;
     private Date createTime;
     private Date updateTime;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>markdown编辑器</title>
-    <link rel="stylesheet" href="../../../other/editor.md-master/editor.md-master/css/editormd.css">
+    <link rel="stylesheet" href="../../../other/editor.md-master/editor/css/editormd.css">
     <style>
         body {
             padding: 0;
@@ -17,11 +17,11 @@
 
 
 <script src="../../../pages/js/jquery.min.js"></script>
-<script src="../../../other/editor.md-master/editor.md-master/editormd.js"></script>
+<script src="../../../other/editor.md-master/editor/editormd.js"></script>
 <script src="../../layuiadmin/layui/layui.js"></script>
-<script src="../../../base/ajax.js"></script>
+<script src="../../../common/ajax.js"></script>
 <script>
-    layui.use(["jquery"], function () {
+    layui.use(["jquery", "layer"], function () {
         var $ = layui.$;
         $.get('../../../pages/test.md', function (md) {
             var editor = editormd("editor", {
@@ -44,7 +44,7 @@
                         "list-ul", "list-ol", "hr", "|",
                         "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
                         "goto-line", "watch", "preview", "fullscreen", "clear", "search", "|",
-                        "help", /*"info",*/ "save", "history", "book", "setting"];
+                        /*"help", "info",*/ "save", "history", "book", "setting"];
                 },
                 onload : function() {
                     // this.fullscreen();

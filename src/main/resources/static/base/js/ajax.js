@@ -2,6 +2,7 @@
  * 结合layui的ajax调用
  */
 var ajax = {
+    baseUrl: "",
     defaultSetting: {
         async: true,
         dataType: "json",
@@ -44,6 +45,8 @@ var ajax = {
                 setting[k] = setting[k] || v;
             });
         });
+        // url前缀
+        setting.url = this.baseUrl + setting.url;
         // 若不开启遮罩层则函数置空
         if (!setting.mask) {
             setting.beforeSend = setting.complete = null;

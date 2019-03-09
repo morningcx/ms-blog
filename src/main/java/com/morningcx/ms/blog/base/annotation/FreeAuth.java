@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
  * @author gcx
  * @date 2019/3/4
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FreeAuth {
 }

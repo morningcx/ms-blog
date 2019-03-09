@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>markdown editor</title>
-    <link rel="stylesheet" href="../other/editor.md-master/editor.md-master/css/editormd.css">
+    <link rel="stylesheet" href="../other/editor.md-master/editor/css/editormd.css">
     <style>
         body {
             padding: 0;
@@ -24,7 +24,7 @@
 </html>
 
 <script src="js/jquery.min.js"></script>
-<script src="../other/editor.md-master/editor.md-master/editormd.js"></script>
+<script src="../other/editor.md-master/editor/editormd.js"></script>
 
 <script type="text/javascript">
     $(function () {
@@ -61,7 +61,7 @@
                 type: "get",
                 success: function (res) {
                     editor = editormd("editormd", {
-                        path: "../other/editor.md-master/editor.md-master/lib/",
+                        path: "../other/editor.editor/editor.editor/lib/",
                         width: "100%",
                         height: 700,
                         emoji: true,

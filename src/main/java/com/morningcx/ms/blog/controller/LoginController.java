@@ -25,12 +25,11 @@ public class LoginController {
     @PostMapping("login")
     public Result login(String account, String password) {
         User user = userMapper.selectOne(new QueryWrapper<User>().
-                select("id", "account", "password", "name").
+                select("id", "password").
                 eq("account", account));
         boolean correct = user != null && user.getPassword().equals(password);
         BusinessException.throwIf(!correct, "用户名或密码错误");
-        user.setPassword(null);
-        RequestUtil.setCurrentUser(user);
-        return Result.ok(user);
+        RequestUtil.setLoginId(user.getId());
+        return Result.ok(user.getId());
     }
 }
