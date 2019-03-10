@@ -40,8 +40,8 @@
                             <th lay-data="{field:'id'}">ID</th>
                             <th lay-data="{field:'title'}">标题</th>
                             <!--<th lay-data="{field:'introduction'}">简介</th>-->
-                            <th lay-data="{field:'createTime'}">创建时间</th>
-                            <th lay-data="{field:'updateTime'}">修改时间</th>
+                            <th lay-data="{field:'createTime', width: 160}">创建时间</th>
+                            <th lay-data="{field:'updateTime', width: 160}">修改时间</th>
                             <th lay-data="{field:'views'}">浏览次数</th>
                             <th lay-data="{field:'likes'}">点赞次数</th>
                             <th lay-data="{templet: parse.type}">类型</th>
@@ -96,7 +96,7 @@
         // 操作按钮点击事件
         var operationActive = {
             detail: function (obj) {
-                layer.msg('ID：' + obj.data.id + ' 的查看操作');
+                window.open("../editor/display.html?id=" + obj.data.id, "_blank");
             },
             edit: function (obj) {
                 window.open("../editor/editor.html?id=" + obj.data.id, "_blank");
@@ -140,7 +140,6 @@
         modifier: function (d) {
             return modifierString[d.modifier];
         }
-
     }
 </script>
 </body>

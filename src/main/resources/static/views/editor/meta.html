@@ -53,8 +53,8 @@
     <div class="layui-col-lg12">
         <label class="layui-form-label">文章标签：</label>
         <div class="layui-input-block">
-            <input placeholder="添加标签" type="text" class="layui-input">
-            <a style="position: absolute;right: 10px;top: 10px;cursor: pointer;color: #adadad" id="addTag">
+            <input placeholder="添加标签" type="text" class="layui-input" id="addTagInput">
+            <a style="position: absolute;right: 10px;top: 10px;cursor: pointer;color: #adadad" id="addTagBtn">
                 <i class="layui-icon layui-icon-add-circle"></i>
             </a>
         </div>
@@ -89,31 +89,40 @@
             }
         });
 
-        $("#addTag").click(function () {
-            var input = $(this).siblings("input");
-            var name = input.val();
-            var tags = $("#tagList");
-            if (name) {
-                /*if (tags.children().length > 4) {
-                    layer.msg("标签不能超过5个！")
-                } else {*/
-                input.val("").focus();
-                tags.append("<span class='layui-badge layui-bg-black' onclick='this.remove()'>" + name + "</span>");
-                /*}*/
+        // 添加标签
+        $("#addTagInput").bind('keypress', function (event) {
+            if (event.keyCode === 13) {
+                $("#addTagBtn").click();
             }
         });
 
+        $("#addTagBtn").click(function () {
+            var input = $("#addTagInput");
+            var name = input.val();
+            var tags = $("#tagList");
+            if (name) {
+                if (tags.children().length > 4) {
+                    layer.msg("标签不能超过5个！")
+                } else {
+                    input.val("").focus();
+                    tags.append("<span class='layui-badge layui-bg-black' onclick='this.remove()'>" + name + "</span>");
+                }
+            }
+        });
+
+        // 新建文章
         $("#save").click(function () {
             var tags = [];
             $("#tagList").children(".layui-badge").each(function () {
-                tags.push({name: $(this).text(), description: $(this).text()});
+                var tagName = $(this).text().trim();
+                tags.push({name: tagName, description: tagName});
             });
             var obj = {
-                title: $("#title").val(),
-                introduction: $("#introduction").val(),
-                categoryId: $("#category").val(),
+                title: $("#title").val().trim(),
+                introduction: $("#introduction").val().trim(),
+                categoryId: $("#category").val().trim(),
                 modifier: 1, // 默认不可见
-                type: $("#type").val(),
+                type: $("#type").val().trim(),
                 tags: tags,
                 content: {content: ""}
             };
