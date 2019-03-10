@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BusinessException;
 import com.morningcx.ms.blog.base.util.EntityUtil;
-import com.morningcx.ms.blog.base.util.RequestUtil;
+import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.entity.Category;
 import com.morningcx.ms.blog.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class CategoryService {
      */
     public IPage<Category> listPage(Category category, Integer page, Integer limit) {
         QueryWrapper<Category> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", RequestUtil.getLoginId());
+        wrapper.eq("user_id", ContextUtil.getLoginId());
         category.setUserId(null);
         wrapper.setEntity(category);
         return categoryMapper.selectPage(new Page<>(page, limit), wrapper);
@@ -53,7 +53,7 @@ public class CategoryService {
         }
         // 检测同一目录下是否存在同名文件
         EntityUtil.trim(category);
-        Integer userId = RequestUtil.getLoginId();
+        Integer userId = ContextUtil.getLoginId();
         QueryWrapper<Category> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
         wrapper.eq("pid", category.getPid());

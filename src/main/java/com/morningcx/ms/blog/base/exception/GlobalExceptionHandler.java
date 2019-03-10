@@ -3,6 +3,8 @@ package com.morningcx.ms.blog.base.exception;
 import com.morningcx.ms.blog.base.result.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,16 +30,23 @@ public class GlobalExceptionHandler {
      * @param e
      * @return
      */
-    @ExceptionHandler(BindException.class)
+    @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Result handleBindException(BindException e) {
+    public Result handleBindException(Exception e) {
         e.printStackTrace();
+        BindingResult bindingResult;
         // valid验证集合中的元素时可能会重复报错，需要裁剪
         Set<String> set = new HashSet<>();
         StringBuilder sb = new StringBuilder();
-        e.getAllErrors().forEach(error -> {
+        // json抛出的异常和表单抛出的异常不一样
+        if (e instanceof MethodArgumentNotValidException) {
+            bindingResult = ((MethodArgumentNotValidException) e).getBindingResult();
+        } else {
+            bindingResult = ((BindException) e).getBindingResult();
+        }
+        bindingResult.getAllErrors().forEach(error -> {
             if (set.add(error.getDefaultMessage())) {
-                sb.append(error.getDefaultMessage()).append("\n");
+                sb.append(error.getDefaultMessage()).append("<br>");
             }
         });
         return Result.fail(sb.toString());

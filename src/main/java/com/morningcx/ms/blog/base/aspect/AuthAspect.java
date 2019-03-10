@@ -1,13 +1,13 @@
 package com.morningcx.ms.blog.base.aspect;
 
 import com.morningcx.ms.blog.base.annotation.FreeAuth;
-import com.morningcx.ms.blog.base.util.RequestUtil;
-import lombok.extern.slf4j.Slf4j;
+import com.morningcx.ms.blog.base.util.ContextUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
  * @author gcx
  * @date 2019/3/4
  */
-@Slf4j
 @Aspect
 @Component
+@Order(1)
 public class AuthAspect {
 
     /**
@@ -42,7 +42,7 @@ public class AuthAspect {
         // 如果没有免登录注解，则需要登录认证
         // todo 类上面写了FreeAuth则所有下面的方法都不需要登录认证(admin一般就登录接口不需要认证)
         if (!sign.getMethod().isAnnotationPresent(FreeAuth.class)) {
-            RequestUtil.getLoginId();
+            ContextUtil.getLoginId();
         }
     }
 }

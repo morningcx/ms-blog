@@ -42,7 +42,10 @@ var ajax = {
     parseSetting(setting) {
         layui.use(['jquery'], function () {
             layui.$.each(ajax.defaultSetting, function (k, v) {
-                setting[k] = setting[k] || v;
+                // 不能用||，值为false时不起作用
+                if (setting[k] === undefined) {
+                    setting[k] = v;
+                }
             });
         });
         // url前缀
@@ -59,7 +62,26 @@ var ajax = {
      */
     errorHandler(res) {
         layui.use(['layer'], function () {
-            layui.layer.alert(res.responseJSON.msg, {icon: 2});
+            var errorMsg = res.responseJSON.msg;
+            var callback;
+            if (errorMsg === "未登录") {
+                callback = function () {
+                    top.location.href = "/login/login.html";
+                }
+            }
+            layui.layer.alert(errorMsg, {icon: 2}, callback);
         });
+    },
+    /**
+     * 从地址栏获取参数值
+     * @param name
+     * @returns {*}
+     */
+    getUrlParam: function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg); // 匹配目标参数
+        if (r != null)
+            return unescape(r[2]);
+        return null; // 返回参数值
     }
 };

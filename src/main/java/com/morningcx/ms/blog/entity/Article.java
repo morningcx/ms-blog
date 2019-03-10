@@ -52,8 +52,8 @@ public class Article {
     @TableField(exist = false)
     private Content content;
     @Valid
-    @NotEmpty(message = "标签个数不能为0")
-    @Size(min = 1, max = 5, message = "标签个数不能超过5")
+    @NotEmpty(message = "标签不能为空")
+    @Size(max = 5, message = "标签不能超过5个")
     @TableField(exist = false)
     private List<Tag> tags;
 }

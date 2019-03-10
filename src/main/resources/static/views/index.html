@@ -46,7 +46,7 @@
 
                 <!--editor编辑器-->
                 <li class="layui-nav-item layui-hide-xs" lay-unselect>
-                    <a href="editor/editor.html" target="_blank">
+                    <a id="addArticle" style="cursor: pointer">
                         <i class="layui-icon layui-icon-add-circle"></i>
                     </a>
                 </li>
@@ -156,15 +156,15 @@
 
 
 
-                    <!--类别管理-->
+                    <!--分类管理-->
                     <li data-name="article" class="layui-nav-item">
-                        <a href="javascript:;" lay-tips="类别管理" lay-direction="2">
+                        <a href="javascript:;" lay-tips="分类管理" lay-direction="2">
                             <i class="layui-icon layui-icon-template"></i>
-                            <cite>类别管理</cite>
+                            <cite>分类管理</cite>
                         </a>
                         <dl class="layui-nav-child">
                             <dd data-name="list">
-                                <a lay-href="category/list.html">类别列表</a>
+                                <a lay-href="category/list.html">分类列表</a>
                             </dd>
                         </dl>
                     </li>
@@ -547,9 +547,24 @@
     }).use('index');
 
     // 自定义事件
-    layui.use(["jquery"], function () {
-        var $ = layui.$;
+    layui.use(["jquery", "layer"], function () {
+        var $ = layui.$, layer = layui.layer;
         // 新增文章
+        $("#addArticle").click(function () {
+            layer.ready(function () {
+                layer.open({
+                    type: 2,
+                    title: "新建文章",
+                    skin: 'layui-layer-admin',
+                    closeBtn: 1,
+                    area: ["400px", "500px"],
+                    anim: 0,
+                    // btn:["确认", "取消"],
+                    shadeClose: true, // 禁止关闭
+                    content: ['./editor/meta.html', 'no']
+                });
+            });
+        });
 
     });
 </script>

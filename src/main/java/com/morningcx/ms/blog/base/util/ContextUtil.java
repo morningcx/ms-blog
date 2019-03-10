@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
  * @author gcx
  * @date 2019/2/27
  */
-public class RequestUtil {
+public class ContextUtil {
 
     private static final String LOGIN_USER_ID = "loginId";
 
