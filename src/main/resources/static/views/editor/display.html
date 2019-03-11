@@ -90,7 +90,7 @@
 <script>
     layui.use(["jquery", "layer"], function () {
         var $ = layui.$, layer = layui.layer;
-        var articleId = ajax.getUrlParam("id");
+        var articleId = getUrlParam("id");
         // 参数传递错误则不执行
         if (!articleId) {
             layer.alert("参数传递错误", {icon: 2});

@@ -21,10 +21,10 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @Log(type = "查询", desc = "根据ID查询文章详细信息")
-    @GetMapping("getFullById")
-    public Article getFullById(Integer id) {
-        return articleService.getArticleById(id);
+    @Log(type = "查询", desc = "根据ID查询文章元信息")
+    @GetMapping("getMetaById")
+    public Result getMetaById(Integer id) {
+        return Result.ok(articleService.getMetaById(id));
     }
 
     @Log(type = "新增", desc = "新增文章")
@@ -62,5 +62,4 @@ public class ArticleController {
     public Result deleteArticle(@RequestBody List<Integer> deleteIds) {
         return Result.ok(articleService.deleteArticle(deleteIds));
     }
-
 }

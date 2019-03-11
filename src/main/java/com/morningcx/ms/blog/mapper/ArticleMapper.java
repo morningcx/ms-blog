@@ -27,7 +27,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @param id
      * @return
      */
-    Article getMetaById(Integer id);
+    /*Article getMetaById(Integer id);*/
 
     /**
      * 根据文章id以及登录用户id回收文章

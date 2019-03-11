@@ -22,7 +22,7 @@
         </foreach>
     </update>
 
-    <select id="getMetaById" resultType="com.morningcx.ms.blog.entity.Article">
+    <!--<select id="getMetaById" resultType="com.morningcx.ms.blog.entity.Article">
         SELECT
             a.*,
             u.`name` as author,
@@ -31,5 +31,5 @@
         INNER JOIN t_user as u on a.author_id = u.id
         INNER JOIN t_category as c on a.category_id = c.id
         where a.deleted = 0 and a.modifier = 0 and a.id = #{id}
-    </select>
+    </select>-->
 </mapper>

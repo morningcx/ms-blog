@@ -25,4 +25,10 @@ public class Category {
     private Date updateTime;
     @TableLogic
     private Integer deleted;
+
+    /*@TableField(exist = false)
+    private List<Category> children;
+    @TableField(exist = false)
+    private List<Article> articles;*/
+
 }

@@ -4,15 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BusinessException;
-import com.morningcx.ms.blog.base.util.EntityUtil;
 import com.morningcx.ms.blog.base.util.ContextUtil;
+import com.morningcx.ms.blog.base.util.EntityUtil;
 import com.morningcx.ms.blog.entity.Category;
+import com.morningcx.ms.blog.mapper.ArticleMapper;
 import com.morningcx.ms.blog.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author gcx
@@ -22,7 +23,25 @@ import java.util.Date;
 public class CategoryService {
 
     @Autowired
+    private ArticleMapper articleMapper;
+
+    @Autowired
     private CategoryMapper categoryMapper;
+
+    /**
+     * 根据ID查询分类
+     *
+     * @param id
+     * @return
+     */
+    public Category getById(Integer id) {
+        QueryWrapper<Category> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        wrapper.eq("user_id", ContextUtil.getLoginId());
+        Category category = categoryMapper.selectOne(wrapper);
+        BusinessException.throwIfNull(category, "分类不存在");
+        return category;
+    }
 
     /**
      * 分页查询
@@ -70,4 +89,44 @@ public class CategoryService {
         return category.getId();
     }
 
+
+    /**
+     * 获取分类树
+     *
+     * @return
+     */
+    public List<Map<String, Object>> getCategoryTree() {
+        List<Map<String, Object>> nodes = new ArrayList<>();
+        Integer userId = ContextUtil.getLoginId();
+        // todo 文章节点
+        /*List<Article> articles = articleMapper.selectList(new QueryWrapper<Article>()
+                .eq("recycle", 0)
+                .eq("author_id", userId)
+                .select("id", "title", "category_id")
+        );
+        if (articles != null && articles.size() != 0) {
+            articles.forEach(article -> {
+                Map<String, Object> map = new HashMap<>();
+                map.put("articleId", article.getId());
+                map.put("name", article.getTitle());
+                map.put("pId", article.getCategoryId());
+                nodes.add(map);
+            });
+        }*/
+        // 分类节点
+        List<Category> categories = categoryMapper.selectList(
+                new QueryWrapper<Category>().eq("user_id", userId));
+        if (categories != null && categories.size() != 0) {
+            categories.forEach(category -> {
+                Map<String, Object> map = new HashMap<>();
+                map.put("id", category.getId());
+                map.put("name", category.getName());
+                map.put("pId", category.getPid());
+                map.put("isParent", true);
+                map.put("open", true);
+                nodes.add(map);
+            });
+        }
+        return nodes;
+    }
 }

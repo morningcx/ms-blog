@@ -9,6 +9,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <!--<link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">-->
+    <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
     <link rel="stylesheet" href="../../library/editor/css/editormd.css">
     <style>
         body {
@@ -31,7 +32,7 @@
 <script>
     layui.use(["jquery", "layer"], function () {
         var $ = layui.$, layer = layui.layer;
-        var articleId = ajax.getUrlParam("id");
+        var articleId = getUrlParam("id");
         // 参数传递错误则不执行
         if (!articleId) {
             layer.alert("参数传递错误！", {icon: 2});
@@ -76,7 +77,7 @@
                         "list-ul", "list-ol", "hr", "|",
                         "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
                         /*"goto-line",*/ "watch", "preview", "fullscreen", "clear", "search", "|",
-                        /*"help", "info",*/ "save", "history", "book", "setting", "|",
+                        /*"help", "info",*/ "save", "history", "meta", "setting", "|",
                         "publish"
                     ];
                 },
@@ -93,7 +94,7 @@
                 toolbarIconsClass: {
                     save: "fa fa-save",
                     history: "fa fa-history",
-                    book: "fa fa-book",
+                    meta: "fa fa-book",
                     setting: "fa fa-gear",
                     publish: "fa fa-mail-forward"
                 },
@@ -104,13 +105,14 @@
                     },
                     publish() {
                         alert("发布")
-                    }
+                    },
+                    meta: saveMeta
                 },
                 lang: {
                     toolbar: {
                         save: "保存",
                         history: "历史",
-                        book: "信息",
+                        meta: "信息",
                         publish: "发布"
                     }
                 }
@@ -141,6 +143,23 @@
                     success: function (res) {
                         layer.msg("保存成功！")
                     }
+                });
+            }
+
+            // 获取文章信息
+            function saveMeta() {
+                layer.ready(function () {
+                    layer.open({
+                        type: 2,
+                        title: "文章信息",
+                        skin: 'layui-layer-admin',
+                        closeBtn: 1,
+                        area: ["400px", "500px"],
+                        anim: 0,
+                        // btn:["确认", "取消"],
+                        shadeClose: true, // 禁止关闭
+                        content: ['./meta.html?id=' + articleId, 'no']
+                    });
                 });
             }
         }

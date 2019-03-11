@@ -9,6 +9,7 @@ import com.morningcx.ms.blog.mapper.ArticleMapper;
 import com.morningcx.ms.blog.mapper.ContentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class ContentService {
         // 查询当前登录用户未回收、未删除的文章
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("id", articleId);
-        wrapper.eq("recycle", 0);
+        // wrapper.eq("recycle", 0); 回收站需要查看内容
         wrapper.eq("author_id", ContextUtil.getLoginId());
         wrapper.select("content_id", "title");
         Article article = articleMapper.selectOne(wrapper);
@@ -58,10 +59,12 @@ public class ContentService {
      * @param newContent
      * @return
      */
+    @Transactional
     public int updateByArticleId(Integer articleId, String newContent) {
         // 查询当前登录用户未回收、未删除的文章
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("id", articleId);
+        // todo 回收站文章不能修改
         wrapper.eq("recycle", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());
         wrapper.select("content_id");

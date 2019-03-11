@@ -41,18 +41,19 @@ public class ArticleService {
 
 
     /**
-     * 根据id查询文章信息
+     * 根据id查询文章元信息
      *
      * @param id
      * @return
      */
-    public Article getArticleById(Integer id) {
-        Article article = articleMapper.getMetaById(id);
+    public Article getMetaById(Integer id) {
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        wrapper.eq("recycle", 0);
+        wrapper.eq("author_id", ContextUtil.getLoginId());
+        Article article = articleMapper.selectOne(wrapper);
         BusinessException.throwIfNull(article, "文章不存在");
         article.setTags(articleTagMapper.listTagsByArticleId(id));
-        // 更新浏览次数
-        articleMapper.updateViewsById(id);
-        article.setContent(contentMapper.selectById(article.getContentId()));
         return article;
     }
 

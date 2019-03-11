@@ -105,7 +105,7 @@
         // 操作按钮点击事件
         var operationActive = {
             detail: function (obj) {
-                layer.msg('ID：' + obj.data.id + ' 的查看操作');
+                window.open("../editor/display.html?id=" + obj.data.id, "_blank");
             },
             recover: function (obj) {
                 recoverArticle([obj.data.id]);
