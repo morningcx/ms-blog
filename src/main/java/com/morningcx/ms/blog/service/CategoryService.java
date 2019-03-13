@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BusinessException;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.base.util.EntityUtil;
+import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.entity.Category;
 import com.morningcx.ms.blog.mapper.ArticleMapper;
 import com.morningcx.ms.blog.mapper.CategoryMapper;
@@ -70,15 +71,14 @@ public class CategoryService {
         if (category.getPid() == null) {
             category.setPid(0);
         }
-        // 检测同一目录下是否存在同名文件
+        // 检测是否存在同名分类
         EntityUtil.trim(category);
         Integer userId = ContextUtil.getLoginId();
         QueryWrapper<Category> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
-        wrapper.eq("pid", category.getPid());
         wrapper.eq("name", category.getName());
         Category oldCategory = categoryMapper.selectOne(wrapper);
-        BusinessException.throwIf(oldCategory != null, "目录下存在同名文件");
+        BusinessException.throwIf(oldCategory != null, "存在同名分类");
         // 插入新分类
         Date now = new Date();
         category.setUserId(userId);
@@ -99,7 +99,7 @@ public class CategoryService {
         List<Map<String, Object>> nodes = new ArrayList<>();
         Integer userId = ContextUtil.getLoginId();
         // todo 文章节点
-        /*List<Article> articles = articleMapper.selectList(new QueryWrapper<Article>()
+        List<Article> articles = articleMapper.selectList(new QueryWrapper<Article>()
                 .eq("recycle", 0)
                 .eq("author_id", userId)
                 .select("id", "title", "category_id")
@@ -112,7 +112,7 @@ public class CategoryService {
                 map.put("pId", article.getCategoryId());
                 nodes.add(map);
             });
-        }*/
+        }
         // 分类节点
         List<Category> categories = categoryMapper.selectList(
                 new QueryWrapper<Category>().eq("user_id", userId));

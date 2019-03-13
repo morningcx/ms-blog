@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>文章元信息</title>
     <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
     <style>
         /*body::-webkit-scrollbar {
@@ -68,7 +68,6 @@
 <div class="layui-col-lg12">
     <button class="layui-btn layui-btn-fluid layui-bg-black" id="save">保存</button>
 </div>
-
 <script src="../../library/layuiAdmin/layui/layui.js"></script>
 <script src="../../base/js/ajax.js"></script>
 <script>
@@ -131,34 +130,55 @@
             }
         });
 
-        // 新建文章
-        /*$("#save").click(function () {
+        // 保存文章元信息
+        $("#save").click(function () {
+            var meta = getArticleMeta();
+            // 文章id存在则更新，不存在则插入
+            if (articleId) {
+                meta.id = articleId;
+                ajax.post({
+                    url: "/article/updateMeta",
+                    contentType: "application/json",
+                    data: JSON.stringify(meta),
+                    success: function () {
+                        $(parent.document).attr('title', meta.title);
+                        layer.msg("保存成功！", {time: 1000}, function () {
+                            parent.layer.close(index);
+                        });
+                    }
+                });
+            } else {
+                ajax.post({
+                    url: "/article/insertArticle",
+                    contentType: "application/json",
+                    data: JSON.stringify(meta),
+                    success: function (res) {
+                        layer.msg("新建成功！", {time: 1000}, function () {
+                            parent.layer.close(index);
+                            window.open("./editor.html?id=" + res.data, "_blank");
+                        });
+                    }
+                });
+            }
+        });
+
+        /**
+         * 获取元信息
+         */
+        function getArticleMeta() {
             var tags = [];
             $("#tagList").children(".layui-badge").each(function () {
                 var tagName = $(this).text().trim();
                 tags.push({name: tagName, description: tagName});
             });
-            var obj = {
+            return {
                 title: $("#title").val().trim(),
                 introduction: $("#introduction").val().trim(),
                 categoryId: $("#category").val().trim(),
-                modifier: 1, // 默认不可见
                 type: $("#type").val().trim(),
-                tags: tags,
-                content: {content: ""}
+                tags: tags
             };
-            ajax.post({
-                url: "/article/insertArticle",
-                contentType: "application/json",
-                data: JSON.stringify(obj),
-                success: function (res) {
-                    layer.msg("新建文章成功！", {time: 1000}, function () {
-                        parent.layer.close(index);
-                        window.open("./editor.html?id=" + res.data, "_blank");
-                    });
-                }
-            });
-        });*/
+        }
     });
 
 

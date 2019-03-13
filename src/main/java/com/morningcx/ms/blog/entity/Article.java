@@ -36,7 +36,6 @@ public class Article {
     private Integer views;
     @NotNull(message = "类型不能为空")
     private Integer type;
-    @NotNull(message = "修饰符不能为空")
     private Integer modifier;
     private Integer recycle;
     @TableLogic
@@ -48,7 +47,6 @@ public class Article {
     private String author;
     @TableField(exist = false)
     private String category;
-    @NotNull(message = "内容不能为空")
     @TableField(exist = false)
     private Content content;
     @Valid

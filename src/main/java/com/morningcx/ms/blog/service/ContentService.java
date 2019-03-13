@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,15 +40,16 @@ public class ContentService {
         wrapper.eq("id", articleId);
         // wrapper.eq("recycle", 0); 回收站需要查看内容
         wrapper.eq("author_id", ContextUtil.getLoginId());
-        wrapper.select("content_id", "title");
+        wrapper.select("content_id", "title", "recycle");
         Article article = articleMapper.selectOne(wrapper);
         String notFind = "文章不存在";
         BusinessException.throwIfNull(article, notFind);
         // 查询文章对应的内容
         Content content = contentMapper.selectById(article.getContentId());
         BusinessException.throwIfNull(content, notFind);
+        // 返回文章标题和文章内容
         Map<String, Object> map = new HashMap<>();
-        map.put("title", article.getTitle());
+        map.put("title", article.getTitle() + ((article.getRecycle() ==  0) ? "" : "(回收站)"));
         map.put("content", content);
         return map;
     }
@@ -64,12 +66,17 @@ public class ContentService {
         // 查询当前登录用户未回收、未删除的文章
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("id", articleId);
-        // todo 回收站文章不能修改
+        // 回收站文章不能修改
         wrapper.eq("recycle", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());
         wrapper.select("content_id");
         Article article = articleMapper.selectOne(wrapper);
         BusinessException.throwIfNull(article, "文章不存在");
+        // 更新文章修改时间
+        Article updateTime = new Article();
+        updateTime.setId(articleId);
+        updateTime.setUpdateTime(new Date());
+        articleMapper.updateById(updateTime);
         // 更新内容
         Content content = new Content();
         content.setId(article.getContentId());

@@ -27,6 +27,12 @@ public class ArticleController {
         return Result.ok(articleService.getMetaById(id));
     }
 
+    @Log(type = "修改", desc = "修改文章元信息")
+    @PostMapping("updateMeta")
+    public Result updateMeta(@Valid @RequestBody Article article) {
+        return Result.ok(articleService.updateMeta(article));
+    }
+
     @Log(type = "新增", desc = "新增文章")
     @PostMapping("insertArticle")
     public Result insertArticle(@RequestBody @Valid Article article) {

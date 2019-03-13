@@ -53,10 +53,36 @@ public class ArticleService {
         wrapper.eq("author_id", ContextUtil.getLoginId());
         Article article = articleMapper.selectOne(wrapper);
         BusinessException.throwIfNull(article, "文章不存在");
+        // 查询标签
         article.setTags(articleTagMapper.listTagsByArticleId(id));
         return article;
     }
 
+    /**
+     * 根据id更新文章元信息
+     *
+     * @param article
+     * @return
+     */
+    @Transactional
+    public int updateMeta(Article article) {
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", article.getId());
+        wrapper.eq("recycle", 0);
+        wrapper.eq("author_id", ContextUtil.getLoginId());
+        BusinessException.throwIf(articleMapper.selectCount(wrapper) == 0, "文章不存在");
+        // 创建新文章对象，防止其他参数混入
+        Article updateArticle = new Article();
+        updateArticle.setTitle(article.getTitle());
+        updateArticle.setIntroduction(article.getIntroduction());
+        updateArticle.setCategoryId(article.getCategoryId());
+        updateArticle.setType(article.getType());
+        updateArticle.setUpdateTime(new Date());
+        // 删除原有标签，添加新标签
+        articleTagMapper.delete(new QueryWrapper<ArticleTag>().eq("article_id", article.getId()));
+        insertTags(article.getId(), article.getTags());
+        return articleMapper.update(updateArticle, wrapper);
+    }
 
     /**
      * 创建新文章
@@ -65,14 +91,18 @@ public class ArticleService {
      */
     @Transactional
     public Integer insertArticle(Article article) {
-        // 设置作者id
-        article.setAuthorId(ContextUtil.getLoginId());
-        // 插入文章内容，markdown内容开头或结尾可能存在空格，所以不需要进行trim操作
-        Content content = article.getContent();
+        // 插入内容，新建文章默认为空
+        Content content = new Content();
+        content.setContent("");
         contentMapper.insert(content);
-        // 插入文章，对简介和标题字符串进行修剪
+
+        // 插入文章元信息
         EntityUtil.trim(article);
         article.setContentId(content.getId());
+        // 设置默认私密文章
+        article.setModifier(1);
+        // 设置作者id
+        article.setAuthorId(ContextUtil.getLoginId());
         Date now = new Date();
         article.setCreateTime(now);
         article.setUpdateTime(now);
@@ -81,11 +111,23 @@ public class ArticleService {
         article.setRecycle(0);
         article.setDeleted(0);
         articleMapper.insert(article);
+
         // 插入标签
+        insertTags(article.getId(), article.getTags());
+        return article.getId();
+    }
+
+    /**
+     * 插入文章标签
+     *
+     * @param articleId
+     * @param tags
+     */
+    private void insertTags(Integer articleId, List<Tag> tags) {
         ArticleTag articleTag = new ArticleTag();
-        articleTag.setArticleId(article.getId());
+        articleTag.setArticleId(articleId);
         Set<String> set = new HashSet<>();
-        for (Tag tag : article.getTags()) {
+        for (Tag tag : tags) {
             // 对标签名称进行修剪
             EntityUtil.trim(tag);
             // 标签去重
@@ -101,7 +143,6 @@ public class ArticleService {
                 articleTagMapper.insert(articleTag);
             }
         }
-        return article.getId();
     }
 
     /**
