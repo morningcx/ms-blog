@@ -27,18 +27,21 @@
 <script src="../../library/layuiAdmin/layui/layui.js"></script>
 <script src="../../base/js/ajax.js"></script>
 <script>
-    layui.use(["jquery", "layer"], function () {
-        var $ = layui.$, layer = layui.layer;
+    layui.use(["jquery", "layer", "form"], function () {
+        var $ = layui.$, layer = layui.layer, form = layui.form;
         var articleId = getUrlParam("id");
         // 参数传递错误则不执行
         if (!articleId) {
-            layer.alert("参数传递错误！", {icon: 2});
+            layer.ready(function () {
+                layer.alert("参数传递错误！", {icon: 2});
+            });
             return;
         }
 
         // 参数正常则请求文章内容
         ajax.get({
             url: "/content/getByArticleId?articleId=" + articleId,
+            mask: false,
             success: function (res) {
                 $(document).attr('title', res.data.title);
                 parseMarkdown(res.data.content.content);
@@ -63,7 +66,7 @@
                 /*codeFold: true, // 每一个标题或者代码行折叠*/
                 imageUpload: false, // 禁止本地上传图片
                 imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                syncScrolling: "single",
+                /*syncScrolling: "single",*/
                 toolbarIcons: function () {
                     // Or return editormd.toolbarModes[name]; // full, simple, mini
                     // Using "||" set icons align right.
@@ -73,7 +76,7 @@
                         "h1", "h2", "h3", "h4", "h5", "h6", "|",
                         "list-ul", "list-ol", "hr", "|",
                         "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
-                        /*"goto-line",*/ "watch", "preview", "fullscreen", "clear", "search", "|",
+                        /*"goto-line",*/ "watch", "preview"/*, "fullscreen"*/, "clear"/*, "search"*/, "|",
                         /*"help", "info",*/ "save", "history", "meta", "setting", "|",
                         "publish"
                     ];
@@ -103,7 +106,7 @@
                     publish() {
                         alert("发布")
                     },
-                    setting: setting,
+                    /*setting: setting,*/
                     meta: saveMeta
                 },
                 lang: {
@@ -164,19 +167,38 @@
 
             // editor设置
             function setting() {
+                var content =
+                    "<form class=\"layui-form layui-col-lg12\" action=\"\">" +
+                    "<div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">工具栏：</label>\n" +
+                    "        <div class=\"layui-input-block\">\n" +
+                    "            <select id=\"editormd-theme-select\">\n" +
+                    "            </select>\n" +
+                    "        </div>\n" +
+                    "    </div>" +
+                    "<div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">编辑区：</label>\n" +
+                    "        <div class=\"layui-input-block\">\n" +
+                    "            <select id=\"editor-area-theme-select\">\n" +
+                    "            </select>\n" +
+                    "        </div>\n" +
+                    "    </div>" +
+                    "<div class=\"layui-form-item\">\n" +
+                    "        <label class=\"layui-form-label\">预览区：</label>\n" +
+                    "        <div class=\"layui-input-block\">\n" +
+                    "            <select id=\"preview-area-theme-select\">\n" +
+                    "            </select>\n" +
+                    "        </div>\n" +
+                    "    </div>" +
+                    "</form>";
 
                 layer.open({
-                    title:'页面层'
-                    ,type: 1
-                    ,skin: 'layui-layer-rim'
-                    ,shadeClose: true
-                    ,area: ['80%', '300px']
-                    ,content: "<select id=\"editormd-theme-select\">\n" +
-                    "                    </select>\n" +
-                    "                    <select id=\"editor-area-theme-select\">\n" +
-                    "                    </select>\n" +
-                    "                    <select id=\"preview-area-theme-select\">\n" +
-                    "                    </select>"
+                    title: '页面层'
+                    , type: 1
+                    , skin: 'layui-layer-rim'
+                    , shadeClose: true
+                    , area: ['50%', '300px']
+                    , content: content
                 });
 
                 themeSelect("editormd-theme-select", editormd.themes, "theme", function ($this, theme) {
@@ -190,6 +212,8 @@
                 themeSelect("preview-area-theme-select", editormd.previewThemes, "previewTheme", function ($this, theme) {
                     editor.setPreviewTheme(theme);
                 });
+
+                form.render("select");
 
                 /**
                  * 主题切换绑定

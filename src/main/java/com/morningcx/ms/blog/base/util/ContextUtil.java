@@ -1,6 +1,6 @@
 package com.morningcx.ms.blog.base.util;
 
-import com.morningcx.ms.blog.base.exception.BusinessException;
+import com.morningcx.ms.blog.base.exception.BizException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -31,7 +31,7 @@ public class ContextUtil {
     public static Integer getLoginId() {
         HttpSession session = getAttributes().getRequest().getSession();
         Integer loginId = (Integer) session.getAttribute(LOGIN_USER_ID);
-        BusinessException.throwIfNull(loginId, "未登录");
+        BizException.throwIfNull(loginId, "未登录");
         return loginId;
     }
 

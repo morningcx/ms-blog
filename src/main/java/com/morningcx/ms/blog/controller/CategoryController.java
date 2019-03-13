@@ -1,6 +1,7 @@
 package com.morningcx.ms.blog.controller;
 
 import com.morningcx.ms.blog.base.annotation.Log;
+import com.morningcx.ms.blog.base.enums.OpEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Category;
 import com.morningcx.ms.blog.service.CategoryService;
@@ -22,25 +23,25 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Log(type = "查询", desc = "根据ID查询分类")
+    @Log(type = OpEnum.READ, desc = "根据ID查询分类")
     @GetMapping("getById")
     public Result getById(Integer id) {
         return Result.ok(categoryService.getById(id));
     }
 
-    @Log(type = "查询", desc = "分页查询分类")
+    @Log(type = OpEnum.READ, desc = "分页查询分类")
     @GetMapping("listPage")
     public Result listPage(Category category, Integer page, Integer limit) {
         return Result.ok(categoryService.listPage(category, page, limit));
     }
 
-    @Log(type = "新增", desc = "新增分类")
+    @Log(type = OpEnum.CREATE, desc = "新增分类")
     @PostMapping("insert")
     public Result insert(@Valid Category category) {
         return Result.ok(categoryService.insert(category));
     }
 
-    @Log(type = "查询", desc = "查询分类树")
+    @Log(type = OpEnum.READ, desc = "查询分类树")
     @GetMapping("getTree")
     public Result getCategoryTree() {
         return Result.ok(categoryService.getCategoryTree());

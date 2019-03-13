@@ -1,6 +1,6 @@
 package com.morningcx.ms.blog.service;
 
-import com.morningcx.ms.blog.base.exception.BusinessException;
+import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.util.QiNiuUtil;
 import com.morningcx.ms.blog.entity.Image;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ImageService {
      * @return
      */
     public Map<String, Object> mdImageUpload(MultipartFile file) {
-        BusinessException.throwIf(file == null || file.isEmpty(), "上传图片不能为空");
+        BizException.throwIf(file == null || file.isEmpty(), "上传图片不能为空");
         Map<String, Object> result = new HashMap<>(3);
         try {
             Image image = QiNiuUtil.uploadImage(file);

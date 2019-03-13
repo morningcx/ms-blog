@@ -3,7 +3,8 @@ package com.morningcx.ms.blog.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.morningcx.ms.blog.base.annotation.FreeAuth;
 import com.morningcx.ms.blog.base.annotation.Log;
-import com.morningcx.ms.blog.base.exception.BusinessException;
+import com.morningcx.ms.blog.base.enums.OpEnum;
+import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.entity.User;
@@ -26,13 +27,13 @@ public class LoginController {
 
     @FreeAuth
     @PostMapping("login")
-    @Log(type = "登录", desc = "用户登录")
+    @Log(type = OpEnum.LOGIN, desc = "用户登录")
     public Result login(String account, String password) {
         User user = userMapper.selectOne(new QueryWrapper<User>().
                 select("id", "password").
                 eq("account", account));
         boolean correct = user != null && user.getPassword().equals(password);
-        BusinessException.throwIf(!correct, "用户名或密码错误");
+        BizException.throwIf(!correct, "用户名或密码错误");
         ContextUtil.setLoginId(user.getId());
         return Result.ok(user.getId());
     }

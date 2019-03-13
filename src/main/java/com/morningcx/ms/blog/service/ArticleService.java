@@ -3,7 +3,7 @@ package com.morningcx.ms.blog.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.morningcx.ms.blog.base.exception.BusinessException;
+import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.util.EntityUtil;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.entity.Article;
@@ -36,8 +36,6 @@ public class ArticleService {
     private TagMapper tagMapper;
     @Autowired
     private ArticleTagMapper articleTagMapper;
-    @Autowired
-    private CategoryMapper categoryMapper;
 
 
     /**
@@ -52,7 +50,7 @@ public class ArticleService {
         wrapper.eq("recycle", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());
         Article article = articleMapper.selectOne(wrapper);
-        BusinessException.throwIfNull(article, "文章不存在");
+        BizException.throwIfNull(article, "文章不存在");
         // 查询标签
         article.setTags(articleTagMapper.listTagsByArticleId(id));
         return article;
@@ -70,7 +68,7 @@ public class ArticleService {
         wrapper.eq("id", article.getId());
         wrapper.eq("recycle", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());
-        BusinessException.throwIf(articleMapper.selectCount(wrapper) == 0, "文章不存在");
+        BizException.throwIf(articleMapper.selectCount(wrapper) == 0, "文章不存在");
         // 创建新文章对象，防止其他参数混入
         Article updateArticle = new Article();
         updateArticle.setTitle(article.getTitle());
@@ -189,10 +187,10 @@ public class ArticleService {
      */
     @Transactional
     public Integer recycleArticle(List<Integer> recycleIds) {
-        BusinessException.throwIf(recycleIds == null || recycleIds.size() == 0, "删除文章ID不能为空");
+        BizException.throwIf(recycleIds == null || recycleIds.size() == 0, "删除文章ID不能为空");
         Integer authorId = ContextUtil.getLoginId();
         int count = articleMapper.recycleBatchIds(recycleIds, authorId);
-        BusinessException.throwIf(count == 0 || count != recycleIds.size(), "删除失败");
+        BizException.throwIf(count == 0 || count != recycleIds.size(), "删除失败");
         return count;
     }
 
@@ -205,10 +203,10 @@ public class ArticleService {
      */
     @Transactional
     public Integer recoverArticle(List<Integer> recoverIds) {
-        BusinessException.throwIf(recoverIds == null || recoverIds.size() == 0, "恢复文章ID不能为空");
+        BizException.throwIf(recoverIds == null || recoverIds.size() == 0, "恢复文章ID不能为空");
         Integer authorId = ContextUtil.getLoginId();
         int count = articleMapper.recoverBatchIds(recoverIds, authorId);
-        BusinessException.throwIf(count == 0 || count != recoverIds.size(), "删除失败");
+        BizException.throwIf(count == 0 || count != recoverIds.size(), "删除失败");
         return count;
     }
 
@@ -221,9 +219,9 @@ public class ArticleService {
     @Transactional
     public Integer deleteArticle(List<Integer> deleteIds) {
         // todo 彻底删除文章没有update_time，没有作者id判断
-        BusinessException.throwIf(deleteIds.size() == 0, "彻底删除文章ID不能为空");
+        BizException.throwIf(deleteIds.size() == 0, "彻底删除文章ID不能为空");
         int count = articleMapper.deleteBatchIds(deleteIds);
-        BusinessException.throwIf(count == 0 || count != deleteIds.size(), "删除失败");
+        BizException.throwIf(count == 0 || count != deleteIds.size(), "删除失败");
         return count;
     }
 

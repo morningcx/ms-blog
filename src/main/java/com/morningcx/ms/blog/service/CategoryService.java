@@ -3,7 +3,7 @@ package com.morningcx.ms.blog.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.morningcx.ms.blog.base.exception.BusinessException;
+import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.base.util.EntityUtil;
 import com.morningcx.ms.blog.entity.Article;
@@ -40,7 +40,7 @@ public class CategoryService {
         wrapper.eq("id", id);
         wrapper.eq("user_id", ContextUtil.getLoginId());
         Category category = categoryMapper.selectOne(wrapper);
-        BusinessException.throwIfNull(category, "分类不存在");
+        BizException.throwIfNull(category, "分类不存在");
         return category;
     }
 
@@ -78,7 +78,7 @@ public class CategoryService {
         wrapper.eq("user_id", userId);
         wrapper.eq("name", category.getName());
         Category oldCategory = categoryMapper.selectOne(wrapper);
-        BusinessException.throwIf(oldCategory != null, "存在同名分类");
+        BizException.throwIf(oldCategory != null, "存在同名分类");
         // 插入新分类
         Date now = new Date();
         category.setUserId(userId);

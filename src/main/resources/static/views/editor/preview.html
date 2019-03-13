@@ -22,7 +22,7 @@
             box-shadow: 0 0 5px darkgrey;
         }
 
-        #viewer {
+        #previewContainer {
             width: calc(80% - 140px);
             box-shadow: 0 0 5px darkgrey;
             margin: 20px;
@@ -71,7 +71,7 @@
 </head>
 <body>
 <!--markdown内容-->
-<div id="viewer"></div>
+<div id="previewContainer"></div>
 <!--目录-->
 <div id="tocContainer" class="markdown-body editormd-preview-container"></div>
 
@@ -93,7 +93,9 @@
         var articleId = getUrlParam("id");
         // 参数传递错误则不执行
         if (!articleId) {
-            layer.alert("参数传递错误", {icon: 2});
+            layer.ready(function () {
+                layer.alert("参数传递错误！", {icon: 2});
+            });
             return;
         }
         ajax.get({
@@ -105,7 +107,7 @@
         });
 
         function generateViewer(md) {
-            var viewer = editormd.markdownToHTML("viewer", {
+            var previewContainer = editormd.markdownToHTML("previewContainer", {
                 /*markdown: res.content,*/
                 // 解析html元素，更加灵活但是不安全，默认是关闭的
                 /*htmlDecode      : "style,script,iframe",*/
@@ -149,7 +151,7 @@
 
             // 每一个锚点距离顶部的高度
 
-            var eachLink = $("#viewer .reference-link");
+            var eachLink = $("#previewContainer .reference-link");
 
             if (eachLink.length === 0) {
                 return;

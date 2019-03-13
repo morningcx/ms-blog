@@ -25,7 +25,7 @@ public class QiNiuUtil {
     private static final String SECRET_KEY = "j5KJ-GFpoa4c8-BLSLXVupnG3MEhHr1VcPmX4TCf";
     private static final String BUCKET = "msblog";
     private static final String PATH = "image.morningcx.com";
-    private static StringMap imagePutPolicy = null;
+    private static StringMap imagePutPolicy = getImagePutPolicy();
 
 
     /**
@@ -44,7 +44,7 @@ public class QiNiuUtil {
         // 验证密钥，生成上传凭证
         Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
         // token有效时长3600s，策略为<bucket>:<key>则同名文件覆盖，为<bucket>则报错
-        String token = auth.uploadToken(BUCKET, key, 3600, getImagePutPolicy());
+        String token = auth.uploadToken(BUCKET, key, 3600, imagePutPolicy);
         Response response = uploadManager.put(imageFile.getBytes(), key, token);
         Image image = JSON.parseObject(response.bodyString(), Image.class);
         image.setPath(PATH);
@@ -53,29 +53,24 @@ public class QiNiuUtil {
     }
 
 
-
-
     /**
      * 获取image的json获取策略
      *
      * @return
      */
     private static StringMap getImagePutPolicy() {
-        if (imagePutPolicy == null) {
-            imagePutPolicy = new StringMap().put("returnBody", new StringBuilder()
-                    .append("{")
-                    .append("key:$(key)").append(",")
-                    .append("hash:$(etag)").append(",")
-                    .append("bucket:$(bucket)").append(",")
-                    .append("size:$(fsize)").append(",")
-                    .append("type:$(mimeType)").append(",")
-                    .append("name:$(fname)").append(",")
-                    .append("width:$(imageInfo.width)").append(",")
-                    .append("height:$(imageInfo.height)").append(",")
-                    .append("average:$(imageAve.RGB)")
-                    .append("}")
-            );
-        }
-        return imagePutPolicy;
+        return imagePutPolicy = new StringMap().put("returnBody", new StringBuilder()
+                .append("{")
+                .append("key:$(key)").append(",")
+                .append("hash:$(etag)").append(",")
+                .append("bucket:$(bucket)").append(",")
+                .append("size:$(fsize)").append(",")
+                .append("type:$(mimeType)").append(",")
+                .append("name:$(fname)").append(",")
+                .append("width:$(imageInfo.width)").append(",")
+                .append("height:$(imageInfo.height)").append(",")
+                .append("average:$(imageAve.RGB)")
+                .append("}")
+        );
     }
 }

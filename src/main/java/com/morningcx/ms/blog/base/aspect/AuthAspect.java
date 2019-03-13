@@ -40,7 +40,6 @@ public class AuthAspect {
     public void doBefore(JoinPoint joinPoint) {
         MethodSignature sign = (MethodSignature) joinPoint.getSignature();
         // 如果没有免登录注解，则需要登录认证
-        // todo 类上面写了FreeAuth则所有下面的方法都不需要登录认证(admin一般就登录接口不需要认证)
         if (!sign.getMethod().isAnnotationPresent(FreeAuth.class)) {
             ContextUtil.getLoginId();
         }

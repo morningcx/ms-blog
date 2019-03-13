@@ -33,40 +33,54 @@ public class LogAspect {
     public void pointCut() {
     }
 
-    @Around(value = "pointCut() && @annotation(log)")
-    public Object around(ProceedingJoinPoint joinPoint, Log log) throws Throwable {
+    @Around(value = "pointCut() && @annotation(logAnnotation)")
+    public Object around(ProceedingJoinPoint joinPoint, Log logAnnotation) throws Throwable {
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = ContextUtil.getAttributes();
         HttpServletRequest request = attributes.getRequest();
-
         MethodSignature method = (MethodSignature) joinPoint.getSignature();
         Class<?> type = method.getDeclaringType();
 
-        com.morningcx.ms.blog.entity.Log logEntity = new com.morningcx.ms.blog.entity.Log();
-        // time 第一个设置，after需要计算两者之差
-        logEntity.setTime(new Date());
-        // ip 后续可能需要改进ip获取方式
-        logEntity.setIp(request.getRemoteAddr());
-        // agent
-        logEntity.setAgent(request.getHeader("user-agent"));
-        // url
-        logEntity.setUrl(request.getRequestURL().toString());
-        // module
+        com.morningcx.ms.blog.entity.Log log = new com.morningcx.ms.blog.entity.Log();
+        log.setTime(new Date());
+        // ip TODO 后续可能需要改进ip获取方式
+        log.setIp(request.getRemoteAddr());
+        log.setAgent(request.getHeader("user-agent"));
+        log.setUrl(request.getRequestURL().toString());
         RequestMapping module = type.getAnnotation(RequestMapping.class);
-        logEntity.setModule(module == null ? "" : module.name());
-        // type
-        logEntity.setType(log.type());
-        // method
-        logEntity.setMethod(type.getName() + "." + method.getName());
-        // session id
-        logEntity.setSession(attributes.getSessionId());
+        log.setModule(module == null ? "" : module.name());
+        log.setType(logAnnotation.type().getName());
+        log.setContent(logAnnotation.desc());
+        log.setMethod(type.getName() + "." + method.getName());
+        log.setSession(attributes.getSessionId());
         // 执行方法，返回obj
         Object obj = joinPoint.proceed();
-        // content
-        logEntity.setContent(log.desc());
-        // cost 不算插入日志的时间
-        logEntity.setCost(System.currentTimeMillis() - logEntity.getTime().getTime());
-        logMapper.insert(logEntity);
+        log.setCost(System.currentTimeMillis() - log.getTime().getTime());
+        logMapper.insert(log);
         return obj;
     }
+/*
+    *//**
+     * 解析日志描述
+     * @param s
+     * @return
+     *//*
+    private static String parseDesc(String s) {
+        StringBuilder sb = new StringBuilder();
+        char open = '{', close = '}';
+        for (int i = 0, start = 0; i < s.length(); ++i) {
+            if (open == s.charAt(i)) {
+                int openIndex = i;
+                sb.append(s, start, openIndex);
+                while (s.charAt(++i) != close) ;
+                // arg为{}中的内容，当前i为close的索引
+                String arg = s.substring(openIndex + 1, i);
+                sb.append(getRealValue(arg));
+                start = i + 1;
+            }
+        }
+        return sb.toString();
+    }*/
+
+
 }

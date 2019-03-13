@@ -1,7 +1,7 @@
 package com.morningcx.ms.blog.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.morningcx.ms.blog.base.exception.BusinessException;
+import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.entity.Content;
@@ -43,10 +43,10 @@ public class ContentService {
         wrapper.select("content_id", "title", "recycle");
         Article article = articleMapper.selectOne(wrapper);
         String notFind = "文章不存在";
-        BusinessException.throwIfNull(article, notFind);
+        BizException.throwIfNull(article, notFind);
         // 查询文章对应的内容
         Content content = contentMapper.selectById(article.getContentId());
-        BusinessException.throwIfNull(content, notFind);
+        BizException.throwIfNull(content, notFind);
         // 返回文章标题和文章内容
         Map<String, Object> map = new HashMap<>();
         map.put("title", article.getTitle() + ((article.getRecycle() ==  0) ? "" : "(回收站)"));
@@ -71,7 +71,7 @@ public class ContentService {
         wrapper.eq("author_id", ContextUtil.getLoginId());
         wrapper.select("content_id");
         Article article = articleMapper.selectOne(wrapper);
-        BusinessException.throwIfNull(article, "文章不存在");
+        BizException.throwIfNull(article, "文章不存在");
         // 更新文章修改时间
         Article updateTime = new Article();
         updateTime.setId(articleId);
