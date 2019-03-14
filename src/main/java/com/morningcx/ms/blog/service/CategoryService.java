@@ -68,16 +68,22 @@ public class CategoryService {
      */
     @Transactional
     public Integer insert(Category category) {
+        Integer userId = ContextUtil.getLoginId();
         if (category.getPid() == null) {
             category.setPid(0);
+        } else {
+            Integer pidCount = categoryMapper.selectCount(new QueryWrapper<Category>()
+                    .eq("id", category.getPid())
+                    .eq("user_id", userId)
+            );
+            BizException.throwIf(pidCount == 0, "上级分类不存在");
         }
         // 检测是否存在同名分类
         EntityUtil.trim(category);
-        Integer userId = ContextUtil.getLoginId();
-        QueryWrapper<Category> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", userId);
-        wrapper.eq("name", category.getName());
-        Category oldCategory = categoryMapper.selectOne(wrapper);
+        Category oldCategory = categoryMapper.selectOne(new QueryWrapper<Category>()
+                .eq("user_id", userId)
+                .eq("name", category.getName())
+        );
         BizException.throwIf(oldCategory != null, "存在同名分类");
         // 插入新分类
         Date now = new Date();
@@ -89,6 +95,81 @@ public class CategoryService {
         return category.getId();
     }
 
+    /**
+     * 更新分类
+     *
+     * @param category
+     * @return
+     */
+    @Transactional
+    public Integer update(Category category) {
+        Integer userId = ContextUtil.getLoginId();
+        // 只能更新自己的分类
+        Integer selectCount = categoryMapper.selectCount(new QueryWrapper<Category>()
+                .eq("id", category.getId())
+                .eq("user_id", userId)
+        );
+        BizException.throwIf(selectCount == 0, "分类不存在");
+        // 检测父类
+        if (category.getPid() == null) {
+            category.setPid(0);
+        } else {
+            BizException.throwIf(category.getPid().equals(category.getId()), "上级分类不能为自己");
+            Integer pidCount = categoryMapper.selectCount(new QueryWrapper<Category>()
+                    .eq("id", category.getPid())
+                    .eq("user_id", userId)
+            );
+            BizException.throwIf(pidCount == 0, "上级分类不存在");
+            // todo 上级分类不能是自己的子类，不然会循环
+        }
+        // 检测是否存在同名分类
+        EntityUtil.trim(category);
+        Integer oldCount = categoryMapper.selectCount(new QueryWrapper<Category>()
+                // 同名文件不是自己
+                .notIn("id", category.getId())
+                .eq("user_id", userId)
+                .eq("name", category.getName())
+        );
+        BizException.throwIf(oldCount != 0, "存在同名分类");
+        Category updateCategory = new Category();
+        updateCategory.setId(category.getId());
+        updateCategory.setPid(category.getPid());
+        updateCategory.setName(category.getName());
+        updateCategory.setDescription(category.getDescription());
+        return categoryMapper.updateById(updateCategory);
+    }
+
+
+    /**
+     * 删除分类
+     *
+     * @param deleteIds
+     * @return
+     */
+    @Transactional
+    public Integer delete(List<Integer> deleteIds) {
+        BizException.throwIf(deleteIds == null || deleteIds.size() == 0, "删除分类ID不能为空");
+        // 限制用户只能删除自己的分类
+        Integer selectCount = categoryMapper.selectCount(new QueryWrapper<Category>()
+                .eq("user_id", ContextUtil.getLoginId())
+                .in("id", deleteIds)
+        );
+        BizException.throwIf(deleteIds.size() != selectCount, "分类不存在");
+        // 删除的分类下不存在子分类
+        Integer subCount = categoryMapper.selectCount(new QueryWrapper<Category>()
+                .in("pid", deleteIds)
+        );
+        BizException.throwIf(subCount != 0, "分类下存在子分类");
+        // 删除的分类下不存在文章  todo 回收站中的文章恢复咋办
+        Integer articleCount = articleMapper.selectCount(new QueryWrapper<Article>()
+                .in("category_id", deleteIds)
+        );
+        BizException.throwIf(articleCount != 0, "分类下存在没有彻底删除的文章");
+        // 删除分类
+        int deleteCount = categoryMapper.deleteBatchIds(deleteIds);
+        BizException.throwIf(deleteCount != deleteIds.size(), "删除失败");
+        return deleteCount;
+    }
 
     /**
      * 获取分类树

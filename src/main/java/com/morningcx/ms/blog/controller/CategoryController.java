@@ -6,12 +6,10 @@ import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Category;
 import com.morningcx.ms.blog.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author gcx
@@ -24,7 +22,7 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @Log(type = OpEnum.READ, desc = "根据ID查询分类")
-    @GetMapping("getById")
+    @GetMapping("wwwww")
     public Result getById(Integer id) {
         return Result.ok(categoryService.getById(id));
     }
@@ -39,6 +37,18 @@ public class CategoryController {
     @PostMapping("insert")
     public Result insert(@Valid Category category) {
         return Result.ok(categoryService.insert(category));
+    }
+
+    @Log(type = OpEnum.UPDATE, desc = "修改分类")
+    @PostMapping("update")
+    public Result update(@Valid Category category) {
+        return Result.ok(categoryService.update(category));
+    }
+
+    @Log(type = OpEnum.DELETE, desc = "删除分类")
+    @PostMapping("delete")
+    public Result delete(@RequestBody List<Integer> deleteIds) {
+        return Result.ok(categoryService.delete(deleteIds));
     }
 
     @Log(type = OpEnum.READ, desc = "查询分类树")

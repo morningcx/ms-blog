@@ -123,7 +123,7 @@
                     data: JSON.stringify(idList),
                     contentType: "application/json",
                     success: function (res) {
-                        layer.alert("成功删除" + res.data + "条数据！");
+                        layer.msg("成功删除" + res.data + "条数据！");
                         toolbarActive.refresh();
                     }
                 });

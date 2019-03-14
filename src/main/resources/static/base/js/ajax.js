@@ -26,7 +26,7 @@ var ajax = {
                         top.location.href = "/login/login.html";
                     }
                 }
-                layui.layer.alert(errorMsg, {icon: 2}, callback);
+                layui.layer.alert(errorMsg, {icon: 2/*, shade: [0.0, '#FFF']*/}, callback);
             });
         }
     },

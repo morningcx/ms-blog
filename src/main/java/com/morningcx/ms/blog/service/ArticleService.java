@@ -71,6 +71,7 @@ public class ArticleService {
         BizException.throwIf(articleMapper.selectCount(wrapper) == 0, "文章不存在");
         // 创建新文章对象，防止其他参数混入
         Article updateArticle = new Article();
+        updateArticle.setId(article.getId());
         updateArticle.setTitle(article.getTitle());
         updateArticle.setIntroduction(article.getIntroduction());
         updateArticle.setCategoryId(article.getCategoryId());
@@ -79,7 +80,7 @@ public class ArticleService {
         // 删除原有标签，添加新标签
         articleTagMapper.delete(new QueryWrapper<ArticleTag>().eq("article_id", article.getId()));
         insertTags(article.getId(), article.getTags());
-        return articleMapper.update(updateArticle, wrapper);
+        return articleMapper.updateById(updateArticle);
     }
 
     /**
@@ -93,7 +94,6 @@ public class ArticleService {
         Content content = new Content();
         content.setContent("");
         contentMapper.insert(content);
-
         // 插入文章元信息
         EntityUtil.trim(article);
         article.setContentId(content.getId());
@@ -109,7 +109,6 @@ public class ArticleService {
         article.setRecycle(0);
         article.setDeleted(0);
         articleMapper.insert(article);
-
         // 插入标签
         insertTags(article.getId(), article.getTags());
         return article.getId();
@@ -218,21 +217,20 @@ public class ArticleService {
      */
     @Transactional
     public Integer deleteArticle(List<Integer> deleteIds) {
-        // todo 彻底删除文章没有update_time，没有作者id判断
-        BizException.throwIf(deleteIds.size() == 0, "彻底删除文章ID不能为空");
-        int count = articleMapper.deleteBatchIds(deleteIds);
-        BizException.throwIf(count == 0 || count != deleteIds.size(), "删除失败");
-        return count;
+        BizException.throwIf(deleteIds == null || deleteIds.size() == 0, "彻底删除文章ID不能为空");
+        // 限制用户只能删除自己的文章
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        wrapper.eq("author_id", ContextUtil.getLoginId());
+        wrapper.in("id", deleteIds);
+        Integer selectCount = articleMapper.selectCount(wrapper);
+        BizException.throwIf(selectCount != deleteIds.size(), "文章不存在");
+        // 确保文章已经在回收站
+        wrapper.eq("recycle", 1);
+        Integer recycleCount = articleMapper.selectCount(wrapper);
+        BizException.throwIf(recycleCount != deleteIds.size(), "只能删除回收站中的文章");
+        int deleteCount = articleMapper.deleteBatchIds(deleteIds);
+        // 不用非0判断，因为前面已经判断过了
+        BizException.throwIf(deleteCount != deleteIds.size(), "删除失败");
+        return deleteCount;
     }
-
-    /*public List<Tag> listTagsByArticleId(Integer id) {
-        QueryWrapper<ArticleTag> wrapper = new QueryWrapper<>();
-        wrapper.eq("article_id", id);
-        List<ArticleTag> articleTags = articleTagMapper.selectList(wrapper);
-        List<Integer> tagIds = new ArrayList<>();
-        for (ArticleTag articleTag : articleTags) {
-            tagIds.add(articleTag.getTagId());
-        }
-        return tagMapper.selectBatchIds(tagIds);
-    }*/
 }
