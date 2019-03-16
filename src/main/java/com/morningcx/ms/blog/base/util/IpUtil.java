@@ -1,10 +1,12 @@
 package com.morningcx.ms.blog.base.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -56,7 +58,7 @@ public class IpUtil {
     }
 
     private static String parseLocationJSON(String json) {
-        JSONObject data = JSON.parseObject(json).getJSONObject("data");
+        /*JSONObject data = JSON.parseObject(json).getJSONObject("data");
         if (data == null) {
             // code = 1，readLine没有读全parseObject时就会抛异常
             return json;
@@ -66,6 +68,14 @@ public class IpUtil {
                 .append(data.getString("region")).append("-")
                 .append(data.getString("city")).append("-")
                 .append(data.getString("isp"));
-        return result.toString();
+        System.out.println(json);*/
+        return null;
+    }
+
+    public static void main(String[] args) throws IOException {
+        String json = "{\"code\":0,\"data\":{\"ip\":\"120.78.197.77\",\"country\":\"中国\",\"area\":\"\",\"region\":\"广东\",\"city\":\"深圳\",\"county\":\"XX\",\"isp\":\"阿里云\",\"country_id\":\"CN\",\"area_id\":\"\",\"region_id\":\"440000\",\"city_id\":\"440300\",\"county_id\":\"xx\",\"isp_id\":\"1000323\"}}\n";
+        JsonNode jsonNode = new ObjectMapper().readTree(json);
+        parseLocationJSON(getLocation("120.78.197.77"));
+        System.out.println(jsonNode.get("data"));
     }
 }

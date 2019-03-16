@@ -1,6 +1,6 @@
 package com.morningcx.ms.blog.base.util;
 
-import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.morningcx.ms.blog.entity.Image;
 import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
@@ -46,7 +46,7 @@ public class QiNiuUtil {
         // token有效时长3600s，策略为<bucket>:<key>则同名文件覆盖，为<bucket>则报错
         String token = auth.uploadToken(BUCKET, key, 3600, imagePutPolicy);
         Response response = uploadManager.put(imageFile.getBytes(), key, token);
-        Image image = JSON.parseObject(response.bodyString(), Image.class);
+        Image image = new ObjectMapper().readValue(response.bodyString(), Image.class);
         image.setPath(PATH);
         log.info(image.toString());
         return image;
