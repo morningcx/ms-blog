@@ -1,4 +1,4 @@
-package com.morningcx.ms.blog.base.config;
+package com.morningcx.ms.blog.base.conf;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;

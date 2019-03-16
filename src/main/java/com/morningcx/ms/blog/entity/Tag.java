@@ -1,5 +1,6 @@
 package com.morningcx.ms.blog.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -18,4 +19,7 @@ public class Tag implements Serializable {
     @NotBlank(message = "标签名称不能为空")
     private String name;
     private String description;
+
+    @TableField(exist = false)
+    private Integer count;
 }

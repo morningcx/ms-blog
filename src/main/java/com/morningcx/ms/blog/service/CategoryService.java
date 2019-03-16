@@ -120,7 +120,9 @@ public class CategoryService {
                     .eq("user_id", userId)
             );
             BizException.throwIf(pidCount == 0, "上级分类不存在");
-            // todo 上级分类不能是自己的子类，不然会循环
+            // 上级分类不能是自己的子类
+            Set<Integer> childNodeSet = getChildNodeSet(category.getId());
+            BizException.throwIf(childNodeSet.contains(category.getPid()), "上级分类不能为子分类");
         }
         // 检测是否存在同名分类
         EntityUtil.trim(category);
@@ -137,6 +139,22 @@ public class CategoryService {
         updateCategory.setName(category.getName());
         updateCategory.setDescription(category.getDescription());
         return categoryMapper.updateById(updateCategory);
+    }
+
+    /**
+     * 获取子分类
+     *
+     * @param pid
+     * @return
+     */
+    private Set<Integer> getChildNodeSet(Integer pid) {
+        Set<Integer> set = new HashSet<>();
+        categoryMapper.selectList(new QueryWrapper<Category>().eq("pid", pid).select("id"))
+                .forEach(child -> {
+                    set.add(child.getId());
+                    set.addAll(getChildNodeSet(child.getId()));
+                });
+        return set;
     }
 
 
@@ -156,10 +174,10 @@ public class CategoryService {
         );
         BizException.throwIf(deleteIds.size() != selectCount, "分类不存在");
         // 删除的分类下不存在子分类
-        Integer subCount = categoryMapper.selectCount(new QueryWrapper<Category>()
+        Integer childCount = categoryMapper.selectCount(new QueryWrapper<Category>()
                 .in("pid", deleteIds)
         );
-        BizException.throwIf(subCount != 0, "分类下存在子分类");
+        BizException.throwIf(childCount != 0, "分类下存在子分类");
         // 删除的分类下不存在文章  todo 回收站中的文章恢复咋办
         Integer articleCount = articleMapper.selectCount(new QueryWrapper<Article>()
                 .in("category_id", deleteIds)

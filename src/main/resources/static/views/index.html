@@ -157,7 +157,7 @@
 
 
                     <!--分类管理-->
-                    <li data-name="article" class="layui-nav-item">
+                    <li data-name="category" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="分类管理" lay-direction="2">
                             <i class="layui-icon layui-icon-template"></i>
                             <cite>分类管理</cite>
@@ -170,6 +170,21 @@
                         <dl class="layui-nav-child">
                             <dd data-name="tree">
                                 <a lay-href="category/tree.html">分类树</a>
+                            </dd>
+                        </dl>
+                    </li>
+
+
+
+                    <!--标签管理-->
+                    <li data-name="tag" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="标签管理" lay-direction="2">
+                            <i class="layui-icon layui-icon-layouts"></i>
+                            <cite>标签管理</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd data-name="list">
+                                <a lay-href="tag/list.html">标签列表</a>
                             </dd>
                         </dl>
                     </li>
@@ -560,7 +575,6 @@
                 layer.open({
                     type: 2,
                     title: "新建文章",
-                    skin: 'layui-layer-admin',
                     closeBtn: 1,
                     area: ["400px", "500px"],
                     anim: 0,

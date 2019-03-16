@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><!--GBK-->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.morningcx.ms.blog.mapper.TagMapper">
+
+    <select id="listReferencePage" resultType="com.morningcx.ms.blog.entity.Tag">
+        select t.*, COUNT(t.id) as count
+        from t_article a INNER JOIN t_article_tag b on a.id = b.article_id
+        INNER JOIN t_tag t on t.id = b.tag_id
+        <where>
+            ${ew.sqlSegment}
+        </where>
+        GROUP BY t.id ORDER BY count desc
+    </select>
+</mapper>

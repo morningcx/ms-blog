@@ -80,8 +80,8 @@
                 url: url,
                 data: field,
                 success: function () {
-                    parent.layui.table.reload('list'); //重载表格
                     parent.layui.layer.msg("操作成功");
+                    parent.layui.table.reload('list'); //重载表格
                     parent.layer.close(index); //再执行关闭
                 }
             });

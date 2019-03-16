@@ -8,8 +8,9 @@
         /*body::-webkit-scrollbar {
             display: none;
         }*/
-        .layui-badge.layui-bg-black {
+        .layui-badge {
             cursor: pointer;
+            background: #6A6A6A;
         }
 
         /*#save {
@@ -19,7 +20,7 @@
     </style>
 </head>
 <body>
-<form class="layui-form">
+<form class="layui-form" style="padding: 20px 30px 0 0;">
     <div class="layui-form-item">
         <label class="layui-form-label">文章标题：</label>
         <div class="layui-input-block">
@@ -66,7 +67,7 @@
     </div>
 </form>
 <div class="layui-col-lg12">
-    <button class="layui-btn layui-btn-fluid layui-bg-black" id="save">保存</button>
+    <button class="layui-btn layui-btn-primary layui-btn-fluid" id="save" >保存</button>
 </div>
 <script src="../../library/layuiAdmin/layui/layui.js"></script>
 <script src="../../base/js/ajax.js"></script>
@@ -98,7 +99,7 @@
                             $("#type").val(data.type);
                             var tags = $("#tagList");
                             for (var i = 0; i < data.tags.length; ++i) {
-                                tags.append("<span class='layui-badge layui-bg-black' onclick='this.remove()'>" + data.tags[i].name + "</span>");
+                                tags.append("<span class='layui-badge' onclick='this.remove()'>" + data.tags[i].name + "</span>");
                             }
                             form.render("select");
                         }
@@ -125,7 +126,7 @@
                     layer.msg("标签不能超过5个！")
                 } else {
                     input.val("").focus();
-                    tags.append("<span class='layui-badge layui-bg-black' onclick='this.remove()'>" + name + "</span>");
+                    tags.append("<span class='layui-badge' onclick='this.remove()'>" + name + "</span>");
                 }
             }
         });
