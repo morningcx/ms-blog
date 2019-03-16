@@ -82,6 +82,13 @@
             <version>[7.2.0, 7.2.99]</version>
         </dependency>
 
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <version>2.1.3.RELEASE</version>
+        </dependency>
+
 
 
         <!-- google图片处理 和七牛不太契合-->
@@ -90,7 +97,6 @@
             <artifactId>thumbnailator</artifactId>
             <version>0.4.8</version>
         </dependency>-->
-
     </dependencies>
 
     <build>

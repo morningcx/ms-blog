@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
 /**
  * @author gcx
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Data
 @TableName("t_tag")
-public class Tag {
+public class Tag implements Serializable {
 
     private Integer id;
     @NotBlank(message = "标签名称不能为空")

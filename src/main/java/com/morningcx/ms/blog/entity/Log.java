@@ -3,6 +3,7 @@ package com.morningcx.ms.blog.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  */
 @Data
 @TableName("t_log")
-public class Log {
+public class Log implements Serializable {
     private Integer id;
     private String ip;
     private String module;

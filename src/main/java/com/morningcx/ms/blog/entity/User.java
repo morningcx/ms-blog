@@ -4,13 +4,15 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author gcx
  * @date 2019/2/16
  */
 @Data
 @TableName("t_user")
-public class User {
+public class User implements Serializable {
 
     private Integer id;
     private String account;

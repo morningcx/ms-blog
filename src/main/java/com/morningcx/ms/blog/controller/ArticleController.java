@@ -6,6 +6,8 @@ import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,6 +18,7 @@ import java.util.List;
  * @date 2019/2/3
  */
 @RestController
+@CacheConfig(cacheNames = "article")
 @RequestMapping(path = "article", name = "文章")
 public class ArticleController {
 
@@ -40,6 +43,7 @@ public class ArticleController {
         return Result.ok(articleService.insertArticle(article));
     }
 
+    @Cacheable(value = "list")
     @Log(type = OpEnum.READ, desc = "分页查询文章")
     @GetMapping("listArticlesByCondition")
     public Result listArticlesByCondition(Article article, Integer page, Integer limit) {

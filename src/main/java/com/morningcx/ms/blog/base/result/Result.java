@@ -3,12 +3,14 @@ package com.morningcx.ms.blog.base.result;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author gcx
  * @date 2019/2/18
  */
 @Data
-public class Result {
+public class Result implements Serializable {
 
     public static final int SUCCESS = 0;
 

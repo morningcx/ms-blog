@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Date;
  */
 @Data
 @TableName("t_category")
-public class Category {
+public class Category implements Serializable {
     private Integer id;
     private Integer pid;
     private Integer userId;
