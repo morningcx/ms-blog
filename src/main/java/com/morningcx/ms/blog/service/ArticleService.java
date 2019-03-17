@@ -72,11 +72,12 @@ public class ArticleService {
         wrapper.eq("recycle", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());
         BizException.throwIf(articleMapper.selectCount(wrapper) == 0, "文章不存在");
-        // 创建新文章对象，防止其他参数混入
+        // 创建新文章对象，防止其他参数混入(比方说点击数)
         Article updateArticle = new Article();
         updateArticle.setId(article.getId());
         updateArticle.setTitle(article.getTitle());
         updateArticle.setIntroduction(article.getIntroduction());
+        // todo 分类id判断，类型01判断
         updateArticle.setCategoryId(article.getCategoryId());
         updateArticle.setType(article.getType());
         updateArticle.setUpdateTime(new Date());
@@ -153,15 +154,12 @@ public class ArticleService {
      * @param limit
      * @return
      */
-    public IPage<Article> listArticlesByCondition(Article article, Integer page, Integer limit) {
+    public IPage<Article> listArticle(Article article, Integer page, Integer limit) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         // 当前登录用户未回收的文章，未删除mp将自动添加
         wrapper.eq("recycle", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());
-        // 其他条件，清空article实体类内部recycle和author_id条件，防止重复
-        article.setRecycle(null);
-        article.setAuthorId(null);
-        wrapper.setEntity(article);
+        wrapper.setEntity(EntityUtil.removeEmptyString(article));
         return articleMapper.selectPage(new Page<>(page, limit), wrapper);
     }
 
@@ -172,12 +170,13 @@ public class ArticleService {
      * @param limit
      * @return
      */
-    public IPage<Article> listRecycleBin(Integer page, Integer limit) {
+    public IPage<Article> listRecycleBin(Article article, Integer page, Integer limit) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         // 回收站中的文章
         wrapper.eq("recycle", 1);
         wrapper.eq("author_id", ContextUtil.getLoginId());
-        // todo 回收站返回的数据不需要这么多，限定查询列名
+        wrapper.select("id", "title", "introduction", "update_time");
+        wrapper.setEntity(EntityUtil.removeEmptyString(article));
         return articleMapper.selectPage(new Page<>(page, limit), wrapper);
     }
 
@@ -230,7 +229,7 @@ public class ArticleService {
         // 确保文章已经在回收站
         wrapper.eq("recycle", 1);
         Integer recycleCount = articleMapper.selectCount(wrapper);
-        BizException.throwIf(recycleCount != deleteIds.size(), "只能删除回收站中的文章");
+        BizException.throwIf(recycleCount != deleteIds.size(), "只能彻底删除回收站中的文章");
         int deleteCount = articleMapper.deleteBatchIds(deleteIds);
         // 不用非0判断，因为前面已经判断过了
         BizException.throwIf(deleteCount != deleteIds.size(), "删除失败");

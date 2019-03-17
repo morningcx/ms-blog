@@ -28,11 +28,16 @@
                 <div class="layui-card-body">
                     <!--搜索栏-->
                     <form class="layui-form layui-form-item">
-                        <input placeholder="请输入PID" class="layui-input layui-input-inline" name="pid">
-                        <input placeholder="请输入分类名称" class="layui-input layui-input-inline" name="name">
-                        <input placeholder="请输入分类描述" class="layui-input layui-input-inline" name="description">
-                        <button class="layui-btn" lay-submit lay-filter="search">搜索</button>
+                        <input placeholder="请输入PID" class="layui-input layui-input-inline"
+                               name="pid" oninput="value=value.replace(/[^\d]/g,'')" maxlength="20">
+                        <input placeholder="请输入名称" class="layui-input layui-input-inline"
+                               name="name" maxlength="20">
+                        <input placeholder="请输入描述" class="layui-input layui-input-inline"
+                               name="description" maxlength="20">
+                        <input type="submit" class="layui-btn" lay-submit lay-filter="search" value="搜索">
+                        <input class="layui-btn" type="reset">
                     </form>
+
                     <!--工具栏-->
                     <script type="text/html" id="table-toolbar">
                         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="batchDel">批量删除</a>

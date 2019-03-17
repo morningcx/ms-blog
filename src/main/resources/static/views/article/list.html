@@ -13,6 +13,9 @@
         body::-webkit-scrollbar {
             display: none;
         }
+        .layui-form-item .layui-input-inline {
+            width: 165px;
+        }
     </style>
 </head>
 <body>
@@ -26,27 +29,56 @@
             <div class="layui-card">
                 <div class="layui-card-header">分类列表</div>
                 <div class="layui-card-body">
+                    <!--搜索栏-->
+                    <form class="layui-form layui-form-item">
+                        <input placeholder="请输入标题" class="layui-input layui-input-inline"
+                               name="title" maxlength="20">
+                        <input placeholder="请输入简介" class="layui-input layui-input-inline"
+                               name="introduction" maxlength="20">
+                        <div class="layui-input-inline">
+                            <select id="category" lay-search name="categoryId">
+                                <option value="">请选择分类</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="type">
+                                <option value="">请选择类型</option>
+                                <option value="0">原创</option>
+                                <option value="1">转载</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline">
+                            <select name="modifier">
+                                <option value="">请选择修饰符</option>
+                                <option value="0">公开</option>
+                                <option value="1">私密</option>
+                            </select>
+                        </div>
+                        <input type="submit" class="layui-btn" lay-submit lay-filter="search" value="搜索">
+                        <input class="layui-btn" type="reset">
+                    </form>
+                    
                     <!--工具栏-->
                     <script type="text/html" id="table-toolbar">
                         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="batchDel">批量删除</a>
                         <a class="layui-btn  layui-btn-primary layui-btn-sm" lay-event="refresh">刷新列表</a>
                     </script>
 
-                    <table class="layui-table" lay-filter="article-list" id="article-list"
+                    <table class="layui-table" lay-filter="list" id="list"
                            lay-data="{page: true, toolbar: '#table-toolbar'}">
                         <thead>
                         <tr>
                             <th lay-data="{checkbox:true, fixed:'left'}"></th>
-                            <th lay-data="{field:'id'}">ID</th>
-                            <th lay-data="{field:'title'}">标题</th>
+                            <th lay-data="{field:'id', width: 70}">ID</th>
+                            <th lay-data="{field:'title', width: 250}">标题</th>
                             <!--<th lay-data="{field:'introduction'}">简介</th>-->
                             <th lay-data="{field:'createTime', width: 160}">创建时间</th>
-                            <th lay-data="{field:'updateTime', width: 160}">修改时间</th>
-                            <th lay-data="{field:'views'}">浏览次数</th>
-                            <th lay-data="{field:'likes'}">点赞次数</th>
+                            <!--<th lay-data="{field:'updateTime', width: 160}">修改时间</th>-->
+                            <th lay-data="{field:'views'}">浏览</th>
+                            <th lay-data="{field:'likes'}">点赞</th>
                             <th lay-data="{templet: parse.type}">类型</th>
                             <th lay-data="{templet: parse.modifier}">修饰符</th>
-                            <th lay-data="{fixed: 'right', toolbar: '#operation', width: 160, align:'center'}">操作</th>
+                            <th lay-data="{fixed: 'right', toolbar: '#operation', width: 210, align:'center'}">操作</th>
                         </tr>
                         </thead>
                     </table>
@@ -54,6 +86,7 @@
                     <!--操作栏-->
                     <script type="text/html" id="operation">
                         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看</a>
+                        <a class="layui-btn layui-btn-xs" style="background: #01afaf" lay-event="meta">信息</a>
                         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
                         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
                     </script>
@@ -65,10 +98,31 @@
 <script src="../../library/layuiAdmin/layui/layui.js"></script>
 <script src="../../base/js/ajax.js"></script>
 <script>
-    layui.use(['table', 'jquery', 'layer'], function () {
-        var $ = layui.$, table = layui.table;
-        table.init('article-list', {url: '/article/listArticlesByCondition'});
+    layui.use(['table', 'jquery', 'layer', 'form'], function () {
+        var $ = layui.$, table = layui.table, form = layui.form;
+        table.init('list', {url: '/article/listArticle'});
 
+        ajax.get({
+            url: "/category/listPage?page=1&limit=1000",
+            mask: false,
+            success: function (res) {
+                var list = res.data;
+                var select = $("#category");
+                for (var i = 0; i < list.length; ++i) {
+                    var data = list[i];
+                    select.append("<option value='" + data.id + "'>" + data.name + "</option>");
+                }
+                form.render("select");
+            }
+        });
+
+        // 搜索事件
+        form.on('submit(search)', function (data) {
+            // 获取提交的字段，重载第一页
+            table.reload('list', {where: data.field, page: {curr: 1}});
+            return false;
+        });
+        
         // 工具栏点击事件
         var toolbarActive = {
             batchDel: function (obj) {
@@ -85,16 +139,30 @@
                 recycleArticle(ids);
             },
             refresh: function () {
-                table.reload('article-list', {});
+                table.reload('list', {});
             }
         };
 
-        table.on('toolbar(article-list)', function (obj) {
+        table.on('toolbar(list)', function (obj) {
             toolbarActive[obj.event] ? toolbarActive[obj.event](obj) : '';
         });
 
         // 操作按钮点击事件
         var operationActive = {
+            meta: function (obj) {
+                layer.ready(function () {
+                    layer.open({
+                        type: 2,
+                        title: "文章信息",
+                        closeBtn: 1,
+                        area: ["400px", "500px"],
+                        anim: 0,
+                        // btn:["确认", "取消"],
+                        shadeClose: true, // 禁止关闭
+                        content: ['../editor/meta.html?id=' + obj.data.id, 'no']
+                    });
+                });
+            },
             detail: function (obj) {
                 window.open("../editor/preview.html?id=" + obj.data.id, "_blank");
             },
@@ -106,7 +174,7 @@
             }
         };
 
-        table.on('tool(article-list)', function (obj) {
+        table.on('tool(list)', function (obj) {
             operationActive[obj.event] ? operationActive[obj.event](obj) : '';
         });
 

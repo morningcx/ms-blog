@@ -55,8 +55,7 @@ public class CategoryService {
     public IPage<Category> listPage(Category category, Integer page, Integer limit) {
         QueryWrapper<Category> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", ContextUtil.getLoginId());
-        category.setUserId(null);
-        wrapper.setEntity(category);
+        wrapper.setEntity(EntityUtil.removeEmptyString(category));
         return categoryMapper.selectPage(new Page<>(page, limit), wrapper);
     }
 

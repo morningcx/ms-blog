@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author gcx
@@ -50,7 +53,7 @@ public class LogAspect {
         RequestMapping module = type.getAnnotation(RequestMapping.class);
         log.setModule(module == null ? "" : module.name());
         log.setType(logAnnotation.type().getName());
-        log.setContent(logAnnotation.desc());
+        log.setContent(parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs()));
         log.setMethod(type.getName() + "." + method.getName());
         log.setSession(attributes.getSessionId());
         // 执行方法，返回obj
@@ -59,28 +62,44 @@ public class LogAspect {
         logMapper.insert(log);
         return obj;
     }
-/*
-    *//**
+
+    /**
      * 解析日志描述
+     *
      * @param s
      * @return
-     *//*
-    private static String parseDesc(String s) {
+     */
+    private String parseDesc(String s, String[] names, Object[] args) throws Exception {
+        Map<String, Object> map = new HashMap<>();
+        for (int i = 0, min = Math.min(names.length, args.length); i < min; ++i) {
+            map.put(names[i], args[i]);
+        }
         StringBuilder sb = new StringBuilder();
         char open = '{', close = '}';
-        for (int i = 0, start = 0; i < s.length(); ++i) {
+        int start = 0;
+        for (int i = 0; i < s.length(); ++i) {
             if (open == s.charAt(i)) {
                 int openIndex = i;
                 sb.append(s, start, openIndex);
                 while (s.charAt(++i) != close) ;
                 // arg为{}中的内容，当前i为close的索引
                 String arg = s.substring(openIndex + 1, i);
-                sb.append(getRealValue(arg));
+                sb.append(getRealValue(arg, map));
                 start = i + 1;
             }
         }
-        return sb.toString();
-    }*/
+        return sb.append(s, start, s.length()).toString();
+    }
 
+    private String getRealValue(String s, Map<String, Object> map) throws Exception {
+        if (s.contains(".")) {
+            String[] args = s.split("\\.");
+            Object obj = map.get(args[0]);
+            Field field = obj.getClass().getDeclaredField(args[1]);
+            field.setAccessible(true);
+            return field.get(obj).toString();
+        }
+        return map.get(s).toString();
+    }
 
 }

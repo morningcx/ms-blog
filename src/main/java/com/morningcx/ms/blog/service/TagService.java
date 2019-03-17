@@ -2,6 +2,7 @@ package com.morningcx.ms.blog.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.entity.Tag;
@@ -29,7 +30,8 @@ public class TagService {
         // mp不支持自定义wrapper的entity条件
         // 这里需要手动判断是否为null，再进行条件添加
         QueryWrapper<Tag> wrapper = new QueryWrapper<>();
-        wrapper.like(tag.getName() != null, "name", tag.getName());
+        wrapper.like(!StringUtils.isEmpty(tag.getName()), "name", tag.getName());
+        wrapper.like(!StringUtils.isEmpty(tag.getDescription()), "description", tag.getDescription());
         wrapper.eq("recycle", 0);
         wrapper.eq("deleted", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());

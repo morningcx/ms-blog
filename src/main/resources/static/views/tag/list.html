@@ -28,9 +28,12 @@
                 <div class="layui-card-body">
                     <!--搜索栏-->
                     <form class="layui-form layui-form-item">
-                        <input placeholder="请输入标签名称" class="layui-input layui-input-inline" name="name">
-                        <button class="layui-btn" lay-submit lay-filter="search">搜索</button>
+                        <input placeholder="请输入名称" class="layui-input layui-input-inline" name="name">
+                        <input placeholder="请输入描述" class="layui-input layui-input-inline" name="description">
+                        <input type="submit" class="layui-btn" lay-submit lay-filter="search" value="搜索">
+                        <input class="layui-btn" type="reset">
                     </form>
+
                     <!--工具栏-->
                     <script type="text/html" id="table-toolbar">
                         <a class="layui-btn  layui-btn-primary layui-btn-sm" lay-event="refresh">刷新列表</a>

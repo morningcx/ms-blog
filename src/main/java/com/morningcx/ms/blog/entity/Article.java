@@ -1,5 +1,6 @@
 package com.morningcx.ms.blog.entity;
 
+import com.baomidou.mybatisplus.annotation.SqlCondition;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -24,8 +25,10 @@ public class Article implements Serializable {
 
     private Integer id;
     private Integer authorId;
+    @TableField(condition = SqlCondition.LIKE)
     @NotBlank(message = "标题不能为空")
     private String title;
+    @TableField(condition = SqlCondition.LIKE)
     @NotBlank(message = "简介不能为空")
     private String introduction;
     private Integer contentId;

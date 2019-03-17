@@ -21,13 +21,13 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Log(type = OpEnum.READ, desc = "根据ID查询分类")
+    @Log(type = OpEnum.READ, desc = "根据ID查询分类：ID-{id}")
     @GetMapping("getById")
     public Result getById(Integer id) {
         return Result.ok(categoryService.getById(id));
     }
 
-    @Log(type = OpEnum.READ, desc = "分页查询分类")
+    @Log(type = OpEnum.READ, desc = "分页查询分类 页码：{page} 页量：{limit}")
     @GetMapping("listPage")
     public Result listPage(Category category, Integer page, Integer limit) {
         return Result.ok(categoryService.listPage(category, page, limit));
@@ -39,13 +39,13 @@ public class CategoryController {
         return Result.ok(categoryService.insert(category));
     }
 
-    @Log(type = OpEnum.UPDATE, desc = "修改分类")
+    @Log(type = OpEnum.UPDATE, desc = "修改ID为{category.id}的分类")
     @PostMapping("update")
     public Result update(@Valid Category category) {
         return Result.ok(categoryService.update(category));
     }
 
-    @Log(type = OpEnum.DELETE, desc = "删除分类")
+    @Log(type = OpEnum.DELETE, desc = "删除分类ID：{deleteIds}")
     @PostMapping("delete")
     public Result delete(@RequestBody List<Integer> deleteIds) {
         return Result.ok(categoryService.delete(deleteIds));

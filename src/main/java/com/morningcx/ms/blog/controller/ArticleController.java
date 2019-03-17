@@ -41,15 +41,15 @@ public class ArticleController {
     }
 
     @Log(type = OpEnum.READ, desc = "分页查询文章")
-    @GetMapping("listArticlesByCondition")
-    public Result listArticlesByCondition(Article article, Integer page, Integer limit) {
-        return Result.ok(articleService.listArticlesByCondition(article, page, limit));
+    @GetMapping("listArticle")
+    public Result listArticle(Article article, Integer page, Integer limit) {
+        return Result.ok(articleService.listArticle(article, page, limit));
     }
 
     @Log(type = OpEnum.READ, desc = "分页查询回收站")
     @GetMapping("listRecycleBin")
-    public Result listRecycleBin(Integer page, Integer limit) {
-        return Result.ok(articleService.listRecycleBin(page, limit));
+    public Result listRecycleBin(Article article, Integer page, Integer limit) {
+        return Result.ok(articleService.listRecycleBin(article, page, limit));
     }
 
     @Log(type = OpEnum.RECYCLE, desc = "回收文章")

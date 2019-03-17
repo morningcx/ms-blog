@@ -26,6 +26,16 @@
             <div class="layui-card">
                 <div class="layui-card-header">回收站</div>
                 <div class="layui-card-body">
+                    <!--搜索栏-->
+                    <form class="layui-form layui-form-item">
+                        <input placeholder="请输入标题" class="layui-input layui-input-inline"
+                               name="title" maxlength="20">
+                        <input placeholder="请输入简介" class="layui-input layui-input-inline"
+                               name="introduction" maxlength="20">
+                        <input type="submit" class="layui-btn" lay-submit lay-filter="search" value="搜索">
+                        <input class="layui-btn" type="reset">
+                    </form>
+
                     <!--工具栏-->
                     <script type="text/html" id="table-toolbar">
                         <a class="layui-btn layui-btn-sm" lay-event="batchRecover">批量恢复</a>
@@ -34,7 +44,7 @@
                     </script>
 
                     <table class="layui-table" lay-data="{page: true, toolbar: '#table-toolbar'}"
-                           lay-filter="recycle-list" id="recycle-list">
+                           lay-filter="list" id="list">
                         <thead>
                         <tr>
                             <th lay-data="{checkbox:true, fixed:'left'}"></th>
@@ -61,9 +71,16 @@
 <script src="../../library/layuiAdmin/layui/layui.js"></script>
 <script src="../../base/js/ajax.js"></script>
 <script>
-    layui.use(['table', 'jquery', 'layer'], function () {
-        var $ = layui.$, table = layui.table;
-        table.init('recycle-list', {url: '/article/listRecycleBin'});
+    layui.use(['table', 'jquery', 'layer', 'form'], function () {
+        var $ = layui.$, table = layui.table, form = layui.form;
+        table.init('list', {url: '/article/listRecycleBin'});
+
+        // 搜索事件
+        form.on('submit(search)', function (data) {
+            // 获取提交的字段，重载第一页
+            table.reload('list', {where: data.field, page: {curr: 1}});
+            return false;
+        });
 
         // 工具栏点击事件
         var toolbarActive = {
@@ -94,10 +111,10 @@
                 deleteArticleCompletely(ids);
             },
             refresh: function () {
-                table.reload('recycle-list', {});
+                table.reload('list', {});
             }
         };
-        table.on('toolbar(recycle-list)', function (obj) {
+        table.on('toolbar(list)', function (obj) {
             toolbarActive[obj.event] ? toolbarActive[obj.event](obj) : '';
         });
 
@@ -114,7 +131,7 @@
                 deleteArticleCompletely([obj.data.id]);
             }
         };
-        table.on('tool(recycle-list)', function (obj) {
+        table.on('tool(list)', function (obj) {
             operationActive[obj.event] ? operationActive[obj.event](obj) : '';
         });
 
