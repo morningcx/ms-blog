@@ -29,7 +29,7 @@ public class ContentService {
     private ContentMapper contentMapper;
 
     /**
-     * 根据文章id获取文章内容和标题(管理端编辑常用)
+     * 根据文章id获取文章内容和标题(编辑常用)
      *
      * @param articleId
      * @return

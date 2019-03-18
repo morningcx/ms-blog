@@ -99,7 +99,8 @@ public class LogAspect {
             field.setAccessible(true);
             return field.get(obj).toString();
         }
-        return map.get(s).toString();
+        Object o = map.get(s);
+        return o == null ? "" : o.toString();
     }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author gcx
@@ -120,7 +121,8 @@ public class CategoryService {
             );
             BizException.throwIf(pidCount == 0, "上级分类不存在");
             // 上级分类不能是自己的子类
-            Set<Integer> childNodeSet = getChildNodeSet(category.getId());
+            Set<Integer> childNodeSet = getChildNodeIds(
+                    Collections.singletonList(category.getId()), new HashSet<>());
             BizException.throwIf(childNodeSet.contains(category.getPid()), "上级分类不能为子分类");
         }
         // 检测是否存在同名分类
@@ -141,21 +143,26 @@ public class CategoryService {
     }
 
     /**
-     * 获取子分类
+     * 获取子分类id，BFS
      *
-     * @param pid
+     * @param pids
      * @return
      */
-    private Set<Integer> getChildNodeSet(Integer pid) {
-        Set<Integer> set = new HashSet<>();
-        categoryMapper.selectList(new QueryWrapper<Category>().eq("pid", pid).select("id"))
-                .forEach(child -> {
-                    set.add(child.getId());
-                    set.addAll(getChildNodeSet(child.getId()));
-                });
-        return set;
+    private Set<Integer> getChildNodeIds(List<Integer> pids, Set<Integer> set) {
+        if (pids == null || pids.size() == 0) {
+            return set;
+        }
+        for (Integer pid : pids) {
+            // 避免无限递归
+            if (!set.add(pid)) {
+                return set;
+            }
+        }
+        List<Category> categories = categoryMapper.selectList(
+                new QueryWrapper<Category>().in("pid", pids).select("id"));
+        List<Integer> collect = categories.stream().map(Category::getId).collect(Collectors.toList());
+        return getChildNodeIds(collect, set);
     }
-
 
     /**
      * 删除分类
@@ -177,7 +184,7 @@ public class CategoryService {
                 .in("pid", deleteIds)
         );
         BizException.throwIf(childCount != 0, "分类下存在子分类");
-        // 删除的分类下不存在文章  todo 回收站中的文章恢复咋办
+        // 删除的分类下不存在文章  todo 回收站中的文章恢复咋办，文章恢复则全部恢复
         Integer articleCount = articleMapper.selectCount(new QueryWrapper<Article>()
                 .in("category_id", deleteIds)
         );

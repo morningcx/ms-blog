@@ -34,6 +34,12 @@ public class ArticleController {
         return Result.ok(articleService.updateMeta(article));
     }
 
+    @Log(type = OpEnum.UPDATE, desc = "修改ID{id}文章的修饰符为{modifier}")
+    @PostMapping("updateModifier")
+    public Result updateModifier(Integer id, Integer modifier) {
+        return Result.ok(articleService.updateModifier(id, modifier));
+    }
+
     @Log(type = OpEnum.CREATE, desc = "新增文章")
     @PostMapping("insertArticle")
     public Result insertArticle(@RequestBody @Valid Article article) {

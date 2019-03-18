@@ -13,6 +13,7 @@
         body::-webkit-scrollbar {
             display: none;
         }
+
         .layui-form-item .layui-input-inline {
             width: 165px;
         }
@@ -57,7 +58,7 @@
                         <input type="submit" class="layui-btn" lay-submit lay-filter="search" value="搜索">
                         <input class="layui-btn" type="reset">
                     </form>
-                    
+
                     <!--工具栏-->
                     <script type="text/html" id="table-toolbar">
                         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="batchDel">批量删除</a>
@@ -70,18 +71,24 @@
                         <tr>
                             <th lay-data="{checkbox:true, fixed:'left'}"></th>
                             <th lay-data="{field:'id', width: 70}">ID</th>
-                            <th lay-data="{field:'title', width: 250}">标题</th>
+                            <th lay-data="{field:'title', width: 200}">标题</th>
                             <!--<th lay-data="{field:'introduction'}">简介</th>-->
                             <th lay-data="{field:'createTime', width: 160}">创建时间</th>
                             <!--<th lay-data="{field:'updateTime', width: 160}">修改时间</th>-->
                             <th lay-data="{field:'views'}">浏览</th>
                             <th lay-data="{field:'likes'}">点赞</th>
                             <th lay-data="{templet: parse.type}">类型</th>
-                            <th lay-data="{templet: parse.modifier}">修饰符</th>
+                            <th lay-data="{templet: '#modifierTpl', width: 100, align:'center'}">修饰符</th>
                             <th lay-data="{fixed: 'right', toolbar: '#operation', width: 210, align:'center'}">操作</th>
                         </tr>
                         </thead>
                     </table>
+
+                    <!--修饰符-->
+                    <script type="text/html" id="modifierTpl">
+                        <input type="checkbox" name="modifier" lay-skin="switch" lay-text="公开|私密" lay-filter="modifier"
+                               value="{{ d.id }}" data-title="{{ d.title }}" {{ d.modifier== 0 ? 'checked' : '' }}>
+                    </script>
 
                     <!--操作栏-->
                     <script type="text/html" id="operation">
@@ -122,7 +129,20 @@
             table.reload('list', {where: data.field, page: {curr: 1}});
             return false;
         });
-        
+
+        // 修饰符
+        form.on('switch(modifier)', function (data) {
+            var title = $(this).data("title");
+            ajax.post({
+                url: "/article/updateModifier",
+                data: {id: this.value, modifier: data.elem.checked ? 0 : 1},
+                success: function () {
+                    layer.msg("文章《 " + title + " 》已设为" + (data.elem.checked ? "公开" : "私密"));
+                }
+            });
+            return false;
+        });
+
         // 工具栏点击事件
         var toolbarActive = {
             batchDel: function (obj) {

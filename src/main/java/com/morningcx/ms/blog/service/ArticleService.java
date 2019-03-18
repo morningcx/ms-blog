@@ -6,14 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.base.util.EntityUtil;
-import com.morningcx.ms.blog.entity.Article;
-import com.morningcx.ms.blog.entity.ArticleTag;
-import com.morningcx.ms.blog.entity.Content;
-import com.morningcx.ms.blog.entity.Tag;
-import com.morningcx.ms.blog.mapper.ArticleMapper;
-import com.morningcx.ms.blog.mapper.ArticleTagMapper;
-import com.morningcx.ms.blog.mapper.ContentMapper;
-import com.morningcx.ms.blog.mapper.TagMapper;
+import com.morningcx.ms.blog.entity.*;
+import com.morningcx.ms.blog.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +33,8 @@ public class ArticleService {
     private TagMapper tagMapper;
     @Autowired
     private ArticleTagMapper articleTagMapper;
+    @Autowired
+    private CategoryMapper categoryMapper;
 
 
     /**
@@ -60,6 +56,28 @@ public class ArticleService {
     }
 
     /**
+     * 修改文章修饰符
+     *
+     * @param id
+     * @return
+     */
+    @Transactional
+    public int updateModifier(Integer id, Integer modifier) {
+        BizException.throwIfNull(modifier, "修饰符不能为空");
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        wrapper.eq("recycle", 0);
+        wrapper.eq("author_id", ContextUtil.getLoginId());
+        Integer count = articleMapper.selectCount(wrapper);
+        BizException.throwIf(count == 0, "文章不存在");
+        Article article = new Article();
+        article.setId(id);
+        article.setModifier(modifier);
+        article.setUpdateTime(new Date());
+        return articleMapper.updateById(article);
+    }
+
+    /**
      * 根据id更新文章元信息
      *
      * @param article
@@ -67,18 +85,25 @@ public class ArticleService {
      */
     @Transactional
     public int updateMeta(Article article) {
+        Integer loginId = ContextUtil.getLoginId();
+        // 判断文章
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("id", article.getId());
         wrapper.eq("recycle", 0);
-        wrapper.eq("author_id", ContextUtil.getLoginId());
+        wrapper.eq("author_id", loginId);
         BizException.throwIf(articleMapper.selectCount(wrapper) == 0, "文章不存在");
+        // 判断分类
+        QueryWrapper<Category> categoryWrapper = new QueryWrapper<>();
+        categoryWrapper.eq("id", article.getCategoryId());
+        categoryWrapper.eq("user_id", ContextUtil.getLoginId());
+        BizException.throwIf(categoryMapper.selectCount(categoryWrapper) == 0, "分类不存在");
         // 创建新文章对象，防止其他参数混入(比方说点击数)
         Article updateArticle = new Article();
         updateArticle.setId(article.getId());
         updateArticle.setTitle(article.getTitle());
         updateArticle.setIntroduction(article.getIntroduction());
-        // todo 分类id判断，类型01判断
         updateArticle.setCategoryId(article.getCategoryId());
+        // 类型01判断不需要没有多大影响
         updateArticle.setType(article.getType());
         updateArticle.setUpdateTime(new Date());
         // 删除原有标签，添加新标签
@@ -94,6 +119,11 @@ public class ArticleService {
      */
     @Transactional
     public Integer insertArticle(Article article) {
+        // 判断分类
+        QueryWrapper<Category> categoryWrapper = new QueryWrapper<>();
+        categoryWrapper.eq("id", article.getCategoryId());
+        categoryWrapper.eq("user_id", ContextUtil.getLoginId());
+        BizException.throwIf(categoryMapper.selectCount(categoryWrapper) == 0, "分类不存在");
         // 插入内容，新建文章默认为空
         Content content = new Content();
         content.setContent("");

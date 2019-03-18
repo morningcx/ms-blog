@@ -103,10 +103,8 @@
                     history() {
                         alert("历史")
                     },
-                    publish() {
-                        alert("发布")
-                    },
-                    /*setting: setting,*/
+                    publish: publish,
+                    setting: setting,
                     meta: saveMeta
                 },
                 lang: {
@@ -135,16 +133,31 @@
             });
 
             // 保存文章
-            function saveArticle() {
+            function saveArticle(callback) {
                 ajax.post({
                     url: "/content/updateByArticleId",
                     data: {
                         articleId: articleId,
                         content: editor.getMarkdown()
                     },
-                    success: function (res) {
-                        layer.msg("保存成功！")
+                    success: function () {
+                        // 回调函数，用于发布
+                        (typeof callback === "function") ? callback() : layer.msg("保存成功！");
                     }
+                });
+            }
+
+            // 发布文章
+            function publish() {
+                // 先执行保存，再发布
+                saveArticle(function () {
+                    ajax.post({
+                        url: "/article/updateModifier",
+                        data: {id: articleId, modifier: 0},
+                        success: function () {
+                            layer.msg("发布成功！");
+                        }
+                    });
                 });
             }
 
