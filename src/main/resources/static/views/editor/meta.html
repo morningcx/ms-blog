@@ -9,23 +9,35 @@
         /*body::-webkit-scrollbar {
             display: none;
         }*/
-        .layui-badge {
-            cursor: pointer;
-            background: #6A6A6A;
+        .tag-editor {
+            overflow: auto;
+            height: 52px;
         }
 
-        #tagList .layui-badge {
-            margin: 5px 5px 0 0;
+        .tag-editor .placeholder {
+            color: #757575;
         }
 
-        /*#save {
-            position: absolute;
-            bottom: 0;
-        }*/
+        #save {
+            width: 91%;
+            margin-bottom: 20px;
+        }
+
+        #introduction {
+            resize: none;
+        }
+
+        .layui-form.layui-form-pane {
+            padding: 20px 20px 0 20px;
+        }
+
+        .layui-col-lg12 {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-<form class="layui-form layui-form-pane" style="padding: 20px 20px 0 20px;">
+<form class="layui-form layui-form-pane">
     <div class="layui-form-item">
         <label class="layui-form-label">文章标题</label>
         <div class="layui-input-block">
@@ -50,25 +62,10 @@
             </select>
         </div>
     </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">添加标签</label>
+    <div class="layui-form-item layui-form-text" style="height: 102px">
+        <label class="layui-form-label">文章标签</label>
         <div class="layui-input-block">
-            <input placeholder="添加标签" type="text" class="layui-input" id="addTagInput"
-                   maxlength="20" style="padding-right: 30px">
-            <a style="position: absolute;right: 10px;top: 11px;cursor: pointer;color: #adadad" id="addTagBtn">
-                <i class="layui-icon layui-icon-add-circle"></i>
-            </a>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">文章标签：</label>
-        <div class="layui-input-block" id="tagList">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">标签编辑</label>
-        <div class="layui-input-block">
-            <input id="tagEditor" style="height: 100%">
+            <input id="tagEditor" hidden>
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
@@ -78,10 +75,9 @@
         </div>
     </div>
 </form>
-<div class="layui-col-lg12" style="text-align: center">
-    <button class="layui-btn layui-btn-primary layui-btn-fluid" id="save" style="width: 90%">保存</button>
+<div class="layui-col-lg12">
+    <button class="layui-btn layui-btn-primary" id="save">保存</button>
 </div>
-
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
 <script src="../../library/tagEditor/jquery.caret.min.js"></script>
@@ -96,16 +92,25 @@
         var index = parent.layer.getFrameIndex(window.name); // 当前窗口索引
         // parent.layer.iframeAuto(index); // 自适应
 
-        $('#tagEditor').tagEditor({
-            autocomplete: {
-                delay: 0, // show suggestions immediately
-                position: {collision: 'flip'}, // automatic menu position up/down
-                source: ['ActionScript', 'AppleScript', 'Asp', 'Python', 'Ruby'
-                ]
-            },
-            forceLowercase: false,
-            placeholder: 'Programming languages ...'
+        // 初始化标签，同步
+        ajax.get({
+            url: "/tag/listAllTagsName",
+            async: false,
+            success: function (res) {
+                $('#tagEditor').tagEditor({
+                    autocomplete: {
+                        delay: 0, // show suggestions immediately
+                        position: {collision: 'flip'}, // automatic menu position up/down
+                        source: res.data
+                    },
+                    maxLength: 20,
+                    forceLowercase: false,
+                    placeholder: '请输入标签'
+                });
+            }
         });
+
+        // 分类下拉初始化
         ajax.get({
             url: "/category/listPage?page=1&limit=1000",
             mask: false,
@@ -126,10 +131,10 @@
                             $("#introduction").val(data.introduction);
                             $("#category").val(data.categoryId);
                             $("#type").val(data.type);
-                            var tags = $("#tagList");
-                            for (var i = 0; i < data.tags.length; ++i) {
-                                tags.append("<span class='layui-badge' onclick='this.remove()'>" + data.tags[i].name + "</span>");
+                            for (var i = 0; i < data.tagNames.length; ++i) {
+                                $('#tagEditor').tagEditor('addTag', data.tagNames[i]);
                             }
+                            $("#save").focus();
                             form.render("select");
                         }
                     });
@@ -139,30 +144,16 @@
             }
         });
 
-        // 回车添加标签
-        $("#addTagInput").bind('keypress', function (event) {
-            if (event.keyCode === 13) {
-                $("#addTagBtn").click();
-            }
-        });
-
-        $("#addTagBtn").click(function () {
-            var input = $("#addTagInput");
-            var name = input.val();
-            var tags = $("#tagList");
-            if (name) {
-                if (tags.children().length > 4) {
-                    layer.msg("标签不能超过5个！")
-                } else {
-                    input.val("").focus();
-                    tags.append("<span class='layui-badge' onclick='this.remove()'>" + name + "</span>");
-                }
-            }
-        });
-
         // 保存文章元信息
         $("#save").click(function () {
-            var meta = getArticleMeta();
+            // 元信息
+            var meta = {
+                title: $("#title").val().trim(),
+                introduction: $("#introduction").val().trim(),
+                categoryId: $("#category").val().trim(),
+                type: $("#type").val().trim(),
+                tagNames: $('#tagEditor').tagEditor('getTags')[0].tags
+            };
             // 文章id存在则更新，不存在则插入
             if (articleId) {
                 meta.id = articleId;
@@ -191,24 +182,6 @@
                 });
             }
         });
-
-        /**
-         * 获取元信息
-         */
-        function getArticleMeta() {
-            var tags = [];
-            $("#tagList").children(".layui-badge").each(function () {
-                var tagName = $(this).text().trim();
-                tags.push({name: tagName, description: tagName});
-            });
-            return {
-                title: $("#title").val().trim(),
-                introduction: $("#introduction").val().trim(),
-                categoryId: $("#category").val().trim(),
-                type: $("#type").val().trim(),
-                tags: tags
-            };
-        }
     });
 
 

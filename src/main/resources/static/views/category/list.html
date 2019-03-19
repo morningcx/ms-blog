@@ -149,11 +149,11 @@
 
         function openItem(id) {
             var arg = id ? ("?id=" + id) : "";
-            layer.open({
+            top.layui.layer.open({
                 type: 2
                 , title: '分类操作'
-                , content: 'item.html' + arg
-                , area: ['400px', '400px']
+                , content: './category/item.html' + arg
+                , area: ['400px', '435px']
                 , btn: ['确定', '取消']
                 , yes: function (index, layero) {
                     layero.find('iframe').contents().find("#submit").click();

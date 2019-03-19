@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -51,7 +52,13 @@ public class ArticleService {
         Article article = articleMapper.selectOne(wrapper);
         BizException.throwIfNull(article, "文章不存在");
         // 查询标签
-        article.setTags(articleTagMapper.listTagsByArticleId(id));
+        List<Object> tagIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>()
+                .eq("article_id", article.getId())
+                .select("tag_id"));
+        List<Object> tagNames = tagMapper.selectObjs(new QueryWrapper<Tag>()
+                .in("id", tagIds)
+                .select("name"));
+        article.setTagNames(tagNames.stream().map(o -> (String) o).collect(Collectors.toList()));
         return article;
     }
 
@@ -108,7 +115,7 @@ public class ArticleService {
         updateArticle.setUpdateTime(new Date());
         // 删除原有标签，添加新标签
         articleTagMapper.delete(new QueryWrapper<ArticleTag>().eq("article_id", article.getId()));
-        insertTags(article.getId(), article.getTags());
+        insertTags(article.getId(), article.getTagNames());
         return articleMapper.updateById(updateArticle);
     }
 
@@ -144,7 +151,7 @@ public class ArticleService {
         article.setDeleted(0);
         articleMapper.insert(article);
         // 插入标签
-        insertTags(article.getId(), article.getTags());
+        insertTags(article.getId(), article.getTagNames());
         return article.getId();
     }
 
@@ -152,22 +159,24 @@ public class ArticleService {
      * 插入文章标签
      *
      * @param articleId
-     * @param tags
+     * @param tagNames
      */
-    private void insertTags(Integer articleId, List<Tag> tags) {
+    private void insertTags(Integer articleId, List<String> tagNames) {
         ArticleTag articleTag = new ArticleTag();
         articleTag.setArticleId(articleId);
         Set<String> set = new HashSet<>();
-        for (Tag tag : tags) {
-            // 对标签名称进行修剪
-            EntityUtil.trim(tag);
+        for (String tagName : tagNames) {
+            tagName = tagName.trim();
             // 标签去重
-            if (set.add(tag.getName())) {
-                Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("name", tag.getName()));
+            if (set.add(tagName)) {
+                Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("name", tagName));
                 // 若原标签不存在，则插入
                 if (oldTag == null) {
-                    tagMapper.insert(tag);
-                    articleTag.setTagId(tag.getId());
+                    Tag newTag = new Tag();
+                    newTag.setName(tagName);
+                    newTag.setDescription(tagName);
+                    tagMapper.insert(newTag);
+                    articleTag.setTagId(newTag.getId());
                 } else {
                     articleTag.setTagId(oldTag.getId());
                 }

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -53,9 +52,8 @@ public class Article implements Serializable {
     private String category;
     @TableField(exist = false)
     private Content content;
-    @Valid
     @NotEmpty(message = "标签不能为空")
     @Size(max = 5, message = "标签不能超过5个")
     @TableField(exist = false)
-    private List<Tag> tags;
+    private List<String> tagNames;
 }

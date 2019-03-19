@@ -10,6 +10,9 @@ import com.morningcx.ms.blog.mapper.TagMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author gcx
  * @date 2019/2/22
@@ -20,7 +23,6 @@ public class TagService {
     private TagMapper tagMapper;
 
     /**
-     *
      * @param tag
      * @param page
      * @param limit
@@ -38,5 +40,14 @@ public class TagService {
         return tagMapper.listReferencePage(new Page<>(page, limit), wrapper);
     }
 
+    /**
+     * 列举出所有的标签(元信息编辑标签提示)
+     *
+     * @return
+     */
+    public List<String> listAllTagsName() {
+        // todo 好像太多了。。
+        return tagMapper.selectList(null).stream().map(Tag::getName).collect(Collectors.toList());
+    }
 
 }

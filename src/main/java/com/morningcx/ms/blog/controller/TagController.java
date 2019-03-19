@@ -26,4 +26,10 @@ public class TagController {
     public Result listReferenceByPage(Tag tag, Integer page, Integer limit) {
         return Result.ok(tagService.listReferencePage(tag, page, limit));
     }
+
+    @Log(type = OpEnum.READ, desc = "查询所有标签名称")
+    @GetMapping("listAllTagsName")
+    public Result listAllTagsName() {
+        return Result.ok(tagService.listAllTagsName());
+    }
 }

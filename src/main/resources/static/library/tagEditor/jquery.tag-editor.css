@@ -1,3 +1,4 @@
+@charset "UTF-8"; /*指定css文件编码，解决伪元素content出现Â乱码*/
 /* surrounding tag container */
 .tag-editor {
     list-style-type: none; padding: 5px 0; margin: 0; overflow: hidden; border: 1px solid #e6e6e6; cursor: text;

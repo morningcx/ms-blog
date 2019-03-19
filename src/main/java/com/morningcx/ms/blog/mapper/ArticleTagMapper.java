@@ -2,10 +2,6 @@ package com.morningcx.ms.blog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.morningcx.ms.blog.entity.ArticleTag;
-import com.morningcx.ms.blog.entity.Tag;
-import org.apache.ibatis.annotations.Select;
-
-import java.util.List;
 
 /**
  * @author gcx
@@ -18,6 +14,6 @@ public interface ArticleTagMapper extends BaseMapper<ArticleTag> {
      * @param articleId
      * @return
      */
-    @Select("select t.* from t_article_tag as a LEFT JOIN t_tag as t on a.tag_id = t.id where a.article_id = #{id}")
-    List<Tag> listTagsByArticleId(Integer articleId);
+    /*@Select("select t.* from t_article_tag as a LEFT JOIN t_tag as t on a.tag_id = t.id where a.article_id = #{id}")
+    List<Tag> listTagsByArticleId(Integer articleId);*/
 }
