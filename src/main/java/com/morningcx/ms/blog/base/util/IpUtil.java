@@ -11,6 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author gcx
@@ -18,7 +21,69 @@ import java.net.URL;
  */
 public class IpUtil {
 
+    private static Pattern pattern = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
+
     private IpUtil() {
+    }
+
+    /**
+     * 判断输入的ipv4地址是否合法
+     *
+     * @param ipAddress
+     * @return
+     */
+    public static boolean isValidIp(String ipAddress) {
+        return ipAddress != null && pattern.matcher(ipAddress).matches();
+    }
+
+    /**
+     * 数字ip转换为字符串ip
+     *
+     * @param ipNum
+     * @return
+     */
+    private static String ipNum2Str(long ipNum) {
+        StringBuilder str = new StringBuilder();
+        str.append(ipNum >>> 24).append(".").append((ipNum >> 16) & 0xff).append(".")
+                .append((ipNum >> 8) & 0xff).append(".").append(ipNum & 0xff);
+        return str.toString();
+    }
+
+    /**
+     * 字符串ip转换为数字ip
+     *
+     * @param ipStr
+     * @return
+     * @throws Exception
+     */
+    private static long ipStr2Num(String ipStr) {
+        if (!isValidIp(ipStr)) {
+            return 0L;
+        }
+        String[] fields = ipStr.split("\\.");
+        long ipNum = 0;
+        for (int i = 0; i < fields.length; ++i) {
+            ipNum |= Long.parseLong(fields[i]) << (24 - 8 * i);
+        }
+        return ipNum;
+    }
+
+    /**
+     * 生成指定范围内的ip列表
+     *
+     * @param start 开始ip
+     * @param end   结束ip
+     * @return
+     * @throws Exception
+     */
+    public static List<String> ipRange(String start, String end) {
+        long s = ipStr2Num(start);
+        long e = ipStr2Num(end);
+        List<String> result = new ArrayList<>((int) (e - s + 1));
+        while (s <= e) {
+            result.add(ipNum2Str(s++));
+        }
+        return result;
     }
 
     /**
@@ -73,8 +138,12 @@ public class IpUtil {
     }
 
     public static void main(String[] args) throws IOException {
-        String json = "{\"code\":0,\"data\":{\"ip\":\"120.78.197.77\",\"country\":\"中国\",\"area\":\"\",\"region\":\"广东\",\"city\":\"深圳\",\"county\":\"XX\",\"isp\":\"阿里云\",\"country_id\":\"CN\",\"area_id\":\"\",\"region_id\":\"440000\",\"city_id\":\"440300\",\"county_id\":\"xx\",\"isp_id\":\"1000323\"}}\n";
+        String json = "{\"code\":0,\"data\":{\"ip\":\"120.78.197.77\",\"country\":\"中国\"," +
+                "\"area\":\"\",\"region\":\"广东\",\"city\":\"深圳\",\"county\":\"XX\"," +
+                "\"isp\":\"阿里云\",\"country_id\":\"CN\",\"area_id\":\"\",\"region_id\":\"440000\"," +
+                "\"city_id\":\"440300\",\"county_id\":\"xx\",\"isp_id\":\"1000323\"}}\n";
         JsonNode jsonNode = new ObjectMapper().readTree(json);
+
         parseLocationJSON(getLocation("120.78.197.77"));
         System.out.println(jsonNode.get("data"));
     }

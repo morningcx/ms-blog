@@ -171,7 +171,7 @@
                         area: ["420px", "550px"],
                         anim: 0,
                         // btn:["确认", "取消"],
-                        shadeClose: true, // 禁止关闭
+                        shadeClose: false, // 禁止关闭
                         content: './meta.html?id=' + articleId
                     });
                 });
@@ -180,29 +180,15 @@
             // editor设置
             function setting() {
                 var content =
-                    "<form class=\"layui-form layui-col-lg12\" action=\"\">" +
-                    "<div class=\"layui-form-item\">\n" +
-                    "        <label class=\"layui-form-label\">工具栏：</label>\n" +
-                    "        <div class=\"layui-input-block\">\n" +
+
                     "            <select id=\"editormd-theme-select\">\n" +
                     "            </select>\n" +
-                    "        </div>\n" +
-                    "    </div>" +
-                    "<div class=\"layui-form-item\">\n" +
-                    "        <label class=\"layui-form-label\">编辑区：</label>\n" +
-                    "        <div class=\"layui-input-block\">\n" +
+
                     "            <select id=\"editor-area-theme-select\">\n" +
                     "            </select>\n" +
-                    "        </div>\n" +
-                    "    </div>" +
-                    "<div class=\"layui-form-item\">\n" +
-                    "        <label class=\"layui-form-label\">预览区：</label>\n" +
-                    "        <div class=\"layui-input-block\">\n" +
+
                     "            <select id=\"preview-area-theme-select\">\n" +
-                    "            </select>\n" +
-                    "        </div>\n" +
-                    "    </div>" +
-                    "</form>";
+                    "            </select>\n" ;
 
                 layer.open({
                     title: '页面层'

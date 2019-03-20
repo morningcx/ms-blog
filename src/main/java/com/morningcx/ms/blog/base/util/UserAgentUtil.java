@@ -1,8 +1,5 @@
 package com.morningcx.ms.blog.base.util;
 
-import cz.mallat.uasparser.OnlineUpdater;
-import cz.mallat.uasparser.UASparser;
-import cz.mallat.uasparser.UserAgentInfo;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -16,37 +13,16 @@ import java.util.List;
  * @date 2019/3/16
  */
 public class UserAgentUtil {
-    static UASparser uasParser = null;
-
-    static {
-        try {
-            uasParser = new UASparser(OnlineUpdater.getVendoredInputStream());
-            // java.lang.UnsupportedClassVersionError:
-            // cz/mallat/uasparser/UASparser : Unsupported major.minor version 51.0
-            // 用jdk1.6测试时会报以上错，需要jdk1.7以上版本支持
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void main(String[] args) throws IOException {
         for (String str : getWorthAgent()) {
-            System.out.println("==============================" + str);
-            UserAgentInfo userAgentInfo = UserAgentUtil.uasParser.parse(str);
-            System.out.println("操作系统家族：" + userAgentInfo.getOsFamily());
-            System.out.println("操作系统详细名称：" + userAgentInfo.getOsName());
-            System.out.println("浏览器名称和版本:" + userAgentInfo.getUaName());
-            System.out.println("类型：" + userAgentInfo.getType());
-            System.out.println("浏览器名称：" + userAgentInfo.getUaFamily());
-            System.out.println("浏览器版本：" + userAgentInfo.getBrowserVersionInfo());
-            System.out.println("设备类型：" + userAgentInfo.getDeviceType());
             System.out.println("--------------------------------------");
             UserAgent userAgent = UserAgent.parseUserAgentString(str);
             Browser browser = userAgent.getBrowser();
             OperatingSystem operatingSystem = userAgent.getOperatingSystem();
             /*System.out.println("操作系统大写：" + operatingSystem.name());*/
             System.out.println("操作系统：" + operatingSystem.getName());
-            System.out.println(userAgent.getBrowser().getGroup().getName());
+            System.out.println(userAgent.getBrowser().getName());
             System.out.println(userAgent.getBrowserVersion().getVersion());
             System.out.println("设备类型：" + operatingSystem.getDeviceType().getName());
 
