@@ -2,7 +2,11 @@ package com.morningcx.ms.blog.base.aspect;
 
 import com.morningcx.ms.blog.base.annotation.Log;
 import com.morningcx.ms.blog.base.util.ContextUtil;
+import com.morningcx.ms.blog.base.util.IpUtil;
 import com.morningcx.ms.blog.mapper.LogMapper;
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.OperatingSystem;
+import eu.bitwalker.useragentutils.UserAgent;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -38,26 +42,59 @@ public class LogAspect {
 
     @Around(value = "pointCut() && @annotation(logAnnotation)")
     public Object around(ProceedingJoinPoint joinPoint, Log logAnnotation) throws Throwable {
-        // 接收到请求，记录请求内容
+        com.morningcx.ms.blog.entity.Log log = new com.morningcx.ms.blog.entity.Log();
+        // 开始执行时间
+        log.setTime(new Date());
+
+        // 可能会发生异常，所以日志处理放在proceed后面
+        Object obj = joinPoint.proceed();
+
+        // 处理请求信息
         ServletRequestAttributes attributes = ContextUtil.getAttributes();
         HttpServletRequest request = attributes.getRequest();
         MethodSignature method = (MethodSignature) joinPoint.getSignature();
         Class<?> type = method.getDeclaringType();
 
-        com.morningcx.ms.blog.entity.Log log = new com.morningcx.ms.blog.entity.Log();
-        log.setTime(new Date());
-        // ip TODO 后续可能需要改进ip获取方式
-        log.setIp(request.getRemoteAddr());
+        // 操作人id
+        log.setUserId(ContextUtil.getLoginId());
+        // 获取真实ip
+        log.setIp(IpUtil.getRealIp(request));
+        // 解析ip地理位置
+        String ipRegion = IpUtil.ip2region(log.getIp());
+        if ("".equals(ipRegion)) {
+            log.setCountry(ipRegion);
+            log.setProvince(ipRegion);
+            log.setCity(ipRegion);
+            log.setIsp(ipRegion);
+        } else {
+            String empty = "0";
+            String[] args = ipRegion.split("\\|");
+            log.setCountry(empty.equals(args[0]) ? "" : args[0]);
+            log.setProvince(empty.equals(args[2]) ? "" : args[2]);
+            log.setCity(empty.equals(args[3]) ? "" : args[3]);
+            log.setIsp(empty.equals(args[4]) ? "" : args[4]);
+        }
+        // agent
         log.setAgent(request.getHeader("user-agent"));
+        UserAgent userAgent = UserAgent.parseUserAgentString(log.getAgent());
+        OperatingSystem operatingSystem = userAgent.getOperatingSystem();
+        Browser browser = userAgent.getBrowser();
+        log.setOs(operatingSystem.getName() + " " + operatingSystem.getDeviceType().getName());
+        log.setBrowser(browser.getName() + " " + userAgent.getBrowserVersion().getVersion() + " " + browser.getBrowserType().getName());
+        // 请求url
         log.setUrl(request.getRequestURL().toString());
+        // 操作模块
         RequestMapping module = type.getAnnotation(RequestMapping.class);
         log.setModule(module == null ? "" : module.name());
+        // 操作类型
         log.setType(logAnnotation.type().getName());
+        // 解析操作描述信息
         log.setContent(parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs()));
+        // 执行的方法
         log.setMethod(type.getName() + "." + method.getName());
+        // session id
         log.setSession(attributes.getSessionId());
-        // 执行方法，返回obj
-        Object obj = joinPoint.proceed();
+        // 总耗时
         log.setCost(System.currentTimeMillis() - log.getTime().getTime());
         logMapper.insert(log);
         return obj;
@@ -70,8 +107,9 @@ public class LogAspect {
      * @return
      */
     private String parseDesc(String s, String[] names, Object[] args) throws Exception {
-        Map<String, Object> map = new HashMap<>();
-        for (int i = 0, min = Math.min(names.length, args.length); i < min; ++i) {
+        int min = Math.min(names.length, args.length);
+        Map<String, Object> map = new HashMap<>(min);
+        for (int i = 0; i < min; ++i) {
             map.put(names[i], args[i]);
         }
         StringBuilder sb = new StringBuilder();

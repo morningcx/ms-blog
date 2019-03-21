@@ -26,7 +26,6 @@ public class ImageController {
         return imageService.mdImageUpload(file);
     }
 
-
     /**
      * 上传文件
      * 消费者，媒体类型

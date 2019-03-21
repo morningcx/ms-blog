@@ -1,16 +1,13 @@
 package com.morningcx.ms.blog.base.util;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.lionsoul.ip2region.DbConfig;
+import org.lionsoul.ip2region.DbMakerConfigException;
+import org.lionsoul.ip2region.DbSearcher;
 
-import java.io.BufferedReader;
+import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -21,7 +18,19 @@ import java.util.regex.Pattern;
  */
 public class IpUtil {
 
+    private static final String DB_PATH = "F:\\ip-library\\lionsoul-ip2region-master\\ip2region\\data\\ip2region.db";
+
+    private static DbSearcher searcher;
+
     private static Pattern pattern = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
+
+    static {
+        try {
+            searcher = new DbSearcher(new DbConfig(), DB_PATH);
+        } catch (FileNotFoundException | DbMakerConfigException e) {
+            e.printStackTrace();
+        }
+    }
 
     private IpUtil() {
     }
@@ -87,64 +96,48 @@ public class IpUtil {
     }
 
     /**
+     * 获取真实ip地址
+     *
+     * @param request
+     * @return
+     */
+    public static String getRealIp(HttpServletRequest request) {
+        String unKnow = "unknown";
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || unKnow.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || unKnow.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || unKnow.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.length() == 0 || unKnow.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.length() == 0 || unKnow.equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+
+    /**
+     * 根据ip获取地理位置和运营商
      *
      * @param ip
      * @return
      */
-    public static String getLocation(String ip) {
-        String result;
-        HttpURLConnection connection = null;
-        BufferedReader bufferedReader = null;
+    public static String ip2region(String ip) {
+        if (ip == null || searcher == null) {
+            return "";
+        }
         try {
-            URL url = new URL("http://ip.taobao.com/service/getIpInfo.php?ip=" + ip);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setConnectTimeout(10000);
-            connection.setReadTimeout(10000);
-            connection.setRequestMethod("GET");
-            // Connection timed out: connect
-            // Connection reset
-            // 还有可能Server returned HTTP response code: 502 for URL: http://ip.taobao.com/service/getIpInfo.php?ip=0:0:0:0:0:0:0:1
-            connection.connect();
-            InputStream in = connection.getInputStream();
-            bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            // Read timed out || null ipv6会出现null
-            String json =  bufferedReader.readLine();
-            // log.info(json);
-            result = parseLocationJSON(json);
-        } catch (Exception e) {
-            result = e.getMessage();
-        } finally {
-            IOUtils.closeQuietly(bufferedReader);
-            if (connection != null) {
-                connection.disconnect();
-            }
+            // 只要ip不为null，即使格式错误也不会报错(显示内网ip)
+            return searcher.btreeSearch(ip).getRegion();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return result;
-    }
-
-    private static String parseLocationJSON(String json) {
-        /*JSONObject data = JSON.parseObject(json).getJSONObject("data");
-        if (data == null) {
-            // code = 1，readLine没有读全parseObject时就会抛异常
-            return json;
-        }
-        StringBuilder result = new StringBuilder();
-        result.append(data.getString("country")).append("-")
-                .append(data.getString("region")).append("-")
-                .append(data.getString("city")).append("-")
-                .append(data.getString("isp"));
-        System.out.println(json);*/
-        return null;
-    }
-
-    public static void main(String[] args) throws IOException {
-        String json = "{\"code\":0,\"data\":{\"ip\":\"120.78.197.77\",\"country\":\"中国\"," +
-                "\"area\":\"\",\"region\":\"广东\",\"city\":\"深圳\",\"county\":\"XX\"," +
-                "\"isp\":\"阿里云\",\"country_id\":\"CN\",\"area_id\":\"\",\"region_id\":\"440000\"," +
-                "\"city_id\":\"440300\",\"county_id\":\"xx\",\"isp_id\":\"1000323\"}}\n";
-        JsonNode jsonNode = new ObjectMapper().readTree(json);
-
-        parseLocationJSON(getLocation("120.78.197.77"));
-        System.out.println(jsonNode.get("data"));
+        return "";
     }
 }

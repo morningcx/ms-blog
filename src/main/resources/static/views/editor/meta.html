@@ -98,14 +98,14 @@
         var index = parent.layer.getFrameIndex(window.name); // 当前窗口索引
         // parent.layer.iframeAuto(index); // 自适应
 
-        // 初始化标签，同步
+        // 初始化标签，同步 todo 限制标签个数
         ajax.get({
             url: "/tag/listAllTagsName",
             async: false,
             success: function (res) {
                 $('#tagEditor').tagEditor({
                     autocomplete: {
-                        delay: 0, // show suggestions immediately
+                        delay: 100, // show suggestions immediately
                         position: {collision: 'flip'}, // automatic menu position up/down
                         source: res.data
                     },
@@ -119,7 +119,6 @@
         // 分类下拉初始化
         ajax.get({
             url: "/category/listPage?page=1&limit=1000",
-            mask: false,
             success: function (res) {
                 var list = res.data;
                 var select = $("#category");

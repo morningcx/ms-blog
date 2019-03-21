@@ -14,11 +14,18 @@ import java.util.Date;
 @TableName("t_log")
 public class Log implements Serializable {
     private Integer id;
+    private Integer userId;
     private String ip;
     private String module;
     private String type;
     private String content;
     private String agent;
+    private String browser;
+    private String os;
+    private String country;
+    private String province;
+    private String city;
+    private String isp;
     private String url;
     private Date time;
     private String method;
