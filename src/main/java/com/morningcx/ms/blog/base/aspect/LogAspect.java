@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * @author gcx
@@ -57,15 +58,20 @@ public class LogAspect {
 
         // 操作人id
         log.setUserId(ContextUtil.getLoginId());
-        // 获取真实ip
-        log.setIp(IpUtil.getRealIp(request));
+
+        String randomIp = IpUtil.ipNum2Str(new Random().nextLong());
+
+        // 获取真实ip，IpUtil.getRealIp(request)
+        log.setIp(randomIp);
+
         // 解析ip地理位置
-        String ipRegion = IpUtil.ip2region(log.getIp());
-        if ("".equals(ipRegion)) {
-            log.setCountry(ipRegion);
-            log.setProvince(ipRegion);
-            log.setCity(ipRegion);
-            log.setIsp(ipRegion);
+        /*String ipRegion = IpUtil.ip2region(log.getIp());*/
+        String ipRegion = IpUtil.ip2region(randomIp);
+        if (ipRegion == null) {
+            log.setCountry("");
+            log.setProvince("");
+            log.setCity("");
+            log.setIsp("");
         } else {
             String empty = "0";
             String[] args = ipRegion.split("\\|");

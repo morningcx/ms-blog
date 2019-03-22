@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>标签云</title>
+    <!--<link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">-->
+    <style>
+/*        #tagCloud{
+            width:100%;
+            height:100%;
+        }*/
+    </style>
+</head>
+<body>
+<div id='tagCloud'></div>
+<script src="../../library/tagCloud/js/jquery-2.1.1.min.js"></script>
+<script src="../../library/tagCloud/js/jquery.svg3dtagcloud.min.js"></script>
+<script src="../../library/layuiAdmin/layui/layui.js"></script>
+<script src="../../base/js/ajax.js"></script>
+<script>
+    layui.use(["jquery", "layer"], function () {
+        var $ = layui.$;
+        ajax.get({
+            url: "/tag/listReferencePage?page=1&limit=1000",
+            success: function (res) {
+                var tagList = res.data;
+                var tags = [];
+                for (var i = 0; i < tagList.length; ++i) {
+                    tagList[i].label = tagList[i].name;
+                    tags.push(tagList[i]);
+                }
+                var settings = {
+                    entries: tags,
+                    width: '100%',
+                    height: '100%',
+                    radius: '70%',
+                    radiusMin: 75,
+                    bgDraw: true,
+                    bgColor: '#393D49',
+                    opacityOver: 1.00,
+                    opacityOut: 0.2,
+                    opacitySpeed: 6,
+                    fov: 800,
+                    speed: 1,
+                    fontFamily: 'Oswald, Arial, sans-serif',
+                    fontSize: '15',
+                    fontColor: '#fff',
+                    fontWeight: 'normal',//bold
+                    fontStyle: 'normal',//italic
+                    fontStretch: 'normal',//wider, narrower, ultra-condensed, extra-condensed, condensed, semi-condensed, semi-expanded, expanded, extra-expanded, ultra-expanded
+                    fontToUpperCase: false
+                };
+                $('#tagCloud').svg3DTagCloud(settings);
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

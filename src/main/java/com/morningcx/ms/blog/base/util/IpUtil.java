@@ -6,7 +6,6 @@ import org.lionsoul.ip2region.DbMakerConfigException;
 import org.lionsoul.ip2region.DbSearcher;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,19 +17,7 @@ import java.util.regex.Pattern;
  */
 public class IpUtil {
 
-    private static final String DB_PATH = "F:\\ip-library\\lionsoul-ip2region-master\\ip2region\\data\\ip2region.db";
-
-    private static DbSearcher searcher;
-
     private static Pattern pattern = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
-
-    static {
-        try {
-            searcher = new DbSearcher(new DbConfig(), DB_PATH);
-        } catch (FileNotFoundException | DbMakerConfigException e) {
-            e.printStackTrace();
-        }
-    }
 
     private IpUtil() {
     }
@@ -51,9 +38,9 @@ public class IpUtil {
      * @param ipNum
      * @return
      */
-    private static String ipNum2Str(long ipNum) {
+    public static String ipNum2Str(long ipNum) {
         StringBuilder str = new StringBuilder();
-        str.append(ipNum >>> 24).append(".").append((ipNum >> 16) & 0xff).append(".")
+        str.append((ipNum >> 24) & 0xff).append(".").append((ipNum >> 16) & 0xff).append(".")
                 .append((ipNum >> 8) & 0xff).append(".").append(ipNum & 0xff);
         return str.toString();
     }
@@ -65,7 +52,7 @@ public class IpUtil {
      * @return
      * @throws Exception
      */
-    private static long ipStr2Num(String ipStr) {
+    public static long ipStr2Num(String ipStr) {
         if (!isValidIp(ipStr)) {
             return 0L;
         }
@@ -129,15 +116,27 @@ public class IpUtil {
      * @return
      */
     public static String ip2region(String ip) {
-        if (ip == null || searcher == null) {
-            return "";
+        if (ip == null) {
+            return null;
         }
+        // todo 数据库存储信息，更新时可以动态改变
+        String dbPath = "F:\\ip-library\\lionsoul-ip2region-master\\ip2region\\data\\ip2region.db";
+        DbSearcher searcher = null;
         try {
+            searcher = new DbSearcher(new DbConfig(), dbPath);
             // 只要ip不为null，即使格式错误也不会报错(显示内网ip)
             return searcher.btreeSearch(ip).getRegion();
-        } catch (IOException e) {
+        } catch (IOException | DbMakerConfigException e) {
             e.printStackTrace();
+        } finally {
+            if (searcher != null) {
+                try {
+                    searcher.close();
+                } catch (IOException e) {
+                    // to nothing
+                }
+            }
         }
-        return "";
+        return null;
     }
 }

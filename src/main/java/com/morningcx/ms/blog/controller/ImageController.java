@@ -15,7 +15,7 @@ import java.util.Map;
  * @date 2019/2/28
  */
 @RestController
-@RequestMapping(path = "category", name = "图片")
+@RequestMapping(path = "image", name = "图片")
 public class ImageController {
 
     @Autowired

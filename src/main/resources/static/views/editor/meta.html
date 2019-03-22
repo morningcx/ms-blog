@@ -75,9 +75,9 @@
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
-        <label class="layui-form-label">文章摘要</label>
+        <label class="layui-form-label">文章简介</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入摘要" class="layui-textarea" id="introduction"></textarea>
+            <textarea placeholder="请输入简介" class="layui-textarea" id="introduction"></textarea>
         </div>
     </div>
 </form>
@@ -105,7 +105,7 @@
             success: function (res) {
                 $('#tagEditor').tagEditor({
                     autocomplete: {
-                        delay: 100, // show suggestions immediately
+                        delay: 100, // show suggestions
                         position: {collision: 'flip'}, // automatic menu position up/down
                         source: res.data
                     },
@@ -167,10 +167,9 @@
                     contentType: "application/json",
                     data: JSON.stringify(meta),
                     success: function () {
-                        $(parent.document).attr('title', meta.title);
-                        layer.msg("保存成功！", {time: 1000}, function () {
-                            parent.layer.close(index);
-                        });
+                        /*$(parent.document).attr('title', meta.title);*/
+                        parent.layer.msg("保存成功！");
+                        parent.layer.close(index);
                     }
                 });
             } else {
@@ -180,8 +179,8 @@
                     data: JSON.stringify(meta),
                     success: function (res) {
                         layer.msg("新建成功！", {time: 1000}, function () {
-                            parent.layer.close(index);
                             window.open("./editor.html?id=" + res.data, "_blank");
+                            parent.layer.close(index);
                         });
                     }
                 });
