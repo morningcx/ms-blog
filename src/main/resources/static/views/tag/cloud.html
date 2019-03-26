@@ -3,16 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>标签云</title>
-    <!--<link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">-->
-    <style>
-/*        #tagCloud{
-            width:100%;
-            height:100%;
-        }*/
-    </style>
+    <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
 </head>
 <body>
-<div id='tagCloud'></div>
+<!--有空隙-->
+<div class="layui-fluid">
+    <!--底部的间隔7.5px-->
+    <div class="layui-row layui-col-space15">
+        <!--横向占满6格空间-->
+        <div class="layui-col-md6">
+            <!--卡片白色背景-->
+            <div class="layui-card">
+                <div class="layui-card-header">标签云</div>
+                <div class="layui-card-body">
+                    <div id="tagCloud"></div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            <!--标签云-->
+            <div class="layui-card">
+                <div class="layui-card-header">标签云</div>
+                <div class="layui-card-body" id="tagContent">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="../../library/tagCloud/js/jquery-2.1.1.min.js"></script>
 <script src="../../library/tagCloud/js/jquery.svg3dtagcloud.min.js"></script>
 <script src="../../library/layuiAdmin/layui/layui.js"></script>
@@ -25,32 +44,44 @@
             success: function (res) {
                 var tagList = res.data;
                 var tags = [];
-                for (var i = 0; i < tagList.length; ++i) {
+                /*for (var i = 0; i < tagList.length; ++i) {
                     tagList[i].label = tagList[i].name;
                     tags.push(tagList[i]);
+                }*/
+
+                var data = ["JAVA", "SpringBoot", "Spring", "Mybatis", "JPA",
+                    "C++", "Python", "SpringCloud", "MVC", "Angular"];
+                var content = $("#tagContent");
+                for (var i = 0; i < 100; ++i) {
+                    var fontSize = Math.random() * 8 + 12;
+                    var fontData = data[Math.floor(Math.random() * 10)];
+                    tags.push({label: fontData});
+                    content.append("<a href=\"\" style=\"font-size: " + fontSize + "px\">" + fontData + " </a>");
                 }
+
                 var settings = {
                     entries: tags,
                     width: '100%',
-                    height: '100%',
-                    radius: '70%',
+                    height: '83%',
+                    radius: '85%',
                     radiusMin: 75,
                     bgDraw: true,
-                    bgColor: '#393D49',
+                    bgColor: '#fff',
                     opacityOver: 1.00,
-                    opacityOut: 0.2,
+                    opacityOut: 0.1,
                     opacitySpeed: 6,
                     fov: 800,
-                    speed: 1,
-                    fontFamily: 'Oswald, Arial, sans-serif',
-                    fontSize: '15',
-                    fontColor: '#fff',
-                    fontWeight: 'normal',//bold
+                    speed: 0.5,
+                    fontFamily: 'Microsoft Yahei, Oswald, Arial, sans-serif',
+                    fontSize: '16',
+                    fontColor: '#000',
+                    fontWeight: 'bold',//bold
                     fontStyle: 'normal',//italic
                     fontStretch: 'normal',//wider, narrower, ultra-condensed, extra-condensed, condensed, semi-condensed, semi-expanded, expanded, extra-expanded, ultra-expanded
                     fontToUpperCase: false
                 };
                 $('#tagCloud').svg3DTagCloud(settings);
+
             }
         });
 

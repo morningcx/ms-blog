@@ -149,10 +149,10 @@
 
         function openItem(id) {
             var arg = id ? ("?id=" + id) : "";
-            top.layui.layer.open({
+            layer.open({
                 type: 2
                 , title: '分类操作'
-                , content: './category/item.html' + arg
+                , content: './item.html' + arg
                 , area: ['400px', '435px']
                 , btn: ['确定', '取消']
                 , yes: function (index, layero) {

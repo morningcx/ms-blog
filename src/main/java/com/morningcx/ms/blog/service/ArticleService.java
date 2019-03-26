@@ -38,6 +38,25 @@ public class ArticleService {
     private CategoryMapper categoryMapper;
 
 
+    public Article getMeta(Integer id) {
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        wrapper.eq("id", id);
+        wrapper.eq("recycle", 0);
+        Article article = articleMapper.selectOne(wrapper);
+        BizException.throwIfNull(article, "文章不存在");
+        // 查询标签
+        List<Object> tagIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>()
+                .eq("article_id", article.getId())
+                .select("tag_id"));
+        List<Object> tagNames = tagMapper.selectObjs(new QueryWrapper<Tag>()
+                .in("id", tagIds)
+                .select("name"));
+        article.setTagNames(tagNames.stream().map(o -> (String) o).collect(Collectors.toList()));
+        return article;
+    }
+
+
+
     /**
      * 根据id查询文章元信息
      *

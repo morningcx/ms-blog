@@ -84,8 +84,8 @@
 <div class="layui-col-lg12">
     <button class="layui-btn layui-btn-primary" id="save">保存</button>
 </div>
-<script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>
+<script src="../../base/plugin/jquery.min.js"></script>
+<script src="../../library/tagEditor/jquery-ui.min.js"></script>
 <script src="../../library/tagEditor/jquery.caret.min.js"></script>
 <script src="../../library/tagEditor/jquery.tag-editor.min.js"></script>
 
@@ -179,7 +179,7 @@
                     data: JSON.stringify(meta),
                     success: function (res) {
                         layer.msg("新建成功！", {time: 1000}, function () {
-                            window.open("./editor.html?id=" + res.data, "_blank");
+                            window.open("../editor/editor.html?id=" + res.data, "_blank");
                             parent.layer.close(index);
                         });
                     }
