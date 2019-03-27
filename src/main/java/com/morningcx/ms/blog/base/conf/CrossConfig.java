@@ -12,9 +12,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CrossConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        // 对前端接口实现跨域
+        registry.addMapping("/web/**")
                 .allowedMethods("*")
-                // 远程地址(最好有所限制)
+                // todo 远程地址(本地)
                 .allowedOrigins("*")
                 .allowedHeaders("*");
     }

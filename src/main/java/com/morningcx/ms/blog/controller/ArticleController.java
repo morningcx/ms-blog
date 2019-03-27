@@ -23,7 +23,6 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-
     @FreeAuth
     @GetMapping("getMeta")
     public Result getMeta(Integer id) {
@@ -55,13 +54,13 @@ public class ArticleController {
         return Result.ok(articleService.insertArticle(article));
     }
 
-    @Log(type = OpEnum.READ, desc = "分页查询文章")
+    @Log(type = OpEnum.PAGE, desc = "分页查询文章")
     @GetMapping("listArticle")
     public Result listArticle(Article article, Integer page, Integer limit) {
         return Result.ok(articleService.listArticle(article, page, limit));
     }
 
-    @Log(type = OpEnum.READ, desc = "分页查询回收站")
+    @Log(type = OpEnum.PAGE, desc = "分页查询回收站")
     @GetMapping("listRecycleBin")
     public Result listRecycleBin(Article article, Integer page, Integer limit) {
         return Result.ok(articleService.listRecycleBin(article, page, limit));

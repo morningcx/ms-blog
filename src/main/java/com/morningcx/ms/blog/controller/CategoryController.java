@@ -27,7 +27,7 @@ public class CategoryController {
         return Result.ok(categoryService.getById(id));
     }
 
-    @Log(type = OpEnum.READ, desc = "分页查询分类 页码：{page} 页量：{limit}")
+    @Log(type = OpEnum.PAGE, desc = "分页查询分类 页码：{page} 页量：{limit}")
     @GetMapping("listPage")
     public Result listPage(Category category, Integer page, Integer limit) {
         return Result.ok(categoryService.listPage(category, page, limit));
