@@ -29,6 +29,7 @@ public class Category implements Serializable {
     private Date createTime;
     private Date updateTime;
     @TableLogic
+    @TableField(select = false)
     private Integer deleted;
 
 }

@@ -1,6 +1,5 @@
 package com.morningcx.ms.blog.controller;
 
-import com.morningcx.ms.blog.base.annotation.FreeAuth;
 import com.morningcx.ms.blog.base.annotation.Log;
 import com.morningcx.ms.blog.base.enums.OpEnum;
 import com.morningcx.ms.blog.base.result.Result;
@@ -22,13 +21,6 @@ public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
-
-    @FreeAuth
-    @GetMapping("getMeta")
-    public Result getMeta(Integer id) {
-        return Result.ok(articleService.getMeta(id));
-    }
-
 
     @Log(type = OpEnum.READ, desc = "根据ID查询文章元信息")
     @GetMapping("getMetaById")

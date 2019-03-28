@@ -22,4 +22,10 @@ public class WebArticleController {
     public Result listHotArticles(Integer userId) {
         return Result.ok(webArticleService.listHotArticles(userId));
     }
+
+    @GetMapping("getFullById")
+    public Result getFullById(Integer id) {
+        return Result.ok(webArticleService.getFullById(id));
+    }
+
 }

@@ -42,6 +42,7 @@ public class Article implements Serializable {
     private Integer modifier;
     private Integer recycle;
     @TableLogic
+    @TableField(select = false)
     private Integer deleted;
 
 
