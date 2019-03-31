@@ -2784,6 +2784,10 @@
   line-height: 1.1;
 }
 
+.markdown-body p {
+  line-height: 2;
+}
+
 .markdown-body p,
 .markdown-body blockquote,
 .markdown-body ul,

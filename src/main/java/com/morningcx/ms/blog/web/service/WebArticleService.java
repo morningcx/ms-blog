@@ -84,6 +84,8 @@ public class WebArticleService {
         // 内容
         Content content = contentMapper.selectById(article.getContentId());
         article.setContent(content);
+        // 更新浏览次数
+        articleMapper.updateViewsById(id);
         return article;
     }
 
