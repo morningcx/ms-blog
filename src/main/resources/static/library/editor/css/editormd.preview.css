@@ -2809,7 +2809,7 @@
 }*/
 .markdown-body ul,
 .markdown-body ol {
-  padding-left: 1.5em;
+  padding-left: 2em;
 }
 
 .markdown-body ul ul,
@@ -3125,11 +3125,11 @@
 }
 .editormd-preview-container blockquote, .editormd-html-preview blockquote {
   color: #666;
+    background: #fcfcfc;
   border-left: 4px solid #ddd;
   padding-left: 20px;
   margin-left: 0;
   font-size: 14px;
-  font-style: italic;
 }
 .editormd-preview-container p code, .editormd-html-preview p code {
   margin-left: 5px;

@@ -29,9 +29,10 @@ public class ContextUtil {
      * @return
      */
     public static Integer getLoginId() {
-        HttpSession session = getAttributes().getRequest().getSession();
-        Integer loginId = (Integer) session.getAttribute(LOGIN_USER_ID);
-        BizException.throwIfNull(loginId, "未登录");
+        HttpSession session = getAttributes().getRequest().getSession(false);
+        Integer loginId = null;
+        BizException.throwIf(session == null ||
+                (loginId = (Integer) session.getAttribute(LOGIN_USER_ID)) == null, "未登录");
         return loginId;
     }
 

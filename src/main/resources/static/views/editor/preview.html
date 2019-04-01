@@ -5,11 +5,13 @@
     <title></title>
     <link rel="icon">
     <link rel="stylesheet" href="../../library/editor/css/editormd.preview.css">
-    <!--<link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">-->
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <!-- <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">-->
     <style>
 
         body {
-            background: #f5f8f9;
+            /*background: #f5f8f9;*/
             padding: 0;
             margin: 0;
         }
@@ -19,33 +21,97 @@
             width: 20%;
             height: 50%;
             float: left;
-            box-shadow: 0 0 5px darkgrey;
+        }
+
+        #tocContainer::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #tocContainer::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+        }
+
+        #tocContainer:hover::-webkit-scrollbar-thumb {
+            background: rgba(136, 136, 136, 0.4);
+        }
+
+        #tocContainer:hover::-webkit-scrollbar-track {
+            background: rgba(136, 136, 136, 0.1);
+        }
+
+        #tocContainer li {
+            list-style-type: none;
+        }
+
+        #tocContainer ul, #tocContainer ol {
+            padding-left: 0.9em;
+            margin-bottom: 0;
+        }
+
+        #tocContainer .markdown-toc.editormd-markdown-toc > ul > li > a {
+            font-weight: bold;
+        }
+
+        #tocContainer a {
+            display: inline-block;
+            margin: 0;
+            width: 100%;
+            overflow: hidden;
+            word-break: keep-all;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            text-decoration: none;
+            color: #9c9c9c;
+            padding-left: 0.6em;
+        }
+
+        #tocContainer a:hover {
+            background: #F5F5F5;
+            border-radius: 4px;
+        }
+
+        #tocContainer ul:first-child {
+            padding-left: 0;
         }
 
         #previewContainer {
-            width: calc(80% - 140px);
-            box-shadow: 0 0 5px darkgrey;
-            margin: 20px;
+            /*border: 1px red solid;*/
+            width: 60%;
+            padding: 0;
+            margin: 0 auto;
         }
 
-        /*@media screen {
+        @media screen and (min-width: 1000px) {
 
-        }*/
-        #tocContainer {
-            width: 20%;
-            max-height: calc(100% - 80px);
-            /*height: 50%;*/
-            margin: 20px;
-            position: fixed;
-            top: 0;
-            right: 0;
-            box-shadow: 0 0 5px darkgrey;
-            overflow: auto;
+            #tocContainer {
+                /*border: 1px red solid;*/
+                width: 15%;
+                max-height: 50%;
+                position: fixed;
+                padding: 0 10px 0 0;
+                margin-right: 25px;
+                top: 10%;
+                right: 0;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+        }
+
+        @media screen and (max-width: 1000px) {
+            #previewContainer {
+                width: 75%;
+            }
+
+            #tocContainer {
+                display: none;
+            }
         }
 
         #currPoint {
-            color: #fc6423;
+            color: #fc6423 !important;
             text-decoration: underline;
+            background: #F5F5F5;
+            border-radius: 4px;
         }
 
         /* 设置滚动条的样式 */
@@ -62,10 +128,6 @@
         }*/
         /*::-webkit-scrollbar-thumb:window-inactive {
             background:rgba(255,0,0,0.4);
-        }*/
-
-        /*#tocContainer::-webkit-scrollbar{
-            display: none; !*隐藏滚动条*!
         }*/
     </style>
 </head>
@@ -160,6 +222,15 @@
             // 每一个链接元素
             var eachElement = $("#tocContainer a");
 
+
+            // 第一个a元素
+            var firstElement = eachElement.eq(0);
+            // toc容器
+            var container = $("#tocContainer");
+            // toc高度的一半减去a标签高度的一半
+            var halfHeight = (container.height() - firstElement.height()) / 2;
+
+
             // 页面滚动
             $(window).scroll(function () {
                 var currTop = $(this).scrollTop();
@@ -171,6 +242,8 @@
                     if (!currPoint.is(targetPoint)) {
                         currPoint.removeAttr("id");
                         targetPoint.attr("id", "currPoint");
+                        // 中部显示绑定
+                        container.scrollTop(targetPoint.offset().top - firstElement.offset().top - halfHeight);
                     }
                 } else {
                     currPoint.removeAttr("id");
@@ -186,7 +259,7 @@
             function tocPart(num, array) {
                 var start = 0, end = array.length - 1;
                 while (start < end) {
-                    var mid = parseInt((end - start) / 2) + start + 1;
+                    var mid = Math.floor((end - start) / 2) + start + 1;
                     if (array.eq(mid).offset().top > num) {
                         end = mid - 1;
                     } else {
