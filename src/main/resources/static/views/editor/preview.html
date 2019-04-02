@@ -3,137 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <link rel="icon">
-    <link rel="stylesheet" href="../../library/editor/css/editormd.preview.css">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="icon">
+    <link rel="stylesheet" href="../../library/editor/css/editormd.preview.css">
     <!-- <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">-->
-    <style>
-
-        body {
-            /*background: #f5f8f9;*/
-            padding: 0;
-            margin: 0;
-        }
-
-        #author {
-            background: white;
-            width: 20%;
-            height: 50%;
-            float: left;
-        }
-
-        #tocContainer::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        #tocContainer::-webkit-scrollbar-thumb {
-            border-radius: 4px;
-        }
-
-        #tocContainer:hover::-webkit-scrollbar-thumb {
-            background: rgba(136, 136, 136, 0.4);
-        }
-
-        #tocContainer:hover::-webkit-scrollbar-track {
-            background: rgba(136, 136, 136, 0.1);
-        }
-
-        #tocContainer li {
-            list-style-type: none;
-        }
-
-        #tocContainer ul, #tocContainer ol {
-            padding-left: 0.9em;
-            margin-bottom: 0;
-        }
-
-        #tocContainer .markdown-toc.editormd-markdown-toc > ul > li > a {
-            font-weight: bold;
-        }
-
-        #tocContainer a {
-            display: inline-block;
-            margin: 0;
-            width: 100%;
-            overflow: hidden;
-            word-break: keep-all;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            text-decoration: none;
-            color: #9c9c9c;
-            padding-left: 0.6em;
-        }
-
-        #tocContainer a:hover {
-            background: #F5F5F5;
-            border-radius: 4px;
-        }
-
-        #tocContainer ul:first-child {
-            padding-left: 0;
-        }
-
-        #previewContainer {
-            /*border: 1px red solid;*/
-            width: 60%;
-            padding: 0;
-            margin: 0 auto;
-        }
-
-        @media screen and (min-width: 1000px) {
-
-            #tocContainer {
-                /*border: 1px red solid;*/
-                width: 15%;
-                max-height: 50%;
-                position: fixed;
-                padding: 0 10px 0 0;
-                margin-right: 25px;
-                top: 10%;
-                right: 0;
-                overflow-y: auto;
-                overflow-x: hidden;
-            }
-        }
-
-        @media screen and (max-width: 1000px) {
-            #previewContainer {
-                width: 75%;
-            }
-
-            #tocContainer {
-                display: none;
-            }
-        }
-
-        #currPoint {
-            color: #fc6423 !important;
-            text-decoration: underline;
-            background: #F5F5F5;
-            border-radius: 4px;
-        }
-
-        /* 设置滚动条的样式 */
-        /*::-webkit-scrollbar {
-            width:10px;
-        }*/
-        /*!* 滚动槽 *!
-        ::-webkit-scrollbar-track {
-            background: #eeeeee;
-        }
-        !* 滚动条滑块 *!
-        ::-webkit-scrollbar-thumb {
-            background:#d0d0d0;
-        }*/
-        /*::-webkit-scrollbar-thumb:window-inactive {
-            background:rgba(255,0,0,0.4);
-        }*/
-    </style>
+    <link href="css/preview.css" rel="stylesheet">
 </head>
 <body>
 <!--markdown内容-->
-<div id="previewContainer"></div>
+<main class="main">
+    <header class="header">
+        <h1 class="title">事务及事务隔离级别</h1>
+        <section class="meta">
+            <i class="fa fa-user"></i>
+            <a class="author" href="javascript:;">admin</a>
+            <i class="fa fa-calendar"></i>
+            <a class="date" href="javascript:;">2019-2-14</a>
+            <i class="fa fa-folder"></i>
+            <a class="category" href="javascript:;">java</a>
+            <i class="fa fa-eye"></i>
+            <a class="views" href="javascript:;">3786</a>
+            <i class="fa fa-heart"></i>
+            <a class="likes" href="javascript:;">101</a><br>
+            <span class="tags">
+                <a href="javascript:;">索引</a>
+                <a href="javascript:;">springboot</a>
+                <a href="javascript:;">mybatis</a>
+                <a href="javascript:;">springcloud</a>
+                <a href="javascript:;">hadoop</a>
+            </span>
+        </section>
+        <p class="introduction">事务的ACID原则，事务隔离级别的介绍</p>
+    </header>
+    <article id="previewContainer"></article>
+</main>
+
 <!--目录-->
 <div id="tocContainer" class="markdown-body editormd-preview-container"></div>
 
@@ -149,129 +54,6 @@
 <script src="../../library/editor/lib/sequence-diagram.min.js"></script>
 <script src="../../library/editor/lib/flowchart.min.js"></script>
 <script src="../../library/editor/lib/jquery.flowchart.min.js"></script>
-<script>
-    layui.use(["jquery", "layer"], function () {
-        var $ = layui.$, layer = layui.layer;
-        var articleId = getUrlParam("id");
-        // 参数传递错误则不执行
-        if (!articleId) {
-            layer.ready(function () {
-                layer.alert("参数传递错误！", {icon: 2});
-            });
-            return;
-        }
-        ajax.get({
-            url: "/content/getByArticleId?articleId=" + articleId,
-            success: function (res) {
-                $(document).attr('title', res.data.title);
-                generateViewer(res.data.content.content);
-            }
-        });
-
-        function generateViewer(md) {
-            var previewContainer = editormd.markdownToHTML("previewContainer", {
-                /*markdown: res.content,*/
-                // 解析html元素，更加灵活但是不安全，默认是关闭的
-                /*htmlDecode      : "style,script,iframe",*/
-                // tocDropdown: false, // 下拉toc显示
-                markdown: md,
-                tocTitle: "目录 Table of Contents",
-                tocContainer: "#tocContainer", // toc容器
-                tocm: true,
-                emoji: true, // 表情图标
-                tocm: true, // tocm
-                taskList: true, // 任务列表，未完成已完成
-                tex: true,  // 科学公式，默认不解析
-                flowChart: true,  // 流程图，默认不解析
-                sequenceDiagram: true,  // 序列图，默认不解析
-                /*markdownSourceCode: false*/ // textarea中是否保留md源码，默认就是false
-            });
-            tocBind();
-        }
-
-        /**
-         * 目录绑定
-         */
-        function tocBind() {
-            /*var each = $("#htmlViewer .reference-link");
-            $(window).scroll(function () {
-                var start = new Date().getTime();
-                var currScroll = $(this).scrollTop();
-                var section;
-                each.each(function () {
-                    var divPosition = $(this).offset().top;
-                    if (divPosition - 1 < currScroll) {
-                        section = $(this);
-                    }
-                });
-                if (section) {
-                    $("#currPoint").removeAttr("id");
-                    $("#tocContainer a[href='#" + section.prop("name") + "']").attr("id", "currPoint");
-                }
-                console.log(new Date().getTime() - start);
-            });*/
-
-            // 每一个锚点距离顶部的高度
-
-            var eachLink = $("#previewContainer .reference-link");
-
-            if (eachLink.length === 0) {
-                return;
-            }
-
-            // 每一个链接元素
-            var eachElement = $("#tocContainer a");
-
-
-            // 第一个a元素
-            var firstElement = eachElement.eq(0);
-            // toc容器
-            var container = $("#tocContainer");
-            // toc高度的一半减去a标签高度的一半
-            var halfHeight = (container.height() - firstElement.height()) / 2;
-
-
-            // 页面滚动
-            $(window).scroll(function () {
-                var currTop = $(this).scrollTop();
-                var currPoint = $("#currPoint");
-                // 目录索引，加5为了避免偏移误差
-                var index = tocPart(currTop + 5, eachLink);
-                if (index !== -1) {
-                    var targetPoint = eachElement.eq(index);
-                    if (!currPoint.is(targetPoint)) {
-                        currPoint.removeAttr("id");
-                        targetPoint.attr("id", "currPoint");
-                        // 中部显示绑定
-                        container.scrollTop(targetPoint.offset().top - firstElement.offset().top - halfHeight);
-                    }
-                } else {
-                    currPoint.removeAttr("id");
-                }
-            });
-
-            /**
-             * 二分查找数组中最后一个小于等于num的索引(toc当前目录索引)
-             * @param num
-             * @param array
-             * @returns {number}
-             */
-            function tocPart(num, array) {
-                var start = 0, end = array.length - 1;
-                while (start < end) {
-                    var mid = Math.floor((end - start) / 2) + start + 1;
-                    if (array.eq(mid).offset().top > num) {
-                        end = mid - 1;
-                    } else {
-                        start = mid;
-                    }
-                }
-                return array.eq(start).offset().top > num ? -1 : start;
-            }
-        }
-    });
-
-
-</script>
+<script src="js/preview.js"></script>
 </body>
 </html>
