@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
  */
 public class ContextUtil {
 
-    private static final String LOGIN_USER_ID = "loginId";
+    public static final String LOGIN_USER_ID = "loginId";
 
     /**
      * 获取当前请求属性

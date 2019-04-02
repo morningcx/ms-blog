@@ -9,10 +9,23 @@ layui.use(["jquery", "layer"], function () {
         return;
     }
     ajax.get({
-        url: "/content/getByArticleId?articleId=" + articleId,
+        url: "/web/article/getFullById?id=" + articleId,
         success: function (res) {
-            $(document).attr('title', res.data.title);
-            generateViewer(res.data.content.content);
+            var data = res.data;
+            $(document).attr('title', data.title);
+            $(".main .header .title").text(data.title);
+            $(".main .header .meta .author").text(data.author);
+            $(".main .header .meta .date").text(data.createTime.substr(0, 10));
+            $(".main .header .meta .category").text(data.category);
+            $(".main .header .meta .views").text(data.views);
+            $(".main .header .meta .likes").text(data.likes);
+            $(".main .header .meta .introduction").text(data.introduction);
+            var tags = data.tagNames, tagsContainer = $(".main .header .meta .tags");
+            for (var i = 0; i < tags.length; ++i) {
+                tagsContainer.append("<a href='javascript:;'>" + tags[i] + "</a>");
+            }
+            $(".main .header .meta").show();
+            generateViewer(data.content.content);
         }
     });
 

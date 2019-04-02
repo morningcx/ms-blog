@@ -3,7 +3,7 @@ body {
     padding: 0;
     margin: 0;
     font-family: "Microsoft Yahei";
-/*    font-size: 16px;*/
+    /*    font-size: 16px;*/
     /*todo 适配 font size*/
 }
 
@@ -17,22 +17,24 @@ a:hover, a:visited, a:link, a:active {
 }
 
 .header .title {
-    font-size: 3em;
+    font-size: 2.5em;
     color: #2e2e2e;
     margin-bottom: 0;
 }
 
-.main .header .introduction {
+.main .header .meta .introduction {
     color: #888888;
     border-left: 5px solid #b9b9b9;
     padding: 10px;
-    margin: 20px auto;
+    font-size: 1em;
+    margin: 1.6em auto;
     line-height: 1.7em;
     background: #F6F6F6;
 }
 
 .main .header .meta {
-    padding: 1.2em 0 0 0;
+    display: none;
+    padding-top: 1.5em;
     font-size: 0.9em;
 }
 
@@ -52,18 +54,24 @@ a:hover, a:visited, a:link, a:active {
 
 .main .header .meta .tags a {
     display: inline-block;
-    margin-top: 10px;
+    margin-top: 0.5em;
+    margin-right: 0.5em;
     border: #E3E9ED 1px solid;
     border-radius: 5px;
     padding: 0 5px 2px 5px;
 }
+
 .main .header .meta .tags a:hover {
     text-decoration: underline;
 }
 
 .main .header .meta .fa {
-    margin-left: 3px;
+    margin-left: 0.5em;
     color: #aebbc3;
+}
+
+.main .header .meta .fa:first-of-type {
+    margin-left: 3px;
 }
 
 #tocContainer::-webkit-scrollbar {
