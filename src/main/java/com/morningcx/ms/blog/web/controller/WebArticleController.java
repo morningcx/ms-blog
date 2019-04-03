@@ -4,6 +4,7 @@ import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.web.service.WebArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,5 +28,11 @@ public class WebArticleController {
     public Result getFullById(Integer id) {
         return Result.ok(webArticleService.getFullById(id));
     }
+
+    @PostMapping("like")
+    public Result updateLikes(Integer id) {
+        return Result.ok(webArticleService.updateLikesById(id));
+    }
+
 
 }

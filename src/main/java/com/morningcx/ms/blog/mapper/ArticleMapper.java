@@ -20,6 +20,14 @@ public interface ArticleMapper extends BaseMapper<Article> {
      */
     int updateViewsById(Integer id);
 
+    /**
+     * 根据文章id更新文章的点赞次数
+     *
+     * @param id
+     * @return
+     */
+    int updateLikesById(Integer id);
+
 
     /**
      * 根据文章id获取文章基本信息、作者、类别

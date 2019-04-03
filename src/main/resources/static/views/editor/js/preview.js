@@ -11,34 +11,71 @@ layui.use(["jquery", "layer"], function () {
     ajax.get({
         url: "/web/article/getFullById?id=" + articleId,
         success: function (res) {
-            var data = res.data;
-            $(document).attr('title', data.title);
-            $(".main .header .title").text(data.title);
-            $(".main .header .meta .author").text(data.author);
-            $(".main .header .meta .date").text(data.createTime.substr(0, 10));
-            $(".main .header .meta .category").text(data.category);
-            $(".main .header .meta .views").text(data.views);
-            $(".main .header .meta .likes").text(data.likes);
-            $(".main .header .meta .introduction").text(data.introduction);
-            var tags = data.tagNames, tagsContainer = $(".main .header .meta .tags");
-            for (var i = 0; i < tags.length; ++i) {
-                tagsContainer.append("<a href='javascript:;'>" + tags[i] + "</a>");
-            }
-            $(".main .header .meta").show();
-            generateViewer(data.content.content);
+            generateTool();
+            generateHeader(res.data);
+            generateViewer(res.data.content.content);
         }
     });
 
+    /**
+     * 生成右下角悬浮工具栏
+     */
+    function generateTool() {
+        var like = false;
+        $(".tool #toTop").click(function () {
+            $("html").animate({scrollTop: 0}, 500);
+        });
+        $(".tool #toc").click(function () {
+            $("#tocContainer").toggle(180);
+        });
+        $(".tool #like").click(function () {
+            if (!like) {
+                like = true;
+                ajax.post({
+                    url: "/web/article/like",
+                    data: {id: articleId},
+                    mask: false,
+                    success: function () {
+                        $(".tool #like").css("background", "#ea6f5a");
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 生成标题以及其他元信息
+     * @param data
+     */
+    function generateHeader(data) {
+        $(document).attr('title', data.title);
+        $(".main .header .meta").show();
+        $(".main .header .title").text(data.title);
+        $(".main .header .meta .author").text(data.author);
+        $(".main .header .meta .date").text(data.createTime.substr(0, 10));
+        $(".main .header .meta .category").text(data.category);
+        $(".main .header .meta .views").text(data.views);
+        $(".main .header .meta .likes").text(data.likes);
+        $(".main .header .meta .introduction").text(data.introduction);
+        var tags = data.tagNames, tagString = "";
+        for (var i = 0; i < tags.length; ++i) {
+            tagString += "<a href='javascript:;'>" + tags[i] + "</a>";
+        }
+        $(".main .header .meta .tags").append(tagString);
+    }
+
+    /**
+     * 生成html视图
+     * @param md
+     */
     function generateViewer(md) {
         var previewContainer = editormd.markdownToHTML("previewContainer", {
-            /*markdown: res.content,*/
             // 解析html元素，更加灵活但是不安全，默认是关闭的
             /*htmlDecode      : "style,script,iframe",*/
             // tocDropdown: false, // 下拉toc显示
             markdown: md,
             /*tocTitle: "目录 Table of Contents",*/
             tocContainer: "#tocContainer", // toc容器
-            tocm: true,
             emoji: true, // 表情图标
             tocm: true, // tocm
             taskList: true, // 任务列表，未完成已完成
@@ -90,6 +127,9 @@ layui.use(["jquery", "layer"], function () {
 
         // 页面滚动
         $(window).scroll(function () {
+            if (!container.is(":visible")) {
+                return;
+            }
             var currTop = $(this).scrollTop();
             var currPoint = $("#currPoint");
             // 目录索引，加5为了避免偏移误差

@@ -198,6 +198,7 @@ public class ArticleService {
         wrapper.eq("recycle", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());
         wrapper.setEntity(EntityUtil.removeEmptyString(article));
+        wrapper.orderByDesc("create_time");
         return articleMapper.selectPage(new Page<>(page, limit), wrapper);
     }
 

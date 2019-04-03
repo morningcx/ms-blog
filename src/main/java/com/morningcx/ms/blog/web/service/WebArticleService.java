@@ -62,9 +62,8 @@ public class WebArticleService {
     public Article getFullById(Integer id) {
         Article article = articleMapper.selectById(id);
         BizException.throwIfNull(article, "文章不存在");
-        HttpSession s = ContextUtil.getAttributes().getRequest().getSession(false);
         // 设置访问限制，用户未登录，或者用户登录但文章不属于自己，则只能访问公开并未回收的文章
-        if (s == null || !article.getAuthorId().equals(s.getAttribute(ContextUtil.LOGIN_USER_ID))) {
+        if (!article.getAuthorId().equals(getLoginId())) {
             BizException.throwIf(article.getModifier() == 1 || article.getRecycle() == 1, "文章不存在");
         }
         // 作者
@@ -88,9 +87,33 @@ public class WebArticleService {
         // 内容
         Content content = contentMapper.selectById(article.getContentId());
         article.setContent(content);
-        // 更新浏览次数 todo ip判断
+        // 更新浏览次数 todo 重复
         articleMapper.updateViewsById(id);
         return article;
     }
 
+    /**
+     * 更新文章点赞次数
+     *
+     * @param id
+     * @return
+     */
+    public int updateLikesById(Integer id) {
+        // todo 重复
+        return articleMapper.updateLikesById(id);
+    }
+
+    /**
+     * 返回当前登录用户的id，没有session则说明未登录
+     *
+     * @return
+     */
+    private Integer getLoginId() {
+        HttpSession s = ContextUtil.getAttributes().getRequest().getSession(false);
+        if (s == null) {
+            return null;
+        }
+        return (Integer) s.getAttribute(ContextUtil.LOGIN_USER_ID);
+    }
 }
+
