@@ -12,6 +12,10 @@
 
 @charset "UTF-8";
 /*! prefixes.scss v0.1.0 | Author: Pandao | https://github.com/pandao/prefixes.scss | MIT license | Copyright (c) 2015 */
+body {
+  padding: 0;
+  margin: 0;
+}
 .editormd {
   width: 90%;
   height: 640px;
@@ -3554,7 +3558,7 @@
 }
 
 .markdown-body blockquote {
-  padding: 0 15px;
+  padding: 10px 15px;
   color: #777;
   border-left: 4px solid #ddd;
 }
@@ -3828,20 +3832,18 @@
 
 .editormd-preview-container, .editormd-html-preview {
   text-align: left;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.75;
   padding: 20px;
   overflow: auto;
   width: 100%;
   background-color: #fff;
 }
 .editormd-preview-container blockquote, .editormd-html-preview blockquote {
-  color: #666;
-  border-left: 4px solid #ddd;
-  padding-left: 20px;
+  color: #888;
+  background: #f6f6f6;
+  border-left: 4px solid #cbcbcb;
   margin-left: 0;
-  font-size: 14px;
-  font-style: italic;
 }
 .editormd-preview-container p code, .editormd-html-preview p code {
   margin-left: 5px;

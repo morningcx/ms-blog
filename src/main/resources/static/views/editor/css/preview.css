@@ -1,9 +1,10 @@
+@charset "UTF-8";
 body {
     /*background: #f5f8f9;*/
     padding: 0;
     margin: 0;
     font-family: "Microsoft Yahei", serif;
-    /*    font-size: 16px;*/
+    /*font-size: 16px;*/
     /*todo 适配 font size*/
 }
 
@@ -25,8 +26,8 @@ a:hover, a:visited, a:link, a:active {
 
 .main .header .meta .introduction {
     color: #888;
-    border-left: 5px solid #cbcbcb;
-    padding: 12px 10px 12px 15px;
+    border-left: 4px solid #cbcbcb;
+    padding: 12px 15px 12px 20px;
     font-size: 15px;
     margin: 1.6em auto;
     line-height: 1.8em;
@@ -83,7 +84,7 @@ a:hover, a:visited, a:link, a:active {
 }
 
 .tool .toolBtn {
-    transition: opacity .2s,background .1s;
+    transition: opacity .2s, background .1s;
     display: block;
     cursor: pointer;
     text-align: center;
@@ -137,11 +138,12 @@ a:hover, a:visited, a:link, a:active {
     border-radius: 50%;
 }
 
-
 #tocContainer a {
     display: inline-block;
     margin: 0;
     width: 100%;
+    font-size: 14px;
+    line-height: 1.6;
     overflow: hidden;
     word-break: keep-all;
     white-space: nowrap;
@@ -193,11 +195,29 @@ a:hover, a:visited, a:link, a:active {
     }
 }
 
+@media screen and (max-width: 700px) {
+    .tool .toolBtn {
+        transition: opacity .2s, background .1s;
+        display: block;
+        cursor: pointer;
+        text-align: center;
+        width: 1.8em;
+        height: 1.8em;
+        color: #fff;
+        font-size: 18px;
+        line-height: 1.8em;
+        background: #91979d;
+        opacity: 0.8;
+        border-radius: 20%;
+        margin-top: 5px;
+        z-index: 999;
+    }
+}
+
 #currPoint {
     /*color: #fc6423 !important;*/
     color: black !important;
     font-weight: bold;
-    text-decoration: underline;
     background: #F5F5F5;
     border-radius: 4px;
 }

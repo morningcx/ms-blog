@@ -99,7 +99,7 @@ public class WebArticleService {
      * @return
      */
     public int updateLikesById(Integer id) {
-        // todo 重复
+        // todo 重复点击(其实和浏览次数是同一个判断)，私密或回收文章添加点赞限制
         return articleMapper.updateLikesById(id);
     }
 

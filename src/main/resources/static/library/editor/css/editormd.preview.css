@@ -2784,10 +2784,6 @@
   line-height: 1.1;
 }
 
-.markdown-body p {
-  line-height: 2;
-}
-
 .markdown-body p,
 .markdown-body blockquote,
 .markdown-body ul,
@@ -2842,7 +2838,7 @@
 }
 
 .markdown-body blockquote {
-  padding: 0 15px;
+  padding: 10px 15px;
   color: #777;
   border-left: 4px solid #ddd;
 }
@@ -3116,20 +3112,19 @@
 
 .editormd-preview-container, .editormd-html-preview {
   text-align: left;
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.75;
   padding: 20px;
   overflow: auto;
   width: 100%;
   background-color: #fff;
 }
 .editormd-preview-container blockquote, .editormd-html-preview blockquote {
-  color: #666;
-    background: #fcfcfc;
-  border-left: 4px solid #ddd;
+  color: #888;
+    background: #f6f6f6;
+  border-left: 4px solid #cbcbcb;
   padding-left: 20px;
   margin-left: 0;
-  font-size: 14px;
 }
 .editormd-preview-container p code, .editormd-html-preview p code {
   margin-left: 5px;

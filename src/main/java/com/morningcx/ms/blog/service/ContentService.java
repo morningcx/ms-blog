@@ -48,7 +48,8 @@ public class ContentService {
         Content content = contentMapper.selectById(article.getContentId());
         BizException.throwIfNull(content, notFind);
         // 返回文章标题和文章内容
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>(2);
+        // todo 是否需要加上(回收站)
         map.put("title", article.getTitle() + ((article.getRecycle() ==  0) ? "" : "(回收站)"));
         map.put("content", content);
         return map;
