@@ -43,13 +43,19 @@
             url: "/tag/listReferencePage?page=1&limit=1000",
             success: function (res) {
                 var tagList = res.data;
-                var tags = [];
-                /*for (var i = 0; i < tagList.length; ++i) {
-                    tagList[i].label = tagList[i].name;
-                    tags.push(tagList[i]);
-                }*/
-
-                var data = ["JAVA", "SpringBoot", "Spring", "Mybatis", "JPA",
+                var tags = [], sum = 0;
+                var content = $("#tagContent");
+                for (var i = 0; i < tagList.length; ++i) {
+                    tags.push({label: tagList[i].name, url: "javascript:;"});
+                    sum += tagList[i].count;
+                }
+                var as = "", baseSize = 12;
+                for (var i = 0; i < tagList.length; ++i) {
+                    var fontSize = baseSize + (tagList[i].count / sum) * 30;
+                    as += "<a style=\"font-size: " + fontSize + "px\">" + tagList[i].name + " </a>";
+                }
+                content.append(as);
+                /*var data = ["JAVA", "SpringBoot", "Spring", "Mybatis", "JPA",
                     "C++", "Python", "SpringCloud", "MVC", "Angular"];
                 var content = $("#tagContent");
                 for (var i = 0; i < 100; ++i) {
@@ -57,7 +63,7 @@
                     var fontData = data[Math.floor(Math.random() * 10)];
                     tags.push({label: fontData});
                     content.append("<a href=\"\" style=\"font-size: " + fontSize + "px\">" + fontData + " </a>");
-                }
+                }*/
 
                 var settings = {
                     entries: tags,

@@ -37,7 +37,6 @@ public class CacheConfig extends CachingConfigurerSupport {
     public CacheManager cacheManager(RedisConnectionFactory factory) {
         RedisSerializer<String> stringRedisSerializer = new StringRedisSerializer();
         GenericJackson2JsonRedisSerializer jacksonSerializer = new GenericJackson2JsonRedisSerializer();
-
         // 解决查询缓存转换异常的问题
         /*ObjectMapper om = new ObjectMapper();
         om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);

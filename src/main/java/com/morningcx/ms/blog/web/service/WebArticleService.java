@@ -1,6 +1,7 @@
 package com.morningcx.ms.blog.web.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.util.ContextUtil;
@@ -32,6 +33,18 @@ public class WebArticleService {
     @Autowired
     private ContentMapper contentMapper;
 
+    public IPage<Article> listArticle(Article article, Integer page, Integer limit) {
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        wrapper.eq("recycle", 0);
+        wrapper.eq("modifier", 0);
+        wrapper.eq("author_id", article.getAuthorId());
+        wrapper.eq(article.getCategoryId() != null, "category_id", article.getCategoryId());
+        wrapper.select("id", "title", "introduction","create_time", "category_id", "views", "likes");
+        wrapper.orderByDesc("create_time");
+        // todo 作者和分类
+        return articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
+    }
+
     /**
      * 热门文章列表
      *
@@ -44,13 +57,8 @@ public class WebArticleService {
         wrapper.eq("modifier", 0);
         wrapper.eq("recycle", 0);
         wrapper.orderByDesc("views");
-        wrapper.select("id", "title", "create_time", "category_id", "views");
-        List<Article> articles = articleMapper.selectPage(new Page<>(1, 5), wrapper).getRecords();
-        /*List<Integer> categoryIds = articles.stream().map(Article::getCategoryId).collect(Collectors.toList());
-        List<Category> categories = categoryMapper.selectList(
-                new QueryWrapper<Category>().in("id", categoryIds).select("name"));*/
-
-        return articles;
+        wrapper.select("id", "title", "create_time", "views");
+        return articleMapper.selectPage(new Page<>(1, 5), wrapper).getRecords();
     }
 
     /**
