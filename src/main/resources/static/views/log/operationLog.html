@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>操作日志列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<!--有空隙-->
+<div class="layui-fluid">
+    <!--底部的间隔7.5px-->
+    <div class="layui-row layui-col-space15">
+        <!--横向占满12格空间-->
+        <div class="layui-col-md12">
+            <!--卡片白色背景-->
+            <div class="layui-card">
+                <div class="layui-card-header">操作日志</div>
+                <div class="layui-card-body">
+                    <!--搜索栏-->
+                    <form class="layui-form layui-form-item">
+                        <input placeholder="请输入模块" class="layui-input layui-input-inline" name="module">
+                        <input placeholder="请输入类型" class="layui-input layui-input-inline" name="type">
+                        <input type="submit" class="layui-btn" lay-submit lay-filter="search" value="搜索">
+                        <input class="layui-btn" type="reset">
+                    </form>
+
+                    <!--工具栏-->
+                    <script type="text/html" id="table-toolbar">
+                        <a class="layui-btn  layui-btn-primary layui-btn-sm" lay-event="refresh">刷新列表</a>
+                    </script>
+
+                    <table class="layui-table" lay-filter="list" id="list"
+                           lay-data="{page: true, toolbar: '#table-toolbar', even: true, skin: 'line'}">
+                        <thead>
+                        <tr>
+                            <th lay-data="{field:'ip', width: '15%'}">IP</th>
+                            <th lay-data="{field:'module', width: '10%'}">模块</th>
+                            <th lay-data="{field:'type', width: '6%'}">类型</th>
+                            <th lay-data="{field:'content', width: '20%'}">内容</th>
+                            <th lay-data="{field:'time', width: '16%'}">时间</th>
+                            <th lay-data="{templet: parse.region, width: '20%'}">地理位置</th>
+                            <th lay-data="{field:'browser', width: '22%'}">浏览器</th>
+                            <th lay-data="{field:'os', width: '17%'}">操作系统</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../library/layuiAdmin/layui/layui.js"></script>
+<script src="../../base/js/ajax.js"></script>
+<script>
+    layui.use(['table', 'jquery', 'form'], function () {
+        var $ = layui.$, table = layui.table, form = layui.form;
+        table.init('list', {url: '/operationLog/listPage'});
+
+        // 搜索事件
+        form.on('submit(search)', function (data) {
+            // 获取提交的字段，重载第一页
+            table.reload('list', {where: data.field, page: {curr: 1}});
+            return false;
+        });
+
+        // 工具栏点击事件
+        var toolbarActive = {
+            refresh: function () {
+                table.reload('list');
+            }
+        };
+
+        table.on('toolbar(list)', function (obj) {
+            toolbarActive[obj.event] ? toolbarActive[obj.event](obj) : "";
+        });
+
+
+        /*// 操作按钮点击事件
+        var operationActive = {
+            detail: function (obj) {
+                var data = obj.data;
+                var content = "<form class=\"layui-form layui-form-pane\" style=\"padding: 15px\">";
+                var map = {
+                    country: "国家",
+                    province: "省份",
+                    city: "城市",
+                    isp: "运营商",
+                    browser: "浏览器",
+                    os: "操作系统"
+                };
+                for (var key in map) {
+                    content +=
+                        "<div class=\"layui-form-item\">\n" +
+                        "<label class=\"layui-form-label\">" + map[key] + "</label>\n" +
+                        "<div class=\"layui-input-block\">\n" +
+                        "<input  type=\"text\" readonly class=\"layui-input\" value='" + data[key] + "'>\n" +
+                        "</div>\n" +
+                        "</div>";
+                }
+                content += "</form>";
+                top.layui.layer.open({
+                    title: '操作信息',
+                    type: 1,
+                    area: ["380px"],
+                    shadeClose: true,
+                    content: content
+                });
+            }
+        };
+
+        table.on('tool(list)', function (obj) {
+            operationActive[obj.event] ? operationActive[obj.event](obj) : "";
+        });*/
+    });
+    // 解析特殊字段
+    var parse = {
+        region: function (d) {
+            return d.country + d.province + d.city + d.isp;
+        }
+    }
+</script>
+</body>
+</html>

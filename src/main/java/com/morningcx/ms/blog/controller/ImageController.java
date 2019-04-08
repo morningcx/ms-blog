@@ -22,8 +22,8 @@ public class ImageController {
     private ImageService imageService;
 
     @PostMapping("mdImageUpload")
-    public Map<String, Object> mdImageUpload(@RequestParam("editormd-image-file") MultipartFile file) {
-        return imageService.mdImageUpload(file);
+    public Map<String, Object> mdImageUpload(@RequestParam("editormd-image-file") MultipartFile file, Integer articleId) {
+        return imageService.mdImageUpload(file, articleId);
     }
 
     /**

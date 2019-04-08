@@ -9,6 +9,16 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="../library/layuiAdmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../library/layuiAdmin/style/admin.css" media="all">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        .layui-side-menu .layui-nav .layui-nav-item .fa {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            margin-top: -19px;
+            line-height: 40px;
+        }
+    </style>
 </head>
 <body class="layui-layout-body">
 
@@ -136,7 +146,7 @@
                     <!--文章管理-->
                     <li data-name="article" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="文章管理" lay-direction="2">
-                            <i class="layui-icon layui-icon-edit"></i>
+                            <i class="layui-icon layui-icon-read"></i>
                             <cite>文章管理</cite>
                         </a>
                         <dl class="layui-nav-child">
@@ -159,7 +169,7 @@
                     <!--分类管理-->
                     <li data-name="category" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="分类管理" lay-direction="2">
-                            <i class="layui-icon layui-icon-template"></i>
+                            <i class="layui-icon layui-icon-app"></i>
                             <cite>分类管理</cite>
                         </a>
                         <dl class="layui-nav-child">
@@ -179,7 +189,7 @@
                     <!--标签管理-->
                     <li data-name="tag" class="layui-nav-item">
                         <a href="javascript:;" lay-tips="标签管理" lay-direction="2">
-                            <i class="layui-icon layui-icon-layouts"></i>
+                            <i class="fa fa-tags"></i>
                             <cite>标签管理</cite>
                         </a>
                         <dl class="layui-nav-child">
@@ -195,6 +205,19 @@
                     </li>
 
 
+
+                    <!--日志管理-->
+                    <li data-name="log" class="layui-nav-item">
+                        <a href="javascript:;" lay-tips="日志管理" lay-direction="2">
+                            <i class="layui-icon layui-icon-form"></i>
+                            <cite>日志管理</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd data-name="operationLog">
+                                <a lay-href="log/operationLog.html">操作日志</a>
+                            </dd>
+                        </dl>
+                    </li>
 
 
 

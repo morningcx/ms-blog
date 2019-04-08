@@ -22,7 +22,7 @@ public class ImageService {
      * @param file
      * @return
      */
-    public Map<String, Object> mdImageUpload(MultipartFile file) {
+    public Map<String, Object> mdImageUpload(MultipartFile file, Integer articleId) {
         BizException.throwIf(file == null || file.isEmpty(), "上传图片不能为空");
         Map<String, Object> result = new HashMap<>(3);
         try {

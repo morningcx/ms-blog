@@ -8,6 +8,7 @@ import com.morningcx.ms.blog.mapper.CategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +38,9 @@ public class WebCategoryService {
                 .groupBy("category_id");
         List<Object> categoryIds = articleMapper.selectObjs(wrapper);
         // todo 引用次数
+        if (categoryIds.size() == 0) {
+            return new ArrayList<>();
+        }
         return categoryMapper.selectList(new QueryWrapper<Category>()
                 .eq("user_id", userId)
                 .in("id", categoryIds)

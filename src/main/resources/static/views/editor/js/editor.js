@@ -37,7 +37,7 @@ layui.use(["jquery", "layer", "form"], function () {
             /*codeFold: true, // 每一个标题或者代码行折叠*/
             imageUpload: true, // 禁止本地上传图片
             imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-            imageUploadURL : "/image/mdImageUpload",
+            imageUploadURL : "/image/mdImageUpload?articleId=" + articleId,
             syncScrolling: "single", // 单向绑定
             toolbarIcons: function () {
                 // Or return editormd.toolbarModes[name]; // full, simple, mini

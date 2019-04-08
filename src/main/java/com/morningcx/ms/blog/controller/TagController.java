@@ -1,7 +1,7 @@
 package com.morningcx.ms.blog.controller;
 
 import com.morningcx.ms.blog.base.annotation.Log;
-import com.morningcx.ms.blog.base.enums.OpEnum;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Tag;
 import com.morningcx.ms.blog.service.TagService;
@@ -21,13 +21,13 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    @Log(type = OpEnum.PAGE, desc = "分页查询引用标签")
+    @Log(type = LogTypeEnum.PAGE, desc = "分页查询引用标签")
     @GetMapping("listReferencePage")
     public Result listReferenceByPage(Tag tag, Integer page, Integer limit) {
         return Result.ok(tagService.listReferencePage(tag, page, limit));
     }
 
-    @Log(type = OpEnum.READ, desc = "查询所有标签名称")
+    @Log(type = LogTypeEnum.READ, desc = "查询所有标签名称")
     @GetMapping("listAllTagsName")
     public Result listAllTagsName() {
         return Result.ok(tagService.listAllTagsName());

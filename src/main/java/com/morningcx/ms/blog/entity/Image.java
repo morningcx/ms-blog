@@ -14,6 +14,7 @@ import java.util.Date;
 @Data
 public class Image implements Serializable {
     private Integer id;
+    private Integer userId;
     private String path;
     private String key;
     private String hash;
@@ -24,7 +25,6 @@ public class Image implements Serializable {
     private Integer width;
     private Integer height;
     private String average;
-    private Integer uploaderId;
     private Date uploadTime;
     @TableLogic
     @TableField(select = false)

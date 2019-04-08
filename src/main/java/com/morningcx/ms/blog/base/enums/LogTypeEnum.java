@@ -5,7 +5,7 @@ package com.morningcx.ms.blog.base.enums;
  * @author gcx
  * @date 2019/3/13
  */
-public enum OpEnum {
+public enum LogTypeEnum {
     /**
      * 操作类型
      */
@@ -22,7 +22,7 @@ public enum OpEnum {
 
     private String name;
 
-    OpEnum(String name) {
+    LogTypeEnum(String name) {
         this.name = name;
     }
 

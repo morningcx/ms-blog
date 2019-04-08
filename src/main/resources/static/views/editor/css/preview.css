@@ -4,6 +4,7 @@ body {
     padding: 0;
     margin: 0;
     font-family: "Microsoft Yahei", serif;
+    overflow: scroll;
     /*font-size: 16px;*/
     /*todo 适配 font size*/
 }
@@ -196,6 +197,10 @@ a:hover, a:visited, a:link, a:active {
 }
 
 @media screen and (max-width: 600px) {
+    .main {
+        width: 90%;
+    }
+
     .tool .toolBtn {
         transition: opacity .2s, background .1s;
         display: block;

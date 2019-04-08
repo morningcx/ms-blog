@@ -11,8 +11,8 @@ import java.util.Date;
  * @date 2019/2/17
  */
 @Data
-@TableName("t_log")
-public class Log implements Serializable {
+@TableName("t_operation_log")
+public class OperationLog implements Serializable {
     private Integer id;
     private Integer userId;
     private String ip;

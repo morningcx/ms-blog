@@ -3,10 +3,12 @@ package com.morningcx.ms.blog.base.aspect;
 import com.morningcx.ms.blog.base.annotation.Log;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.base.util.IpUtil;
-import com.morningcx.ms.blog.mapper.LogMapper;
+import com.morningcx.ms.blog.entity.OperationLog;
+import com.morningcx.ms.blog.mapper.OperationLogMapper;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
+import eu.bitwalker.useragentutils.Version;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -32,10 +34,10 @@ import java.util.Random;
 @Aspect
 @Component
 @Order(2)
-public class LogAspect {
+public class OperationLogAspect {
 
     @Autowired
-    private LogMapper logMapper;
+    private OperationLogMapper operationLogMapper;
 
     @Pointcut("execution(public * com.morningcx.ms.blog.controller..*.*(..)))")
     public void pointCut() {
@@ -43,9 +45,9 @@ public class LogAspect {
 
     @Around(value = "pointCut() && @annotation(logAnnotation)")
     public Object around(ProceedingJoinPoint joinPoint, Log logAnnotation) throws Throwable {
-        com.morningcx.ms.blog.entity.Log log = new com.morningcx.ms.blog.entity.Log();
+        OperationLog operationLog = new OperationLog();
         // 开始执行时间
-        log.setTime(new Date());
+        operationLog.setTime(new Date());
 
         // 可能会发生异常，所以日志处理放在proceed后面
         Object obj = joinPoint.proceed();
@@ -57,52 +59,54 @@ public class LogAspect {
         Class<?> type = method.getDeclaringType();
 
         // 操作人id
-        log.setUserId(ContextUtil.getLoginId());
+        operationLog.setUserId(ContextUtil.getLoginId());
+
 
         String randomIp = IpUtil.ipNum2Str(new Random().nextLong());
 
-        // 获取真实ip，IpUtil.getRealIp(request)
-        log.setIp(randomIp);
+        // todo 获取真实ip，IpUtil.getRealIp(request)
+        operationLog.setIp(randomIp);
 
         // 解析ip地理位置
-        /*String ipRegion = IpUtil.ip2region(log.getIp());*/
-        String ipRegion = IpUtil.ip2region(randomIp);
+        String ipRegion = IpUtil.ip2region(operationLog.getIp());
         if (ipRegion == null) {
-            log.setCountry("");
-            log.setProvince("");
-            log.setCity("");
-            log.setIsp("");
+            operationLog.setCountry("");
+            operationLog.setProvince("");
+            operationLog.setCity("");
+            operationLog.setIsp("");
         } else {
             String empty = "0";
             String[] args = ipRegion.split("\\|");
-            log.setCountry(empty.equals(args[0]) ? "" : args[0]);
-            log.setProvince(empty.equals(args[2]) ? "" : args[2]);
-            log.setCity(empty.equals(args[3]) ? "" : args[3]);
-            log.setIsp(empty.equals(args[4]) ? "" : args[4]);
+            operationLog.setCountry(empty.equals(args[0]) ? "" : args[0]);
+            operationLog.setProvince(empty.equals(args[2]) ? "" : args[2]);
+            operationLog.setCity(empty.equals(args[3]) ? "" : args[3]);
+            operationLog.setIsp(empty.equals(args[4]) ? "" : args[4]);
         }
         // agent
-        log.setAgent(request.getHeader("user-agent"));
-        UserAgent userAgent = UserAgent.parseUserAgentString(log.getAgent());
+        operationLog.setAgent(request.getHeader("user-agent"));
+        UserAgent userAgent = UserAgent.parseUserAgentString(operationLog.getAgent());
         OperatingSystem operatingSystem = userAgent.getOperatingSystem();
         Browser browser = userAgent.getBrowser();
-        log.setOs(operatingSystem.getName() + " " + operatingSystem.getDeviceType().getName());
-        log.setBrowser(browser.getName() + " " + userAgent.getBrowserVersion().getVersion() + " " + browser.getBrowserType().getName());
+        operationLog.setOs(operatingSystem.getName() + " " + operatingSystem.getDeviceType().getName());
+        Version version = userAgent.getBrowserVersion();
+        operationLog.setBrowser(browser.getName() + " " + (version == null ? "Unknown" : version)
+                + " " + browser.getBrowserType().getName());
         // 请求url
-        log.setUrl(request.getRequestURL().toString());
+        operationLog.setUrl(request.getRequestURL().toString());
         // 操作模块
         RequestMapping module = type.getAnnotation(RequestMapping.class);
-        log.setModule(module == null ? "" : module.name());
+        operationLog.setModule(module == null ? "" : module.name());
         // 操作类型
-        log.setType(logAnnotation.type().getName());
+        operationLog.setType(logAnnotation.type().getName());
         // 解析操作描述信息
-        log.setContent(parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs()));
+        operationLog.setContent(parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs()));
         // 执行的方法
-        log.setMethod(type.getName() + "." + method.getName());
+        operationLog.setMethod(type.getName() + "." + method.getName());
         // session id
-        log.setSession(attributes.getSessionId());
+        operationLog.setSession(attributes.getSessionId());
         // 总耗时
-        log.setCost(System.currentTimeMillis() - log.getTime().getTime());
-        logMapper.insert(log);
+        operationLog.setCost(System.currentTimeMillis() - operationLog.getTime().getTime());
+        operationLogMapper.insert(operationLog);
         return obj;
     }
 

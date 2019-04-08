@@ -1,7 +1,7 @@
 package com.morningcx.ms.blog.controller;
 
 import com.morningcx.ms.blog.base.annotation.Log;
-import com.morningcx.ms.blog.base.enums.OpEnum;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ public class ContentController {
     @Autowired
     private ContentService contentService;
 
-    @Log(type = OpEnum.READ, desc = "根据文章ID查询内容和标题")
+    @Log(type = LogTypeEnum.READ, desc = "根据文章ID查询内容和标题")
     @GetMapping("getByArticleId")
     public Result getByArticleId(Integer articleId) {
         return Result.ok(contentService.getByArticleId(articleId));
     }
 
-    @Log(type = OpEnum.UPDATE, desc = "根据文章ID修改内容")
+    @Log(type = LogTypeEnum.UPDATE, desc = "根据文章ID修改内容")
     @PostMapping("updateByArticleId")
     public Result updateByArticleId(Integer articleId, String content) {
         return Result.ok(contentService.updateByArticleId(articleId, content));

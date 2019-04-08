@@ -3,7 +3,7 @@ package com.morningcx.ms.blog.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.morningcx.ms.blog.base.annotation.FreeAuth;
 import com.morningcx.ms.blog.base.annotation.Log;
-import com.morningcx.ms.blog.base.enums.OpEnum;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.base.util.ContextUtil;
@@ -27,7 +27,7 @@ public class LoginController {
 
     @FreeAuth
     @PostMapping("login")
-    @Log(type = OpEnum.LOGIN, desc = "用户登录")
+    @Log(type = LogTypeEnum.LOGIN, desc = "用户登录")
     public Result login(String account, String password) {
         User user = userMapper.selectOne(new QueryWrapper<User>().
                 select("id", "password").

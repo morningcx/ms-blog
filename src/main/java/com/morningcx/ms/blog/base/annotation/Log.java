@@ -1,6 +1,6 @@
 package com.morningcx.ms.blog.base.annotation;
 
-import com.morningcx.ms.blog.base.enums.OpEnum;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -26,5 +26,5 @@ public @interface Log {
      *
      * @return
      */
-    OpEnum type();
+    LogTypeEnum type();
 }
