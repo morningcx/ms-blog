@@ -39,7 +39,7 @@ public class OperationLogAspect {
     @Autowired
     private OperationLogMapper operationLogMapper;
 
-    @Pointcut("execution(public * com.morningcx.ms.blog.controller..*.*(..)))")
+    @Pointcut("execution(public * com.morningcx.ms.blog.controller.admin..*.*(..)))")
     public void pointCut() {
     }
 

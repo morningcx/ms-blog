@@ -9,13 +9,8 @@
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
-    <style>
-        body::-webkit-scrollbar {
-            display: none;
-        }
-    </style>
 </head>
-<body>
+<body style="overflow: scroll">
 <!--有空隙-->
 <div class="layui-fluid">
     <!--底部的间隔7.5px-->
@@ -44,11 +39,11 @@
                         <thead>
                         <tr>
                             <th lay-data="{field:'ip', width: '15%'}">IP</th>
+                            <th lay-data="{templet: parse.region, width: '20%'}">地理位置</th>
                             <th lay-data="{field:'module', width: '10%'}">模块</th>
                             <th lay-data="{field:'type', width: '6%'}">类型</th>
                             <th lay-data="{field:'content', width: '20%'}">内容</th>
                             <th lay-data="{field:'time', width: '16%'}">时间</th>
-                            <th lay-data="{templet: parse.region, width: '20%'}">地理位置</th>
                             <th lay-data="{field:'browser', width: '22%'}">浏览器</th>
                             <th lay-data="{field:'os', width: '17%'}">操作系统</th>
                         </tr>

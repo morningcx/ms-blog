@@ -1,6 +1,6 @@
-package com.morningcx.ms.blog.controller;
+package com.morningcx.ms.blog.controller.admin;
 
-import com.morningcx.ms.blog.service.ImageService;
+import com.morningcx.ms.blog.service.admin.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

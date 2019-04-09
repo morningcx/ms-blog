@@ -1,8 +1,8 @@
-package com.morningcx.ms.blog.web.controller;
+package com.morningcx.ms.blog.controller.web;
 
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Article;
-import com.morningcx.ms.blog.web.service.WebArticleService;
+import com.morningcx.ms.blog.service.web.WebArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.web.bind.annotation.GetMapping;

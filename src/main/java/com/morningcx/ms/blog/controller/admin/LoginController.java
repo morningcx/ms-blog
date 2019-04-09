@@ -1,4 +1,4 @@
-package com.morningcx.ms.blog.controller;
+package com.morningcx.ms.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.morningcx.ms.blog.base.annotation.FreeAuth;

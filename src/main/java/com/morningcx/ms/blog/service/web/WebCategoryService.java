@@ -1,4 +1,4 @@
-package com.morningcx.ms.blog.web.service;
+package com.morningcx.ms.blog.service.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.morningcx.ms.blog.entity.Article;

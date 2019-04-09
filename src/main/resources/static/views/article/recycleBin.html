@@ -43,7 +43,8 @@
                         <a class="layui-btn  layui-btn-primary layui-btn-sm" lay-event="refresh">刷新列表</a>
                     </script>
 
-                    <table class="layui-table" lay-data="{page: true, toolbar: '#table-toolbar'}"
+                    <table class="layui-table"
+                           lay-data="{page: true, toolbar: '#table-toolbar', even: true, skin: 'line'}"
                            lay-filter="list" id="list">
                         <thead>
                         <tr>

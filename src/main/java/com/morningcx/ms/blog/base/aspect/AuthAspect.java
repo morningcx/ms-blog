@@ -32,7 +32,7 @@ public class AuthAspect {
      * <p>
      * 5、*(..):最后这个星号表示方法名，*号表示所有的方法，后面括弧里面表示方法的参数，两个句点表示任何参数。
      */
-    @Pointcut("execution(public * com.morningcx.ms.blog.controller..*.*(..)))")
+    @Pointcut("execution(public * com.morningcx.ms.blog.controller.admin..*.*(..)))")
     public void pointCut() {
     }
 

@@ -1,4 +1,4 @@
-package com.morningcx.ms.blog.service;
+package com.morningcx.ms.blog.service.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.morningcx.ms.blog.base.exception.BizException;

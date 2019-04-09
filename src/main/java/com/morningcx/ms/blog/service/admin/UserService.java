@@ -1,4 +1,4 @@
-package com.morningcx.ms.blog.service;
+package com.morningcx.ms.blog.service.admin;
 
 import com.morningcx.ms.blog.entity.User;
 import com.morningcx.ms.blog.mapper.UserMapper;

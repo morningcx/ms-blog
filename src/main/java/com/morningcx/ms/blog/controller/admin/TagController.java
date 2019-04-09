@@ -1,10 +1,10 @@
-package com.morningcx.ms.blog.controller;
+package com.morningcx.ms.blog.controller.admin;
 
 import com.morningcx.ms.blog.base.annotation.Log;
 import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Tag;
-import com.morningcx.ms.blog.service.TagService;
+import com.morningcx.ms.blog.service.admin.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

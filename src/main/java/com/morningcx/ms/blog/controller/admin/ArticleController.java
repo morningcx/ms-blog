@@ -1,10 +1,10 @@
-package com.morningcx.ms.blog.controller;
+package com.morningcx.ms.blog.controller.admin;
 
 import com.morningcx.ms.blog.base.annotation.Log;
 import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Article;
-import com.morningcx.ms.blog.service.ArticleService;
+import com.morningcx.ms.blog.service.admin.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,25 +22,25 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @Log(type = LogTypeEnum.READ, desc = "根据ID查询文章元信息")
+    @Log(type = LogTypeEnum.READ, desc = "查询文章id:{id}的元信息")
     @GetMapping("getMetaById")
     public Result getMetaById(Integer id) {
         return Result.ok(articleService.getMetaById(id));
     }
 
-    @Log(type = LogTypeEnum.UPDATE, desc = "修改文章元信息")
+    @Log(type = LogTypeEnum.UPDATE, desc = "更新文章id:{id}的元信息")
     @PostMapping("updateMeta")
     public Result updateMeta(@Valid @RequestBody Article article) {
         return Result.ok(articleService.updateMeta(article));
     }
 
-    @Log(type = LogTypeEnum.UPDATE, desc = "修改ID{id}文章的修饰符为{modifier}")
+    @Log(type = LogTypeEnum.UPDATE, desc = "更新文章id:{id}修饰符{modifier}")
     @PostMapping("updateModifier")
     public Result updateModifier(Integer id, Integer modifier) {
         return Result.ok(articleService.updateModifier(id, modifier));
     }
 
-    @Log(type = LogTypeEnum.CREATE, desc = "新增文章")
+    @Log(type = LogTypeEnum.CREATE, desc = "新增文章id:{article.id}")
     @PostMapping("insertArticle")
     public Result insertArticle(@RequestBody @Valid Article article) {
         return Result.ok(articleService.insertArticle(article));

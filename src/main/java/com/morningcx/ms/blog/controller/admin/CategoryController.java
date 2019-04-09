@@ -1,10 +1,10 @@
-package com.morningcx.ms.blog.controller;
+package com.morningcx.ms.blog.controller.admin;
 
 import com.morningcx.ms.blog.base.annotation.Log;
 import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.entity.Category;
-import com.morningcx.ms.blog.service.CategoryService;
+import com.morningcx.ms.blog.service.admin.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +21,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Log(type = LogTypeEnum.READ, desc = "根据ID查询分类：ID-{id}")
+    @Log(type = LogTypeEnum.READ, desc = "")
     @GetMapping("getById")
     public Result getById(Integer id) {
         return Result.ok(categoryService.getById(id));

@@ -10,16 +10,12 @@
     <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
     <style>
-        body::-webkit-scrollbar {
-            display: none;
-        }
-
         .layui-form-item .layui-input-inline {
             width: 165px;
         }
     </style>
 </head>
-<body>
+<body style="overflow: scroll">
 <!--有空隙-->
 <div class="layui-fluid" >
     <!--底部的间隔7.5px-->
@@ -67,7 +63,7 @@
                     </script>
 
                     <table class="layui-table" lay-filter="list" id="list"
-                           lay-data="{page: true, toolbar: '#table-toolbar'}">
+                           lay-data="{page: true, toolbar: '#table-toolbar', even: true, skin: 'line'}">
                         <thead>
                         <tr>
                             <th lay-data="{checkbox:true, fixed:'left'}"></th>
