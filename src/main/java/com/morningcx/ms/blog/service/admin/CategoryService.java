@@ -207,13 +207,13 @@ public class CategoryService {
         List<Article> articles = articleMapper.selectList(new QueryWrapper<Article>()
                 .eq("recycle", 0)
                 .eq("author_id", userId)
-                .select("id", "title", "category_id")
+                .select("id", "title", "category_id", "modifier")
         );
         if (articles != null && articles.size() != 0) {
             articles.forEach(article -> {
-                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>(4);
                 map.put("articleId", article.getId());
-                map.put("name", article.getTitle());
+                map.put("name", article.getTitle() + (article.getModifier() == 0 ? "" : "(私密)"));
                 map.put("pId", article.getCategoryId());
                 nodes.add(map);
             });
@@ -223,7 +223,7 @@ public class CategoryService {
                 new QueryWrapper<Category>().eq("user_id", userId));
         if (categories != null && categories.size() != 0) {
             categories.forEach(category -> {
-                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> map = new HashMap<>(5);
                 map.put("id", category.getId());
                 map.put("name", category.getName());
                 map.put("pId", category.getPid());

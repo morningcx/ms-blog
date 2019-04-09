@@ -33,32 +33,41 @@ public class WebArticleService {
     @Autowired
     private ContentMapper contentMapper;
 
+    /**
+     * 分页查询文章
+     *
+     * @param article
+     * @param page
+     * @param limit
+     * @return
+     */
     public IPage<Article> listArticle(Article article, Integer page, Integer limit) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("recycle", 0);
         wrapper.eq("modifier", 0);
         wrapper.eq("author_id", article.getAuthorId());
         wrapper.eq(article.getCategoryId() != null, "category_id", article.getCategoryId());
-        wrapper.select("id", "title", "introduction","create_time", "category_id", "views", "likes");
+        wrapper.select("id", "title", "introduction", "create_time", "category_id", "views", "likes");
         wrapper.orderByDesc("create_time");
         // todo 作者和分类
         return articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
     }
 
     /**
-     * 热门文章列表
+     * 根据条件查询热门文章列表(所有文章排行、分类频道排行)
      *
-     * @param userId
+     * @param article
      * @return
      */
-    public List<Article> listHotArticles(Integer userId) {
+    public List<Article> listHotArticles(Article article, Integer page, Integer limit) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
-        wrapper.eq("author_id", userId);
+        wrapper.eq("author_id", article.getAuthorId());
         wrapper.eq("modifier", 0);
         wrapper.eq("recycle", 0);
+        wrapper.eq(article.getCategoryId() != null, "category_id", article.getCategoryId());
         wrapper.orderByDesc("views");
         wrapper.select("id", "title", "create_time", "views");
-        return articleMapper.selectPage(new Page<>(1, 5), wrapper).getRecords();
+        return articleMapper.selectPage(new Page<>(page, limit > 10 ? 10 : limit), wrapper).getRecords();
     }
 
     /**

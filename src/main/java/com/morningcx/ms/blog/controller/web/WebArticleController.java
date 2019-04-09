@@ -29,8 +29,8 @@ public class WebArticleController {
     }
 
     @GetMapping("listHotArticles")
-    public Result listHotArticles(Integer userId) {
-        return Result.ok(webArticleService.listHotArticles(userId));
+    public Result listHotArticles(Article article, Integer page, Integer limit) {
+        return Result.ok(webArticleService.listHotArticles(article, page, limit));
     }
 
     /*@Cacheable*/

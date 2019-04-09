@@ -22,4 +22,14 @@ public class User implements Serializable {
     private String github;
     private String email;
     private String zhihu;
+
+
+
+
+    @TableField(exist = false)
+    private Integer articleCount;
+    @TableField(exist = false)
+    private Integer categoryCount;
+    @TableField(exist = false)
+    private Integer tagCount;
 }

@@ -42,14 +42,14 @@ a:hover, a:visited, a:link, a:active {
 }
 
 .main .header .meta a {
-    color: #9EABB3;
+    color: #999;
 }
 
 .main .header .meta .tags a {
     display: inline-block;
     margin-top: 0.5em;
     margin-right: 0.5em;
-    border: #E3E9ED 1px solid;
+    border: #e4e4e4 1px solid;
     border-radius: 5px;
     padding: 0 5px 2px 5px;
 }
@@ -60,7 +60,7 @@ a:hover, a:visited, a:link, a:active {
 
 .main .header .meta .fa {
     margin-left: 0.5em;
-    color: #aebbc3;
+    color: #999;
 }
 
 .main .header .meta .fa:first-of-type {
