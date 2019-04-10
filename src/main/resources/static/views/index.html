@@ -86,8 +86,8 @@
                         <cite>晨星</cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a lay-href="./user/info.html">基本资料</a></dd>
-                        <dd><a lay-href="./user/password.html">修改密码</a></dd><hr>
+                        <dd><a lay-href="user/info.html">基本信息</a></dd>
+                        <dd><a lay-href="user/password.html">修改密码</a></dd><hr>
                         <dd><a href="../login/login.html">退出</a></dd>
                     </dl>
                 </li>
@@ -110,7 +110,7 @@
                 </div>
 
                 <!--lay-shrink="all"只能打开一个-->
-                <ul class="layui-nav layui-nav-tree" id="LAY-system-side-menu"
+                <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu"
                     lay-filter="layadmin-system-side-menu">
                     <li data-name="home" class="layui-nav-item layui-nav-itemed">
                         <a lay-tips="主页" lay-direction="2">
@@ -208,6 +208,27 @@
                             </dd>
                         </dl>
                     </li>
+
+
+                    <!--个人管理-->
+                    <li data-name="log" class="layui-nav-item">
+                        <a lay-tips="个人管理" lay-direction="2">
+                            <i class="layui-icon layui-icon-username"></i>
+                            <cite>个人管理</cite>
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd data-name="info">
+                                <a lay-href="user/info.html">基本信息</a>
+                            </dd>
+                        </dl>
+                        <dl class="layui-nav-child">
+                            <dd data-name="password">
+                                <a lay-href="user/password.html">修改密码</a>
+                            </dd>
+                        </dl>
+                    </li>
+
+
                 </ul>
             </div>
         </div>

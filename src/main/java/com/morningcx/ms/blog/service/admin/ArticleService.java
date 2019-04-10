@@ -70,6 +70,7 @@ public class ArticleService {
     @Transactional
     public int updateModifier(Integer id, Integer modifier) {
         BizException.throwIfNull(modifier, "修饰符不能为空");
+        BizException.throwIf(modifier < 0 || modifier > 1, "修饰符错误");
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("id", id);
         wrapper.eq("recycle", 0);
@@ -109,7 +110,6 @@ public class ArticleService {
         updateArticle.setTitle(article.getTitle());
         updateArticle.setIntroduction(article.getIntroduction());
         updateArticle.setCategoryId(article.getCategoryId());
-        // 类型01判断不需要没有多大影响
         updateArticle.setType(article.getType());
         updateArticle.setUpdateTime(new Date());
         // 删除原有标签，添加新标签

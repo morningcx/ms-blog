@@ -6,10 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +34,8 @@ public class Article implements Serializable {
     private Date updateTime;
     private Integer likes;
     private Integer views;
+    @Min(value = 0, message = "类型错误")
+    @Max(value = 1, message = "类型错误")
     @NotNull(message = "类型不能为空")
     private Integer type;
     private Integer modifier;

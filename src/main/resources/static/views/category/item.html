@@ -19,7 +19,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">分类名称：</label>
         <div class="layui-input-block">
-            <input placeholder="请输入名称" class="layui-input" name="name">
+            <input placeholder="请输入名称" class="layui-input" name="name" lay-verify="required">
         </div>
     </div>
     <div class="layui-form-item">
@@ -33,7 +33,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">分类描述：</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入描述" class="layui-textarea" name="description" style="height: 150px;resize: none"></textarea>
+            <textarea placeholder="请输入描述" lay-verify="required" class="layui-textarea" name="description" style="height: 150px;resize: none"></textarea>
         </div>
     </div>
     <div class="layui-form-item">

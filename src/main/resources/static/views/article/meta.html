@@ -19,7 +19,7 @@
         }
 
         #save {
-            width: 91%;
+            width: 100%;
             margin-bottom: 20px;
         }
 
@@ -47,7 +47,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文章分类</label>
         <div class="layui-input-block">
-            <select id="category" lay-search>
+            <select id="category" lay-search lay-verify="required">
                 <option value="">请选择分类</option>
             </select>
         </div>
@@ -55,35 +55,30 @@
     <div class="layui-form-item">
         <label class="layui-form-label">文章类型</label>
         <div class="layui-input-block">
-            <select id="type">
+            <select id="type" lay-verify="required">
                 <option value="">请选择类型</option>
                 <option value="0">原创</option>
                 <option value="1">转载</option>
             </select>
         </div>
     </div>
-    <!--<div class="layui-form-item" pane>
-        <label class="layui-form-label">文章评论</label>
-        <div class="layui-input-block">
-            <input type="checkbox" class="layui-input" lay-skin="switch" lay-text="开启|关闭">
-        </div>
-    </div>-->
     <div class="layui-form-item layui-form-text" style="height: 102px">
         <label class="layui-form-label">文章标签</label>
         <div class="layui-input-block">
-            <input id="tagEditor" hidden>
+            <input id="tagEditor" hidden lay-verify="tags">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">文章简介</label>
         <div class="layui-input-block">
-            <textarea placeholder="请输入简介" class="layui-textarea" id="introduction"></textarea>
+            <textarea placeholder="请输入简介" class="layui-textarea" id="introduction" lay-verify="required"></textarea>
         </div>
     </div>
+    <div class="layui-col-lg12">
+        <button class="layui-btn layui-btn-primary" lay-submit lay-filter="submit" id="save">保存</button>
+    </div>
 </form>
-<div class="layui-col-lg12">
-    <button class="layui-btn layui-btn-primary" id="save">保存</button>
-</div>
+
 <script src="../../base/plugin/jquery.min.js"></script>
 <script src="../../library/tagEditor/jquery-ui.min.js"></script>
 <script src="../../library/tagEditor/jquery.caret.min.js"></script>
@@ -98,7 +93,7 @@
         var index = parent.layer.getFrameIndex(window.name); // 当前窗口索引
         // parent.layer.iframeAuto(index); // 自适应
 
-        // 初始化标签，同步 todo 限制标签个数
+        // 初始化标签，同步
         ajax.get({
             url: "/tag/listAllTagsName",
             async: false,
@@ -113,6 +108,14 @@
                     forceLowercase: false,
                     placeholder: '请输入标签'
                 });
+            }
+        });
+        // 标签验证
+        form.verify({
+            tags: function (value) {
+                if (value.split(",").length > 5) {
+                    return "标签不能超过5个";
+                }
             }
         });
 
@@ -149,8 +152,8 @@
             }
         });
 
-        // 保存文章元信息
-        $("#save").click(function () {
+        // 保存元信息
+        form.on('submit(submit)', function () {
             // 元信息
             var meta = {
                 title: $("#title").val().trim(),
@@ -186,6 +189,7 @@
                     }
                 });
             }
+            return false;
         });
     });
 

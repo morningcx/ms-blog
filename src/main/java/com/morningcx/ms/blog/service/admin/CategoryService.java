@@ -211,7 +211,7 @@ public class CategoryService {
         );
         if (articles != null && articles.size() != 0) {
             articles.forEach(article -> {
-                Map<String, Object> map = new HashMap<>(4);
+                Map<String, Object> map = new HashMap<>(3);
                 map.put("articleId", article.getId());
                 map.put("name", article.getTitle() + (article.getModifier() == 0 ? "" : "(私密)"));
                 map.put("pId", article.getCategoryId());
