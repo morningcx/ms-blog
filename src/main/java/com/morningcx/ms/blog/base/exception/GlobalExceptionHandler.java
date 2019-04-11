@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
     public Result handleBindException(Exception e) {
         e.printStackTrace();
         BindingResult bindingResult;
-        // valid验证集合中的元素时可能会重复报错，需要裁剪
+        // valid验证集合中的元素时可能会重复报错，需要去重
         Set<String> set = new HashSet<>();
         StringBuilder sb = new StringBuilder();
         // json抛出的异常和表单抛出的异常不一样

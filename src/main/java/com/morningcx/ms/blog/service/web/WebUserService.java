@@ -35,7 +35,8 @@ public class WebUserService {
     public User getUserInfo(Integer id) {
         User user = userMapper.selectOne(new QueryWrapper<User>()
                 .eq("id", id)
-                .select("id", "name", "github", "zhihu", "email"));
+                .select("id", "name", "github", "zhihu", "wechat", "qq",
+                        "email", "signature", "head_image_url"));
         BizException.throwIfNull(user, "用户不存在");
         // 公开文章的数量
         List<Object> publicArticleIds = articleMapper.selectObjs(new QueryWrapper<Article>()

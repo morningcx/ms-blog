@@ -13,7 +13,7 @@
             position: absolute;
             left: calc(50% - 200px);
             top: calc(50% - 250px);
-            text-align: center  ;
+            text-align: center;
         }
     </style>
 </head>
@@ -26,6 +26,7 @@
     <button id="btn">登录</button>
 </div>
 <script src="../layuiAdmin/layuiadmin/layui/layui.js"></script>
+<script src="../library/sha1/sha1.js"></script>
 <script src="jquery.particleground.min.js"></script>
 <script>
     layui.use("form", function () {
@@ -38,9 +39,12 @@
             $.ajax({
                 url: "/login",
                 type: "POST",
-                data: {account: $("#username").val(), password: $("#password").val()},
+                data: {
+                    account: $("#username").val(),
+                    password: hex_sha1($("#password").val())
+                },
                 dataType: "json",
-                success: function (res) {
+                success: function () {
                     window.location.href = "../views/index.html";
                 },
                 error: function (data) {

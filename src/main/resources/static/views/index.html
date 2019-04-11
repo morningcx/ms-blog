@@ -11,11 +11,13 @@
     <link rel="stylesheet" href="../library/layuiAdmin/style/admin.css" media="all">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
-        .layui-side-menu .layui-nav .layui-nav-item .fa {
+
+        .layui-side-menu .layui-nav .layui-nav-item .fa,
+        .layui-side-menu .layui-nav .layui-nav-item .layui-icon {
             position: absolute;
             top: 50%;
             left: 20px;
-            margin-top: -19px;
+            margin-top: -20px;
             line-height: 40px;
         }
     </style>
@@ -51,13 +53,6 @@
             <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
 
 
-
-
-
-
-
-
-
                 <li class="layui-nav-item" lay-unselect>
                     <a lay-href="app/message/index.html" layadmin-event="message" lay-text="消息中心">
                         <i class="layui-icon layui-icon-notice"></i>
@@ -87,7 +82,8 @@
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="user/info.html">基本信息</a></dd>
-                        <dd><a lay-href="user/password.html">修改密码</a></dd><hr>
+                        <dd><a lay-href="user/password.html">修改密码</a></dd>
+                        <hr>
                         <dd><a href="../login/login.html">退出</a></dd>
                     </dl>
                 </li>
@@ -131,8 +127,6 @@
                     </li>
 
 
-
-
                     <!--文章管理-->
                     <li data-name="article" class="layui-nav-item">
                         <a lay-tips="文章管理" lay-direction="2">
@@ -150,10 +144,6 @@
                             </dd>
                         </dl>
                     </li>
-
-
-
-
 
 
                     <!--分类管理-->
@@ -175,7 +165,6 @@
                     </li>
 
 
-
                     <!--标签管理-->
                     <li data-name="tag" class="layui-nav-item">
                         <a lay-tips="标签管理" lay-direction="2">
@@ -193,7 +182,6 @@
                             </dd>
                         </dl>
                     </li>
-
 
 
                     <!--日志管理-->

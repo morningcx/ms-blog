@@ -36,4 +36,10 @@ public class UserController {
     public Result updateMyInfo(@Valid User user) {
         return Result.ok(userService.updateMyInfo(user));
     }
+
+    @PostMapping("resetMyPassword")
+    @Log(type = LogTypeEnum.UPDATE, desc = "重置个人密码")
+    public Result resetMyPassword(String oldPassword, String newPassword) {
+        return Result.ok(userService.resetMyPassword(oldPassword, newPassword));
+    }
 }

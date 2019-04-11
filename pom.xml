@@ -118,6 +118,14 @@
             <version>1.7.2</version>
         </dependency>
 
+        <!-- 加密 -->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.12</version>
+        </dependency>
+
+
         <!-- google图片处理 和七牛不太契合-->
         <!--<dependency>
             <groupId>net.coobird</groupId>

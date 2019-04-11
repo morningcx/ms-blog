@@ -11,17 +11,29 @@
     <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
     <style>
         .layui-form-item .layui-input-inline {
-            width: 40%;
+            width: 39%;
         }
 
         #userHeadImage {
-            box-shadow: 0 0 2px #b6b6b6;
-            width: 148px;
-            height: 148px;
+            box-shadow: 0 0 5px #b6b6b6;
+            width: 144px;
+            height: 144px;
         }
 
         .layui-btn-container .layui-btn {
             margin-bottom: 0;
+        }
+
+        .layui-form-label.required:before {
+            position: relative;
+            left: -4px;
+            content: "*";
+            color: red;
+        }
+
+        .layui-disabled, .layui-disabled:hover, .layui-disabled:focus {
+            color: grey !important;
+            border-color: #e6e6e6 !important;
         }
     </style>
 </head>
@@ -43,37 +55,38 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">头像</label>
+                            <label class="layui-form-label required">头像</label>
                             <div class="layui-input-inline">
-                                <input name="headImageUrl" lay-verify="url" placeholder="请输入头像图片地址"
-                                       class="layui-input">
+                                <input name="headImageUrl" lay-verify="required" placeholder="请输入头像图片地址"
+                                       class="layui-input" autocomplete="off">
                             </div>
                             <div class="layui-input-inline layui-btn-container" style="width: auto;">
                                 <button type="button" class="layui-btn layui-btn-primary">上传图片</button>
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">账号</label>
+                            <label class="layui-form-label required">账号</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="account" readonly class="layui-input">
+                                <input type="text" name="account" readonly class="layui-input layui-disabled"
+                                       autocomplete="off">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">昵称</label>
+                            <label class="layui-form-label required">邮箱</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="email" lay-verify="email" placeholder="请输入邮箱地址" readonly
+                                       autocomplete="off" class="layui-input layui-disabled">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label required">昵称</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="name" lay-verify="required" lay-verify="name"
                                        autocomplete="off" placeholder="请输入昵称" class="layui-input">
                             </div>
                         </div>
-                        <div class="layui-form-item layui-form-text">
-                            <label class="layui-form-label">个性签名</label>
-                            <div class="layui-input-inline">
-                                <textarea name="signature" lay-verify="required" placeholder="请输入个性签名"
-                                          class="layui-textarea"></textarea>
-                            </div>
-                        </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">性别</label>
+                            <label class="layui-form-label required">性别</label>
                             <div class="layui-input-block">
                                 <input type="radio" name="gender" value="0" title="男" checked>
                                 <input type="radio" name="gender" value="1" title="女">
@@ -81,20 +94,19 @@
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">生日</label>
+                            <label class="layui-form-label required">生日</label>
                             <div class="layui-input-inline">
                                 <input type="text" name="birthday" lay-verify="required" placeholder="请选择出生日期"
-                                       class="layui-input" id="birthday">
+                                       autocomplete="off" class="layui-input" id="birthday">
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">邮箱</label>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label required">个性签名</label>
                             <div class="layui-input-inline">
-                                <input type="text" name="email" lay-verify="email" placeholder="请输入邮箱地址"
-                                       autocomplete="off" class="layui-input">
+                                <textarea name="signature" lay-verify="required" placeholder="请输入个性签名"
+                                          class="layui-textarea"></textarea>
                             </div>
                         </div>
-
                         <div class="layui-form-item">
                             <label class="layui-form-label">QQ</label>
                             <div class="layui-input-inline">
@@ -172,7 +184,7 @@
                 url: "/user/updateMyInfo",
                 data: field,
                 success: function () {
-                    layer.alert("更新个人信息成功", function () {
+                    layer.alert("更新个人信息成功", {icon: 1}, function () {
                         window.location.reload();
                     });
                 }

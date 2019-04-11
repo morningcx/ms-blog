@@ -113,6 +113,9 @@
         // 标签验证
         form.verify({
             tags: function (value) {
+                if (!value) {
+                    return "标签不能为空";
+                }
                 if (value.split(",").length > 5) {
                     return "标签不能超过5个";
                 }
