@@ -78,7 +78,7 @@
                 </li>
                 <li class="layui-nav-item" lay-unselect>
                     <a href="javascript:;">
-                        <cite>晨星</cite>
+                        <cite id="userName"></cite>
                     </a>
                     <dl class="layui-nav-child">
                         <dd><a lay-href="user/info.html">基本信息</a></dd>
@@ -266,6 +266,20 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use('index');
+
+    layui.use(["jquery", "layer"], function () {
+        var $ = layui.$, layer = layui.layer;
+        // 首页初始化
+        ajax.get({
+            url: "/user/getIndexInfo",
+            success: function (res) {
+                var data = res.data;
+                $("#userName").text(data.user.name);
+            }
+        });
+    });
+
+
 
     // 自定义事件
     /*layui.use(["jquery", "layer"], function () {

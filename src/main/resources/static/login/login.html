@@ -3,56 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <title>登录界面</title>
-    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <style>
-        .login {
-            background-color: #747072;
-            width: 400px;
-            height: 500px;
-            position: absolute;
-            left: calc(50% - 200px);
-            top: calc(50% - 250px);
-            text-align: center;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../library/layuiAdmin/layui/css/layui.css" rel="stylesheet"  media="all">
+    <link href="../library/layuiAdmin/style/admin.css" rel="stylesheet" media="all">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link href="css/login.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<div id="particles">
-</div>
-<div class="login">
-    用户名：<input type="text" id="username"><br>
-    密码：<input type="password" id="password"><br>
-    <button id="btn">登录</button>
-</div>
+<div id="particles"></div>
+<form class="layui-form">
+    <div class="title">用户登录</div>
+    <div class="sub-title">欢迎登录后台管理系统</div>
+    <div class="layui-form-item">
+        <label class="layui-icon layui-icon-username" for="username"></label>
+        <input type="text" id="username" placeholder="账号" class="layui-input">
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-icon layui-icon-password" for="password"></label>
+        <input type="password" id="password" placeholder="密码" class="layui-input">
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-row">
+            <div class="layui-col-xs7">
+                <label class="layui-icon layui-icon-vercode" for="code"></label>
+                <input type="text" placeholder="验证码" class="layui-input" id="codeInput">
+            </div>
+            <div class="layui-col-xs5">
+                <div id="code">&nbsp;</div>
+            </div>
+        </div>
+    </div>
+    <button type="button" class="layui-btn layui-btn-normal layui-col-xs12" id="btn">登录</button>
+</form>
+<script src="../base/plugin/jquery.min.js"></script>
+<script src="js/jquery.particleground.min.js"></script>
 <script src="../layuiAdmin/layuiadmin/layui/layui.js"></script>
 <script src="../library/sha1/sha1.js"></script>
-<script src="jquery.particleground.min.js"></script>
-<script>
-    layui.use("form", function () {
-        var $ = layui.$;
-        particleground(document.getElementById('particles'), {
-            dotColor: '#b4b9b9',
-            lineColor: '#b4b9b9'
-        });
-        $("#btn").click(function () {
-            $.ajax({
-                url: "/login",
-                type: "POST",
-                data: {
-                    account: $("#username").val(),
-                    password: hex_sha1($("#password").val())
-                },
-                dataType: "json",
-                success: function () {
-                    window.location.href = "../views/index.html";
-                },
-                error: function (data) {
-                    alert(data.responseJSON.msg);
-                }
-            });
-        });
-    });
-</script>
+<script src="js/login.js"></script>
 </body>
 </html>

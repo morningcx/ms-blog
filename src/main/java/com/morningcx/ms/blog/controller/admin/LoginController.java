@@ -1,6 +1,8 @@
 package com.morningcx.ms.blog.controller.admin;
 
 import com.morningcx.ms.blog.base.annotation.FreeAuth;
+import com.morningcx.ms.blog.base.annotation.Log;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.service.admin.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class LoginController {
 
     @FreeAuth
     @PostMapping("login")
-    /*@Log(type = LogTypeEnum.LOGIN, desc = "用户登录")*/
+    @Log(type = LogTypeEnum.LOGIN, desc = "用户登录")
     public Result login(String account, String password) {
         return Result.ok(loginService.login(account, password));
     }

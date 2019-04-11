@@ -1,0 +1,98 @@
+body {
+    background: #3494c5;
+    font-family: "Microsoft Yahei", serif;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+}
+
+#code {
+    display: inline-block;
+    width: 90%;
+    margin-left: 10%;
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    letter-spacing: 2px;
+    border: 1px #e6e6e6 solid;
+    color: #1E9FFF;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    -webkit-user-select: none; /*禁止用户选中文字*/
+}
+
+.layui-form {
+    background-color: white;
+    border-radius: 5px;
+    width: 26rem;
+    height: 26.4rem;
+    padding: 3.5rem 3rem;
+    position: absolute;
+    left: calc(50% - 13rem);
+    top: calc(50% - 13.2rem);
+}
+
+.layui-form .layui-form-item .layui-input {
+    padding-left: 2.35rem;
+    padding-right: 0.8rem;
+}
+
+.layui-form .layui-icon {
+    position: absolute;
+    width: 2.35rem;
+    font-size: 1.2rem;
+    padding-left: 0.2rem;
+    line-height: 38px;
+    text-align: center;
+    color: #d2d2d2;
+}
+
+.layui-input:focus {
+    border-color: #39aeff !important;
+}
+
+.layui-form .title {
+    text-align: center;
+    color: #333333;
+    font-size: 1.8rem;
+    font-weight: 400;
+}
+
+.layui-form-item {
+    margin-bottom: 18px;
+}
+
+.layui-form .sub-title {
+    text-align: center;
+    font-weight: 300;
+    margin: 0.8rem 0 1.1rem 0;
+    color: #999;
+}
+
+#btn {
+    margin-top: 10px;
+}
+
+@media screen and (max-width: 480px) {
+    .layui-form {
+        width: 86%;
+        padding: 3.5rem 2rem;
+        position: absolute;
+        left: 7%;
+        top: calc(50% - 13.2rem);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

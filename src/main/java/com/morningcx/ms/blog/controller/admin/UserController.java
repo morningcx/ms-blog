@@ -25,6 +25,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("getIndexInfo")
+    @Log(type = LogTypeEnum.READ, desc = "获取首页信息")
+    public Result getIndexInfo() {
+        return Result.ok(userService.getIndexInfo());
+    }
+
     @GetMapping("getMyInfo")
     @Log(type = LogTypeEnum.READ, desc = "获取个人基本信息")
     public Result getMyInfo() {

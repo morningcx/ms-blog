@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author gcx
@@ -20,6 +22,21 @@ public class UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    /**
+     * 获取首页所需要的数据
+     *
+     * @return
+     */
+    public Map<String, Object> getIndexInfo() {
+        Map<String, Object> map = new HashMap<>();
+        // 用户昵称
+        User user = userMapper.selectOne(new QueryWrapper<User>()
+                .eq("id", ContextUtil.getLoginId())
+                .select("name"));
+        map.put("user", user);
+        return map;
+    }
 
     /**
      * 获取当前登录用户信息

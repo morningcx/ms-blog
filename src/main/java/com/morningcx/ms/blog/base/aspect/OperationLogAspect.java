@@ -25,7 +25,6 @@ import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * @author gcx
@@ -60,13 +59,8 @@ public class OperationLogAspect {
 
         // 操作人id
         operationLog.setUserId(ContextUtil.getLoginId());
-
-
-        String randomIp = IpUtil.ipNum2Str(new Random().nextLong());
-
-        // todo 获取真实ip，IpUtil.getRealIp(request)
-        operationLog.setIp(randomIp);
-
+        // 获取真实ip
+        operationLog.setIp(IpUtil.getRealIp(request));
         // 解析ip地理位置
         String ipRegion = IpUtil.ip2region(operationLog.getIp());
         if (ipRegion == null) {
