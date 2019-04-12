@@ -71,6 +71,24 @@ public class WebArticleService {
     }
 
     /**
+     * 查询归档信息
+     *
+     * @param userId
+     * @param page
+     * @param limit
+     * @return
+     */
+    public IPage<Article> listArchives(Integer userId, Integer page, Integer limit) {
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        wrapper.eq("author_id", userId);
+        wrapper.eq("modifier", 0);
+        wrapper.eq("recycle", 0);
+        wrapper.select("id", "title", "create_time");
+        wrapper.orderByDesc("create_time");
+        return articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
+    }
+
+    /**
      * 获取文章全部信息
      *
      * @param id

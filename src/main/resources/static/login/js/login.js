@@ -1,10 +1,16 @@
-layui.use(["form", "layer"], function () {
-    var form = layui.form, layer = layui.layer;
+layui.use(["layer"], function () {
+    var layer = layui.layer;
     var code = {
         seed: ['abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '0123456789'],
         container: $("#code"),
         value: null
     };
+
+    $(document).keyup(function (event) {
+        if (event.keyCode === 13) {
+            $("#btn").click();
+        }
+    });
 
     particleground(document.getElementById('particles'), {
         dotColor: '#65b4e6',

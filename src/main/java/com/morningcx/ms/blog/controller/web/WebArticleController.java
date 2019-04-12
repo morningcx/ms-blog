@@ -33,6 +33,11 @@ public class WebArticleController {
         return Result.ok(webArticleService.listHotArticles(article, page, limit));
     }
 
+    @GetMapping("listArchives")
+    public Result listArchives(Integer userId, Integer page, Integer limit) {
+        return Result.ok(webArticleService.listArchives(userId, page, limit));
+    }
+
     /*@Cacheable*/
     @GetMapping("getFullById")
     public Result getFullById(Integer id) {

@@ -88,7 +88,7 @@ layui.use(["jquery", "layer", "form"], function () {
                     history: "历史",
                     meta: "信息",
                     publish: "发布",
-                    setting: "设置"
+                    setting: "设置" // todo 夜间
                 }
             }
             // imageUploadURL: "../mdImageUpload",
