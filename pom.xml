@@ -125,6 +125,14 @@
             <version>1.12</version>
         </dependency>
 
+        <!-- druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.10</version>
+        </dependency>
+
+
 
         <!-- google图片处理 和七牛不太契合-->
         <!--<dependency>
