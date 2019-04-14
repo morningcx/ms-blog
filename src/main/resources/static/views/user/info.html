@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
     <style>
         .layui-form-item .layui-input-inline {
-            width: 39%;
+            width: 47%;
         }
 
         #userHeadImage {
@@ -62,7 +62,8 @@
                                        class="layui-input" autocomplete="off">
                             </div>
                             <div class="layui-input-inline layui-btn-container" style="width: auto;">
-                                <button type="button" class="layui-btn layui-btn-primary">上传图片</button>
+                                <button type="button" class="layui-btn layui-btn-primary" id="headImageUpload">上传图片
+                                </button>
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -122,7 +123,8 @@
                                        class="layui-input">
                             </div>
                             <div class="layui-input-inline layui-btn-container" style="width: auto;">
-                                <button type="button" class="layui-btn layui-btn-primary">上传图片</button>
+                                <button type="button" class="layui-btn layui-btn-primary" id="wechatImageUpload">上传图片
+                                </button>
                                 <button type="button" class="layui-btn layui-btn-primary" id="openWechatImage">查看图片
                                 </button>
                             </div>
@@ -199,6 +201,21 @@
                 type: 1,
                 title: false,
                 content: '<img src="' + $("input[name='wechat']").val() + '" alt="" width="200" height="200">'
+            });
+        });
+
+        $("#wechatImageUpload").click(function () {
+            ajax.upload("/image/imageUpload", function (res) {
+                $("input[name='wechat']").val(res.data);
+                layer.msg("上传图片成功");
+            });
+        });
+
+        $("#headImageUpload").click(function () {
+            ajax.upload("/image/imageUpload", function (res) {
+                $("input[name='headImageUrl']").val(res.data);
+                refreshHead();
+                layer.msg("上传图片成功");
             });
         });
     });

@@ -21,7 +21,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Log(type = LogTypeEnum.READ, desc = "")
+    @Log(type = LogTypeEnum.READ, desc = "根据ID查询分类信息")
     @GetMapping("getById")
     public Result getById(Integer id) {
         return Result.ok(categoryService.getById(id));

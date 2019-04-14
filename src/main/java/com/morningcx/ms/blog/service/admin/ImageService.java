@@ -1,12 +1,20 @@
 package com.morningcx.ms.blog.service.admin;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.util.QiNiuUtil;
 import com.morningcx.ms.blog.entity.Image;
+import com.morningcx.ms.blog.mapper.ImageMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,6 +23,8 @@ import java.util.Map;
  */
 @Service
 public class ImageService {
+    @Autowired
+    private ImageMapper imageMapper;
 
     /**
      * markdown上传图片到七牛
@@ -22,14 +32,15 @@ public class ImageService {
      * @param file
      * @return
      */
-    public Map<String, Object> mdImageUpload(MultipartFile file, Integer articleId) {
-        BizException.throwIf(file == null || file.isEmpty(), "上传图片不能为空");
+    @Transactional
+    public Map<String, Object> mdImageUpload(MultipartFile file) {
         Map<String, Object> result = new HashMap<>(3);
         try {
             Image image = QiNiuUtil.uploadImage(file);
+            imageMapper.insert(image);
             result.put("success", 1);
             result.put("message", "上传成功");
-            result.put("url", "http://" + image.getPath() + "/" + image.getKey());
+            result.put("url", image.getPath());
         } catch (Exception e) {
             e.printStackTrace();
             result.put("success", 0);
@@ -37,4 +48,48 @@ public class ImageService {
         }
         return result;
     }
+
+    /**
+     * 通用图片上传
+     *
+     * @param imageFile
+     * @return
+     */
+    @Transactional
+    public String imageUpload(MultipartFile imageFile) throws IOException {
+        Image image = QiNiuUtil.uploadImage(imageFile);
+        imageMapper.insert(image);
+        return image.getPath();
+    }
+
+    /**
+     * 分页查询图片
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    public IPage<Image> listPage(Integer page, Integer limit) {
+        return imageMapper.selectPage(new Page<>(page, limit),
+                new QueryWrapper<Image>().orderByDesc("create_time"));
+    }
+
+    /**
+     * 删除图片
+     *
+     * @param deleteIds
+     * @return
+     */
+    public int delete(List<Integer> deleteIds) throws IOException {
+        BizException.throwIf(deleteIds == null || deleteIds.size() == 0, "删除图片ID不能为空");
+        List<Image> images = imageMapper.selectList(new QueryWrapper<Image>()
+                .in("id", deleteIds)
+                .select("id", "bucket", "fkey"));
+        for (Image image : images) {
+            QiNiuUtil.deletedImage(image.getBucket(), image.getFkey());
+            imageMapper.deleteById(image.getId());
+        }
+        return images.size();
+    }
+
 }

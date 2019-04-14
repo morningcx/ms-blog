@@ -23,39 +23,43 @@ layui.use(["layer"], function () {
         var account = $("#username");
         var password = $("#password");
         var codeInput = $("#codeInput");
-        if (!account.val()) {
-            account.focus();
-            layer.msg("账号不能为空");
-            return;
-        }
-        if (!password.val()) {
-            password.focus();
-            layer.msg("密码不能为空");
-            return;
-        }
-        if (!codeInput.val() || code.value.toLowerCase() !== codeInput.val().toLowerCase()) {
-            codeInput.focus();
-            layer.msg("验证码错误");
-            createCode();
-            return;
-        }
-        $.ajax({
-            url: "/login",
-            type: "POST",
-            data: {
-                account: account.val(),
-                password: hex_sha1(password.val())
-            },
-            dataType: "json",
-            success: function () {
-                window.location.href = "../views/index.html";
-            },
-            error: function (data) {
+        if (check([account, password, codeInput])) {
+            if (code.value.toLowerCase() !== codeInput.val().toLowerCase()) {
                 createCode();
-                layer.msg(data.responseJSON.msg);
+                codeInput.focus();
+                layer.msg("验证码错误");
+                return;
             }
-        });
+            $.ajax({
+                url: "/login",
+                type: "POST",
+                data: {
+                    account: account.val(),
+                    password: hex_sha1(password.val())
+                },
+                dataType: "json",
+                success: function () {
+                    window.location.href = "../views/index.html";
+                },
+                error: function (data) {
+                    createCode();
+                    layer.msg(data.responseJSON.msg);
+                }
+            });
+        }
     });
+
+    function check(list) {
+        for (var i = 0; i < list.length; ++i) {
+            var item = list[i];
+            if (!item.val()) {
+                item.focus();
+                layer.msg(item.attr('placeholder') + "不能为空");
+                return false;
+            }
+        }
+        return true;
+    }
 
     function createCode() {
         var len = 5;

@@ -8,6 +8,7 @@ import com.morningcx.ms.blog.mapper.UserMapper;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -53,6 +54,7 @@ public class UserService {
      * @param user
      * @return
      */
+    @Transactional
     public Integer updateMyInfo(User user) {
         User updateUser = new User();
         // 当前登录用户id
@@ -78,6 +80,7 @@ public class UserService {
      *
      * @return
      */
+    @Transactional
     public Integer resetMyPassword(String oldPassword, String newPassword) {
         BizException.throwIfBlank(oldPassword, "原密码不能为空");
         BizException.throwIfBlank(newPassword, "新密码不能为空");

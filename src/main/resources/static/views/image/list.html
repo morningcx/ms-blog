@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
+</head>
+<body style="overflow-y: scroll">
+<!--有空隙-->
+<div class="layui-fluid">
+    <!--底部的间隔7.5px-->
+    <div class="layui-row layui-col-space15">
+        <!--横向占满12格空间-->
+        <div class="layui-col-md12">
+            <!--卡片白色背景-->
+            <div class="layui-card">
+                <div class="layui-card-header">图片列表</div>
+                <div class="layui-card-body">
+
+                    <!--工具栏-->
+                    <script type="text/html" id="table-toolbar">
+                        <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="batchDel">批量删除</a>
+                        <a class="layui-btn layui-btn-warm layui-btn-sm" lay-event="upload">上传图片</a>
+                        <a class="layui-btn layui-btn-primary layui-btn-sm" lay-event="refresh">刷新列表</a>
+                    </script>
+
+                    <table class="layui-table" lay-filter="list" id="list"
+                           lay-data="{page: true, toolbar: '#table-toolbar', even: true, skin: 'line'}">
+                        <thead>
+                        <tr>
+                            <th lay-data="{checkbox:true, fixed:'left'}"></th>
+                            <th lay-data="{field:'id', width: '6%'}">ID</th>
+                            <th lay-data="{field:'fkey'}">关键字</th>
+                            <th lay-data="{templet: parse.size}">大小</th>
+                            <th lay-data="{field:'name', width: '16%'}">原文件名</th>
+                            <th lay-data="{field:'createTime', width: '16%'}">上传时间</th>
+                            <th lay-data="{field:'width'}">宽度</th>
+                            <th lay-data="{field:'height'}">高度</th>
+                            <th lay-data="{templet: parse.average}">主色调</th>
+                            <th lay-data="{fixed: 'right', toolbar: '#operation', width: '13%', align:'center'}">操作</th>
+                        </tr>
+                        </thead>
+                    </table>
+
+                    <!--操作栏-->
+                    <script type="text/html" id="operation">
+                        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看</a>
+                        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../library/layuiAdmin/layui/layui.js"></script>
+<script src="../../base/js/ajax.js"></script>
+<script>
+    layui.use(['table', 'jquery', 'layer'], function () {
+        var $ = layui.$, table = layui.table;
+        table.init('list', {url: '/image/listPage'});
+
+        // 工具栏点击事件
+        var toolbarActive = {
+            batchDel: function (obj) {
+                var checkStatus = table.checkStatus(obj.config.id);
+                var data = checkStatus.data;
+                if (data.length === 0) {
+                    layer.msg("请选择要删除的数据！");
+                    return;
+                }
+                var ids = [];
+                for (var i = 0; i < data.length; ++i) {
+                    ids.push(data[i].id);
+                }
+                deleteItem(ids);
+            },
+            upload: function () {
+                ajax.upload("/image/imageUpload", function (res) {
+                    layer.msg("上传成功");
+                    table.reload('list');
+                })
+            },
+            refresh: function () {
+                table.reload('list');
+            }
+        };
+
+        table.on('toolbar(list)', function (obj) {
+            toolbarActive[obj.event] ? toolbarActive[obj.event](obj) : "";
+        });
+
+
+        // 操作按钮点击事件
+        var operationActive = {
+            detail: function (obj) {
+                var height = (obj.data.height / obj.data.width) * 320;
+                height = height > 400 ? 400 : height;
+                layer.open({
+                    type: 1,
+                    title: false,
+                    content: '<img src="' + obj.data.path + '" alt="" width="320" height="' + height +
+                    '" style="margin: 5px;border: 1px #e6e6e6 solid;">'
+                });
+            },
+            del: function (obj) {
+                deleteItem([obj.data.id]);
+            }
+        };
+
+        table.on('tool(list)', function (obj) {
+            operationActive[obj.event] ? operationActive[obj.event](obj) : "";
+        });
+
+        function deleteItem(idList) {
+            layer.confirm('确认要删除ID为' + idList + "，共" + idList.length + "条数据？", function (index) {
+                layer.close(index);
+                ajax.post({
+                    url: "/image/delete",
+                    data: JSON.stringify(idList),
+                    contentType: "application/json",
+                    success: function (res) {
+                        layer.msg("成功删除" + res.data + "条数据！");
+                        toolbarActive.refresh();
+                    }
+                });
+            });
+        }
+
+    });
+    // 解析特殊字段
+    var parse = {
+        average: function (d) {
+            if (!d.average) return "";
+            var style = 'text-align: center;color: white;width: 100%; height: 100%;';
+            return "<div style='" + style + "background-color: #" + d.average.substring(2) + "'>" + d.average + "</div>";
+        },
+        size: function (d) {
+            if (d.size < 1024) {
+                return d.size + "B";
+            } else {
+                return (d.size / 1024).toFixed(2) + "KB";
+            }
+        }
+    }
+</script>
+</body>
+</html>

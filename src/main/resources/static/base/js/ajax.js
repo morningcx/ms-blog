@@ -38,6 +38,29 @@ var ajax = {
         setting.type = "post";
         this.sendRequest(setting);
     },
+    upload(url, afterSuccess) {
+        layui.use(['jquery'], function () {
+            var node = "#upLoadForm", $ = layui.$;
+            if ($(node).length === 0) {
+                $("body").append("<form id='" + node.substring(1) + "' hidden>" +
+                    "<input id='upLoadFile' type='file' name='file'></form>");
+                $("#upLoadFile").change(function () {
+                    // 用户取消文件上传或者每次上传完成清空
+                    if ($(this).val() === "") return;
+                    ajax.post({
+                        url: url,
+                        data: new FormData($(node)[0]),
+                        contentType: false,
+                        processData: false,
+                        success: afterSuccess
+                    });
+                    // 每次改变之后需要清空，不然多次选择同一个文件不会触发change
+                    $(this).val("");
+                });
+            }
+            $("#upLoadFile").click();
+        });
+    },
     sendRequest(setting) {
         layui.use(['jquery'], function () {
             layui.$.ajax(ajax.parseSetting(setting));

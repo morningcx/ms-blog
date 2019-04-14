@@ -36,7 +36,7 @@ layui.use(["jquery", "layer", "form"], function () {
             sequenceDiagram: true,  // 序列图，默认不解析
             /*codeFold: true, // 每一个标题或者代码行折叠*/
             imageUpload: true, // 禁止本地上传图片
-            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageFormats: ["jpg", "jpeg", "gif", "png"],
             imageUploadURL : "/image/mdImageUpload?articleId=" + articleId,
             syncScrolling: "single", // 单向绑定
             toolbarIcons: function () {
