@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
+    <style>
+        .layui-fluid {
+            padding: 15px 20px;
+        }
+
+        #image {
+            box-shadow: 0 0 5px #ccc;
+            margin: 18px 0;
+        }
+
+        .imageContainer {
+            text-align: center;
+
+        }
+
+        .layui-form-item {
+            margin-bottom: 6px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-col-xs12 layui-col-sm5 imageContainer">
+        <div class="tool">
+            <a href="" class="layui-btn layui-btn-sm layui-btn-normal open" target="_blank">打开链接</a>
+            <button class="layui-btn layui-btn-sm copy">复制链接</button>
+            <button class="layui-btn layui-btn-sm layui-btn-danger delete">删除图片</button>
+        </div>
+        <img src="" id="image" width="85%">
+    </div>
+    <div class="layui-col-xs12 layui-col-sm7">
+        <form class="layui-form layui-form-pane" lay-filter="imageInfoForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">路径</label>
+                <div class="layui-input-block">
+                    <input type="text" name="path" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">Hash</label>
+                <div class="layui-input-block">
+                    <input type="text" name="hash" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">尺寸</label>
+                <div class="layui-input-block">
+                    <input type="text" name="wh" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">大小</label>
+                <div class="layui-input-block">
+                    <input type="text" name="size" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">类型</label>
+                <div class="layui-input-block">
+                    <input type="text" name="type" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">原名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">主色调</label>
+                <div class="layui-input-block">
+                    <input type="text" name="average" readonly class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">上传时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="createTime" readonly class="layui-input">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="../../library/layuiAdmin/layui/layui.js"></script>
+<script src="../../base/js/ajax.js"></script>
+<script>
+    layui.use(["jquery", "layer", "form"], function () {
+        var $ = layui.$, layer = layui.layer, form = layui.form;
+        var index0 = parent.layer.getFrameIndex(window.name); // 当前窗口索引
+        var imageId = getUrlParam("id");
+        // 参数传递错误则不执行
+        if (!imageId) {
+            layer.ready(function () {
+                layer.alert("参数传递错误！", {icon: 2});
+            });
+            return;
+        }
+        ajax.get({
+            url: "/image/getById?id=" + imageId, success: function (res) {
+                var data = res.data;
+                // 处理数据
+                data.size = getSize(data);
+                data.wh = data.width + "x" + data.height;
+                // 填充图片
+                $("#image").attr("src", data.path);
+                // 填充表单
+                form.val("imageInfoForm", data);
+                // 工具栏按钮初始化
+                $(".imageContainer .tool .open").attr("href", data.path);
+                $(".imageContainer .tool .copy").click(function () {
+                    $("input[name='path']").select();
+                    document.execCommand("copy");
+                    layer.msg("复制链接成功");
+                });
+                $(".imageContainer .tool .delete").click(function () {
+                    layer.confirm('确认要删除ID为' + data.id + '的图片吗？', function (index) {
+                        layer.close(index);
+                        ajax.post({
+                            url: "/image/delete",
+                            data: JSON.stringify([data.id]),
+                            contentType: "application/json",
+                            success: function () {
+                                layer.msg("删除图片成功！", {time: 1000}, function () {
+                                    parent.location.reload();
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+        });
+
+        function getSize(d) {
+            if (d.size < 1024) {
+                return d.size + "B";
+            } else {
+                return (d.size / 1024).toFixed(2) + "KB";
+            }
+        }
+    });
+</script>
+</body>
+</html>

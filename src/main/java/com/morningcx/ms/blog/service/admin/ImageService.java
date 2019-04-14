@@ -63,6 +63,19 @@ public class ImageService {
     }
 
     /**
+     * 根据id查询图片
+     *
+     * @param id
+     * @return
+     */
+    public Image getById(Integer id) {
+        Image image = imageMapper.selectById(id);
+        BizException.throwIfNull(image, "图片不存在");
+        return image;
+    }
+
+
+    /**
      * 分页查询图片
      *
      * @param page
@@ -72,6 +85,18 @@ public class ImageService {
     public IPage<Image> listPage(Integer page, Integer limit) {
         return imageMapper.selectPage(new Page<>(page, limit),
                 new QueryWrapper<Image>().orderByDesc("create_time"));
+    }
+
+    /**
+     * 图片墙
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
+    public IPage<Image> listWall(Integer page, Integer limit) {
+        return imageMapper.selectPage(new Page<>(page, limit),
+                new QueryWrapper<Image>().select("id", "path").orderByDesc("create_time"));
     }
 
     /**

@@ -21,7 +21,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">图片列表</div>
                 <div class="layui-card-body">
-
+                    <!--todo 条件查询-->
                     <!--工具栏-->
                     <script type="text/html" id="table-toolbar">
                         <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="batchDel">批量删除</a>
@@ -35,13 +35,12 @@
                         <tr>
                             <th lay-data="{checkbox:true, fixed:'left'}"></th>
                             <th lay-data="{field:'id', width: '6%'}">ID</th>
-                            <th lay-data="{field:'fkey'}">关键字</th>
-                            <th lay-data="{templet: parse.size}">大小</th>
+                            <th lay-data="{field:'path'}">路径</th>
+                            <th lay-data="{templet: parse.size, field: 'size'}">大小</th>
                             <th lay-data="{field:'name', width: '16%'}">原文件名</th>
                             <th lay-data="{field:'createTime', width: '16%'}">上传时间</th>
-                            <th lay-data="{field:'width'}">宽度</th>
-                            <th lay-data="{field:'height'}">高度</th>
-                            <th lay-data="{templet: parse.average}">主色调</th>
+                            <th lay-data="{templet: parse.wh, field:'width'}">尺寸</th>
+                            <th lay-data="{templet: parse.average, field: 'average'}">主色调</th>
                             <th lay-data="{fixed: 'right', toolbar: '#operation', width: '13%', align:'center'}">操作</th>
                         </tr>
                         </thead>
@@ -99,13 +98,11 @@
         // 操作按钮点击事件
         var operationActive = {
             detail: function (obj) {
-                var height = (obj.data.height / obj.data.width) * 320;
-                height = height > 400 ? 400 : height;
                 layer.open({
-                    type: 1,
-                    title: false,
-                    content: '<img src="' + obj.data.path + '" alt="" width="320" height="' + height +
-                    '" style="margin: 5px;border: 1px #e6e6e6 solid;">'
+                    type: 2
+                    , title: '图片详情'
+                    , content: './item.html?id=' + obj.data.id
+                    , area: ['80%', '90%']
                 });
             },
             del: function (obj) {
@@ -146,6 +143,9 @@
             } else {
                 return (d.size / 1024).toFixed(2) + "KB";
             }
+        },
+        wh: function (d) {
+            return d.width + "x" + d.height;
         }
     }
 </script>

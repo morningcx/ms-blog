@@ -35,10 +35,22 @@ public class ImageController {
         return Result.ok(imageService.imageUpload(file));
     }
 
+    @GetMapping("getById")
+    @Log(type = LogTypeEnum.READ, desc = "查询图片{id}")
+    public Result getById(Integer id) {
+        return Result.ok(imageService.getById(id));
+    }
+
     @GetMapping("listPage")
-    @Log(type = LogTypeEnum.PAGE, desc = "页码：{page} 页量：{limit}")
+    @Log(type = LogTypeEnum.PAGE, desc = "分页查询图片列表 页码：{page} 页量：{limit}")
     public Result listPage(Integer page, Integer limit) {
         return Result.ok(imageService.listPage(page, limit));
+    }
+
+    @GetMapping("listWall")
+    @Log(type = LogTypeEnum.PAGE, desc = "分页查询图片墙 页码：{page} 页量：{limit}")
+    public Result listWall(Integer page, Integer limit) {
+        return Result.ok(imageService.listWall(page, limit));
     }
 
     @PostMapping("delete")

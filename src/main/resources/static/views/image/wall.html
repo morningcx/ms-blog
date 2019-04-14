@@ -30,6 +30,10 @@
 </head>
 <body style="overflow-y: scroll">
 <div class="layui-fluid">
+    <!--<div class="layui-input-inline">
+        <input type="text" class="layui-input">
+    </div>
+    <button class="layui-btn">上传</button>-->
     <div class="layui-row layui-col-space10" id="imageContainer"></div>
 </div>
 <script src="../../library/layuiAdmin/layui/layui.js"></script>
@@ -46,15 +50,14 @@
             done: function (page, next) {
                 var list = "";
                 ajax.get({
-                    url: '/image/listPage?page=' + page + "&limit=" + limit,
+                    url: '/image/listWall?page=' + page + "&limit=" + limit,
                     success: function (res) {
                         layui.each(res.data, function (index, item) {
                             // 返回400x400像素的压缩图片
                             list += "<div class=\"layui-col-xs6 layui-col-sm3 layui-col-md2 layui-col-lg2\">\n" +
-                                "            <div class=\"layui-card\">\n" +
-                                "                <img lay-src=\"" + item.path + "?imageMogr2/thumbnail/400x400!/blur/1x0/quality/75|imageslim\">\n" +
-                                "            </div>\n" +
-                                "        </div>";
+                                "<div class=\"layui-card\">\n" +
+                                "<img lay-src=\"" + item.path + "?imageMogr2/thumbnail/400x400!/blur/1x0/quality/75|imageslim\" " +
+                                "class='imageItem' data-id='" + item.id + "'></div></div>";
                         });
                         next(list, page < Math.ceil(res.count / limit));
                     }
@@ -62,7 +65,14 @@
             }
         });
 
-
+        $(document).on("click", ".imageItem", function () {
+            layer.open({
+                type: 2
+                , title: '图片详情'
+                , content: './item.html?id=' + $(this).data("id")
+                , area: ['80%', '90%']
+            });
+        });
     });
 </script>
 </body>
