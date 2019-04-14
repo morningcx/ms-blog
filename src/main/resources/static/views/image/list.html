@@ -35,7 +35,7 @@
                         <tr>
                             <th lay-data="{checkbox:true, fixed:'left'}"></th>
                             <th lay-data="{field:'id', width: '6%'}">ID</th>
-                            <th lay-data="{field:'path'}">路径</th>
+                            <th lay-data="{field:'path', templet: parse.path}">链接</th>
                             <th lay-data="{templet: parse.size, field: 'size'}">大小</th>
                             <th lay-data="{field:'name', width: '16%'}">原文件名</th>
                             <th lay-data="{field:'createTime', width: '16%'}">上传时间</th>
@@ -145,7 +145,11 @@
             }
         },
         wh: function (d) {
+            if (!d.width) return "";
             return d.width + "x" + d.height;
+        },
+        path: function (d) {
+            return "<a href='" + d.path + "' target='_blank'>" + d.path + "</a>"
         }
     }
 </script>

@@ -35,6 +35,7 @@ public class ImageController {
         return Result.ok(imageService.imageUpload(file));
     }
 
+
     @GetMapping("getById")
     @Log(type = LogTypeEnum.READ, desc = "查询图片{id}")
     public Result getById(Integer id) {

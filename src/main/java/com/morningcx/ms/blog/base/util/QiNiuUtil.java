@@ -1,13 +1,14 @@
 package com.morningcx.ms.blog.base.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.entity.Image;
+import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
+import com.qiniu.storage.model.FetchRet;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringMap;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,6 @@ public class QiNiuUtil {
     private static final String DOMAIN = "image.morningcx.com";
     private static StringMap imagePutPolicy = getImagePutPolicy();
 
-
     /**
      * 上传图片至七牛云
      *
@@ -39,17 +39,19 @@ public class QiNiuUtil {
      * @throws IOException
      */
     public static Image uploadImage(MultipartFile imageFile) throws IOException {
-        String fileType = checkImage(imageFile);
+        String fileName = imageFile.getOriginalFilename();
+        String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length());
         // 构造一个带指定Zone对象的配置类，zone0代表华东
         Configuration config = new Configuration(Zone.zone0());
         UploadManager uploadManager = new UploadManager(config);
-        // 指定文件前缀以及名称，不指定默认用hash值作为文件名
+        // 指定文件前缀以及名称，不指定默认用hash值作为文件名 todo key还是要加前缀
         String key = UUID.randomUUID() + fileType;
         // 验证密钥，生成上传凭证
         Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
         // token有效时长3600s，策略为<bucket>:<key>则同名文件覆盖，为<bucket>则报错
         String token = auth.uploadToken(BUCKET, key, 3600, imagePutPolicy);
-        Response response = uploadManager.put(imageFile.getBytes(), key, token);
+        byte[] bytes = imageFile.getBytes();
+        Response response = uploadManager.put(bytes, key, token);
         Image image = new ObjectMapper().readValue(response.bodyString(), Image.class);
         image.setName(imageFile.getOriginalFilename());
         image.setDomain(DOMAIN);
@@ -73,22 +75,32 @@ public class QiNiuUtil {
     }
 
     /**
-     * 检测文件类型，并返回后缀名
+     * 抓取网络资源至七牛云
      *
-     * @param imageFile
+     * @param url
      * @return
+     * @throws QiniuException
      */
-    private static String checkImage(MultipartFile imageFile) {
-        BizException.throwIf(imageFile == null || imageFile.isEmpty(), "上传图片不能为空");
-        String fileName = imageFile.getOriginalFilename();
-        String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
-        if (!(".jpg".equals(fileType) || ".jpeg".equals(fileType)
-                || ".gif".equals(fileType) || ".png".equals(fileType))) {
-            BizException.throwBy("上传图片类型只支持jpg、jpeg、gif、png");
-        }
-        return fileType;
+    public static Image fetchRemote(String url) throws QiniuException {
+        // todo 添加接口，要么再加一个资源来源类型
+        Configuration config = new Configuration(Zone.zone0());
+        Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
+        BucketManager bucketManager = new BucketManager(auth, config);
+        String key = UUID.randomUUID().toString();
+        FetchRet fetchRet = bucketManager.fetch(url, BUCKET, key);
+        Image image = new Image();
+        image.setFkey(key);
+        image.setBucket(BUCKET);
+        image.setHash(fetchRet.hash);
+        image.setType(fetchRet.mimeType);
+        image.setSize((int) fetchRet.fsize);
+        image.setName(url);
+        image.setDomain(DOMAIN);
+        image.setPath("http://" + image.getDomain() + "/" + image.getFkey());
+        image.setCreateTime(new Date());
+        image.setDeleted(0);
+        return image;
     }
-
 
     /**
      * 获取image的json获取策略

@@ -33,10 +33,11 @@ public class ImageService {
      * @return
      */
     @Transactional
-    public Map<String, Object> mdImageUpload(MultipartFile file) {
+    public Map<String, Object> mdImageUpload(MultipartFile imageFile) {
+        checkImage(imageFile);
         Map<String, Object> result = new HashMap<>(3);
         try {
-            Image image = QiNiuUtil.uploadImage(file);
+            Image image = QiNiuUtil.uploadImage(imageFile);
             imageMapper.insert(image);
             result.put("success", 1);
             result.put("message", "上传成功");
@@ -57,6 +58,7 @@ public class ImageService {
      */
     @Transactional
     public String imageUpload(MultipartFile imageFile) throws IOException {
+        checkImage(imageFile);
         Image image = QiNiuUtil.uploadImage(imageFile);
         imageMapper.insert(image);
         return image.getPath();
@@ -115,6 +117,24 @@ public class ImageService {
             imageMapper.deleteById(image.getId());
         }
         return images.size();
+    }
+
+
+
+    /**
+     * 检测文件类型，并返回后缀名
+     *
+     * @param imageFile
+     * @return
+     */
+    private static void checkImage(MultipartFile imageFile) {
+        BizException.throwIf(imageFile == null || imageFile.isEmpty(), "上传图片不能为空");
+        String fileName = imageFile.getOriginalFilename();
+        String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
+        if (!(".jpg".equals(fileType) || ".jpeg".equals(fileType)
+                || ".gif".equals(fileType) || ".png".equals(fileType))) {
+            BizException.throwBy("上传图片类型只支持jpg、jpeg、gif、png");
+        }
     }
 
 }

@@ -8,26 +8,20 @@ var ajax = {
         dataType: "json",
         mask: true, // 默认开启遮罩层
         beforeSend() {
-            layui.use(['layer'], function () {
-                layui.layer.load(2);
-            });
+            layui.layer.load(2);
         },
         complete() {
-            layui.use(['layer'], function () {
-                layui.layer.closeAll('loading');
-            });
+            layui.layer.closeAll('loading');
         },
         error(res) {
-            layui.use(['layer'], function () {
-                var errorMsg = res.responseJSON.msg;
-                var callback;
-                if (errorMsg === "未登录") {
-                    callback = function () {
-                        top.location.href = "/login/login.html";
-                    }
+            var errorMsg = res.responseJSON.msg;
+            var callback;
+            if (errorMsg === "未登录") {
+                callback = function () {
+                    top.location.href = "/login/login.html";
                 }
-                layui.layer.alert(errorMsg, {icon: 2/*, shade: [0.0, '#FFF']*/}, callback);
-            });
+            }
+            layui.layer.alert(errorMsg, {icon: 2/*, shade: [0.0, '#FFF']*/}, callback);
         }
     },
     get(setting) {
@@ -40,16 +34,16 @@ var ajax = {
     },
     upload(url, afterSuccess) {
         layui.use(['jquery'], function () {
-            var node = "#upLoadForm", $ = layui.$;
-            if ($(node).length === 0) {
-                $("body").append("<form id='" + node.substring(1) + "' hidden>" +
-                    "<input id='upLoadFile' type='file' name='file'></form>");
-                $("#upLoadFile").change(function () {
+            var upLoadForm = "#upLoadFormNode", upLoadFile = "#upLoadFileNode", $ = layui.$;
+            if ($(upLoadForm).length === 0) {
+                $("body").append("<form id='" + upLoadForm.substring(1) + "' hidden>" +
+                    "<input id='" + upLoadFile.substring(1) + "' type='file' name='file'></form>");
+                $(upLoadFile).change(function () {
                     // 用户取消文件上传或者每次上传完成清空
                     if ($(this).val() === "") return;
                     ajax.post({
                         url: url,
-                        data: new FormData($(node)[0]),
+                        data: new FormData($(upLoadForm)[0]),
                         contentType: false,
                         processData: false,
                         success: afterSuccess
@@ -58,12 +52,15 @@ var ajax = {
                     $(this).val("");
                 });
             }
-            $("#upLoadFile").click();
+            $(upLoadFile).click();
         });
     },
     sendRequest(setting) {
-        layui.use(['jquery'], function () {
-            layui.$.ajax(ajax.parseSetting(setting));
+        // 发送请求之前先加载完毕所有必要组件
+        layui.use(['jquery', 'layer'], function () {
+            layer.ready(function () {
+                layui.$.ajax(ajax.parseSetting(setting));
+            });
         });
     },
     /**
@@ -72,13 +69,11 @@ var ajax = {
      * @returns {*}
      */
     parseSetting(setting) {
-        layui.use(['jquery'], function () {
-            layui.$.each(ajax.defaultSetting, function (k, v) {
-                // 不能用||，值为false时不起作用
-                if (setting[k] === undefined) {
-                    setting[k] = v;
-                }
-            });
+        layui.$.each(ajax.defaultSetting, function (k, v) {
+            // 不能用||，值为false时不起作用
+            if (setting[k] === undefined) {
+                setting[k] = v;
+            }
         });
         // url前缀
         setting.url = this.baseUrl + setting.url;
