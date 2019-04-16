@@ -45,13 +45,26 @@ public class Article implements Serializable {
     private Integer deleted;
 
 
-
+    /**
+     * 作者
+     */
     @TableField(exist = false)
     private String author;
+    /**
+     * 分类
+     */
     @TableField(exist = false)
     private String category;
     @TableField(exist = false)
+    private String categoryCover;
+    /**
+     * 内容
+     */
+    @TableField(exist = false)
     private Content content;
+    /**
+     * 标签
+     */
     @NotEmpty(message = "标签不能为空")
     @Size(max = 5, message = "标签不能超过5个")
     @TableField(exist = false)

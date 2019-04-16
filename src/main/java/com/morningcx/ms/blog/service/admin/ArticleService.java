@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -199,7 +196,16 @@ public class ArticleService {
         wrapper.eq("author_id", ContextUtil.getLoginId());
         wrapper.setEntity(EntityUtil.removeEmptyString(article));
         wrapper.orderByDesc("create_time");
-        return articleMapper.selectPage(new Page<>(page, limit), wrapper);
+        IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit), wrapper);
+        // 查询分类
+        List<Article> records = articleIPage.getRecords();
+        Set<Integer> categoryIds = records.stream().map(Article::getCategoryId).collect(Collectors.toSet());
+        Map<Integer, String> categoryMap = categoryMapper.selectList(new QueryWrapper<Category>()
+                .select("id", "name")
+                .in("id", categoryIds))
+                .stream().collect(Collectors.toMap(Category::getId, Category::getName));
+        records.forEach(a -> a.setCategory(categoryMap.get(a.getCategoryId())));
+        return articleIPage;
     }
 
     /**

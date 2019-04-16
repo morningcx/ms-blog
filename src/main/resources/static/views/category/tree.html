@@ -10,6 +10,14 @@
     <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
     <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
     <link rel="stylesheet" href="../../library/zTree/css/zTreeStyle/zTreeStyle.css">
+    <style>
+        #coverImage {
+            display: block;
+            box-shadow: 0 0 2px #999;
+            border-radius: 4px;
+            margin: 15px auto;
+        }
+    </style>
 </head>
 <body>
 <!--有空隙-->
@@ -31,6 +39,7 @@
             <div class="layui-card">
                 <div class="layui-card-header">分类信息</div>
                 <div class="layui-card-body">
+                    <img width="200" height="150" id="coverImage">
                     <form class="layui-form">
                         <div class="layui-form-item">
                             <label class="layui-form-label">ID：</label>
@@ -47,7 +56,13 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">描述：</label>
                             <div class="layui-input-block">
-                                <input type="text" class="layui-input" id="categoryDesc" readonly>
+                                <textarea type="text" class="layui-textarea" id="categoryDesc" readonly style="resize: none"></textarea>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label required">封面：</label>
+                            <div class="layui-input-block">
+                                <input class="layui-input" name="cover" id="categoryCover">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -143,6 +158,8 @@
                     $("#categoryDesc").val(data.description);
                     $("#categoryCreate").val(data.createTime);
                     $("#categoryUpdate").val(data.updateTime);
+                    $("#categoryCover").val(data.cover);
+                    $("#coverImage").attr("src", data.cover);
                 }
             });
         }

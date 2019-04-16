@@ -37,7 +37,7 @@ layui.use(["jquery", "layer", "form"], function () {
             /*codeFold: true, // 每一个标题或者代码行折叠*/
             imageUpload: true, // 禁止本地上传图片
             imageFormats: ["jpg", "jpeg", "gif", "png"],
-            imageUploadURL : "/image/mdImageUpload?articleId=" + articleId,
+            imageUploadURL: "/image/mdImageUpload?articleId=" + articleId,
             syncScrolling: "single", // 单向绑定
             toolbarIcons: function () {
                 // Or return editormd.toolbarModes[name]; // full, simple, mini
@@ -48,8 +48,8 @@ layui.use(["jquery", "layer", "form"], function () {
                     "h1", "h2", "h3", "h4", "h5", "h6", "|",
                     "list-ul", "list-ol", "hr", "|",
                     "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
-                    /*"goto-line",*/ "watch", "preview", "see"/*, "fullscreen", "clear"*//*, "search"*/, "|",
-                    /*"help", "info",*/ "save", "history", "meta", "setting", "|",
+                    /*"goto-line",*/ "watch", "preview", "|", "night", "see"/*, "fullscreen", "clear"*//*, "search"*/,
+                    /*"help", "info",*/ "save", "history", "meta", "|",
                     "publish"
                 ];
             },
@@ -68,7 +68,7 @@ layui.use(["jquery", "layer", "form"], function () {
                 save: "fa-save",
                 history: "fa-history",
                 meta: "fa-book",
-                setting: "fa-gear",
+                night: "fa-moon-o",
                 publish: "fa-mail-forward"
             },
             toolbarHandlers: {
@@ -78,7 +78,7 @@ layui.use(["jquery", "layer", "form"], function () {
                     alert("历史")
                 },
                 publish: publish,
-                setting: setting,
+                night: night,
                 meta: saveMeta
             },
             lang: {
@@ -88,7 +88,7 @@ layui.use(["jquery", "layer", "form"], function () {
                     history: "历史",
                     meta: "信息",
                     publish: "发布",
-                    setting: "设置" // todo 夜间
+                    night: "夜间"
                 }
             }
             // imageUploadURL: "../mdImageUpload",
@@ -156,70 +156,12 @@ layui.use(["jquery", "layer", "form"], function () {
             });
         }
 
-        // editor设置
-        function setting() {
-            var content =
-
-                "            <select id=\"editormd-theme-select\">\n" +
-                "            </select>\n" +
-
-                "            <select id=\"editor-area-theme-select\">\n" +
-                "            </select>\n" +
-
-                "            <select id=\"preview-area-theme-select\">\n" +
-                "            </select>\n" ;
-
-            layer.open({
-                title: '页面层'
-                , type: 1
-                , skin: 'layui-layer-rim'
-                , shadeClose: true
-                , area: ['50%', '300px']
-                , content: content
-            });
-
-            themeSelect("editormd-theme-select", editormd.themes, "theme", function ($this, theme) {
-                editor.setTheme(theme);
-            });
-
-            themeSelect("editor-area-theme-select", editormd.editorThemes, "editorTheme", function ($this, theme) {
-                editor.setCodeMirrorTheme(theme);
-            });
-
-            themeSelect("preview-area-theme-select", editormd.previewThemes, "previewTheme", function ($this, theme) {
-                editor.setPreviewTheme(theme);
-            });
-
-            form.render("select");
-
-            /**
-             * 主题切换绑定
-             */
-            function themeSelect(id, themes, lsKey, callback) {
-                var select = $("#" + id);
-
-                for (var i = 0, len = themes.length; i < len; i++) {
-                    var theme = themes[i];
-                    var selected = (localStorage[lsKey] == theme) ? " selected=\"selected\"" : "";
-
-                    select.append("<option value=\"" + theme + "\"" + selected + ">" + theme + "</option>");
-                }
-
-                select.bind("change", function () {
-                    var theme = $(this).val();
-
-                    if (theme === "") {
-                        alert("theme == \"\"");
-                        return false;
-                    }
-
-                    console.log("lsKey =>", lsKey, theme);
-
-                    localStorage[lsKey] = theme;
-                    callback(select, theme);
-                });
-
-                return select;
+        // editor夜间模式
+        function night() {
+            if (this.settings.theme === "dark") {
+                editor.setTheme("default").setCodeMirrorTheme("default").setPreviewTheme("default");
+            } else {
+                editor.setTheme("dark").setCodeMirrorTheme("pastel-on-dark").setPreviewTheme("dark");
             }
         }
     }

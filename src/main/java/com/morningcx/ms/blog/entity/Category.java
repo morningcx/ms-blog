@@ -20,6 +20,8 @@ public class Category implements Serializable {
     private Integer id;
     private Integer pid;
     private Integer userId;
+    @NotBlank(message = "封面不能为空")
+    private String cover;
     @TableField(condition = SqlCondition.LIKE)
     @NotBlank(message = "名称不能为空")
     private String name;

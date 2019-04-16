@@ -28,15 +28,6 @@ public interface ArticleMapper extends BaseMapper<Article> {
      */
     int updateLikesById(Integer id);
 
-
-    /**
-     * 根据文章id获取文章基本信息、作者、类别
-     *
-     * @param id
-     * @return
-     */
-    /*Article getMetaById(Integer id);*/
-
     /**
      * 根据文章id以及登录用户id回收文章
      *
@@ -54,4 +45,6 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * @return
      */
     int recoverBatchIds(@Param("ids") Collection<Integer> ids, @Param("authorId") Integer authorId);
+
+    /*List<Article> listSimplePage(IPage<Tag> page, @Param("ew") Wrapper<Tag> wrapper);*/
 }

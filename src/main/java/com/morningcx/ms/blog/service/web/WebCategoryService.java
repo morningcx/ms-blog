@@ -1,6 +1,7 @@
 package com.morningcx.ms.blog.service.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.entity.Category;
 import com.morningcx.ms.blog.mapper.ArticleMapper;
@@ -22,6 +23,18 @@ public class WebCategoryService {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    /**
+     * 根据id获取分类
+     *
+     * @param id
+     * @return
+     */
+    public Category getById(Integer id) {
+        Category category = categoryMapper.selectById(id);
+        BizException.throwIfNull(category, "分类不存在");
+        return category;
+    }
 
     /**
      * 列举包含文章的分类(分类下没有可见文章的不显示)

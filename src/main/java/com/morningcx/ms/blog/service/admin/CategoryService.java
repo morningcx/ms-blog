@@ -137,6 +137,7 @@ public class CategoryService {
         Category updateCategory = new Category();
         updateCategory.setId(category.getId());
         updateCategory.setPid(category.getPid());
+        updateCategory.setCover(category.getCover());
         updateCategory.setName(category.getName());
         updateCategory.setDescription(category.getDescription());
         return categoryMapper.updateById(updateCategory);

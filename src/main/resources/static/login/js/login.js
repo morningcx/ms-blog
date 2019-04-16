@@ -1,5 +1,5 @@
 layui.use(["layer"], function () {
-    var layer = layui.layer;
+    var layer = layui.layer, loading = false;
     var code = {
         seed: ['abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '0123456789'],
         container: $("#code"),
@@ -7,7 +7,7 @@ layui.use(["layer"], function () {
     };
 
     $(document).keyup(function (event) {
-        if (event.keyCode === 13) {
+        if (event.keyCode === 13 && !loading) {
             $("#btn").click();
         }
     });
@@ -30,22 +30,26 @@ layui.use(["layer"], function () {
                 layer.msg("验证码错误");
                 return;
             }
-            $.ajax({
-                url: "/login",
-                type: "POST",
-                data: {
-                    account: account.val(),
-                    password: hex_sha1(password.val())
-                },
-                dataType: "json",
-                success: function () {
-                    window.location.href = "../views/index.html";
-                },
-                error: function (data) {
-                    createCode();
-                    layer.msg(data.responseJSON.msg);
-                }
-            });
+            if (!loading) {
+                loading = true;
+                $.ajax({
+                    url: "/login",
+                    type: "POST",
+                    data: {
+                        account: account.val(),
+                        password: hex_sha1(password.val())
+                    },
+                    dataType: "json",
+                    success: function () {
+                        window.location.href = "../views/index.html";
+                    },
+                    error: function (data) {
+                        createCode();
+                        layer.msg(data.responseJSON.msg);
+                        loading = false;
+                    }
+                });
+            }
         }
     });
 

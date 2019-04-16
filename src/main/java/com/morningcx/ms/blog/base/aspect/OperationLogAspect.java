@@ -8,7 +8,6 @@ import com.morningcx.ms.blog.mapper.OperationLogMapper;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
 import eu.bitwalker.useragentutils.UserAgent;
-import eu.bitwalker.useragentutils.Version;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -82,8 +81,7 @@ public class OperationLogAspect {
         OperatingSystem operatingSystem = userAgent.getOperatingSystem();
         Browser browser = userAgent.getBrowser();
         operationLog.setOs(operatingSystem.getName() + " " + operatingSystem.getDeviceType().getName());
-        Version version = userAgent.getBrowserVersion();
-        operationLog.setBrowser(browser.getName() + " " + (version == null ? "Unknown" : version)
+        operationLog.setBrowser(browser.getName() + " " + userAgent.getBrowserVersion()
                 + " " + browser.getBrowserType().getName());
         // 请求url
         operationLog.setUrl(request.getRequestURL().toString());

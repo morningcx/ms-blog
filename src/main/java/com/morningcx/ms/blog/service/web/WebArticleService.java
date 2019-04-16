@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -49,8 +52,20 @@ public class WebArticleService {
         wrapper.eq(article.getCategoryId() != null, "category_id", article.getCategoryId());
         wrapper.select("id", "title", "introduction", "create_time", "category_id", "views", "likes");
         wrapper.orderByDesc("create_time");
-        // todo 作者和分类
-        return articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
+        IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
+        // 查询分类
+        List<Article> records = articleIPage.getRecords();
+        Set<Integer> categoryIds = records.stream().map(Article::getCategoryId).collect(Collectors.toSet());
+        Map<Integer, Category> categoryMap = categoryMapper.selectList(new QueryWrapper<Category>()
+                .select("id", "name", "cover")
+                .in("id", categoryIds))
+                .stream().collect(Collectors.toMap(Category::getId, Function.identity()));
+        records.forEach(a -> {
+            Category category = categoryMap.get(a.getCategoryId());
+            a.setCategory(category.getName());
+            a.setCategoryCover(category.getCover());
+        });
+        return articleIPage;
     }
 
     /**

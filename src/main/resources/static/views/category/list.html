@@ -45,8 +45,8 @@
                         <thead>
                         <tr>
                             <th lay-data="{checkbox:true, fixed:'left'}"></th>
-                            <th lay-data="{field:'id'}">ID</th>
-                            <th lay-data="{field:'pid'}">PID</th>
+                            <th lay-data="{field:'id', width: '6%'}">ID</th>
+                            <th lay-data="{field:'pid', width: '6%'}">PID</th>
                             <th lay-data="{field:'name'}">名称</th>
                             <th lay-data="{field:'description'}">描述</th>
                             <th lay-data="{field:'createTime', width: '16%'}">创建时间</th>
@@ -148,7 +148,7 @@
                 type: 2
                 , title: '分类操作'
                 , content: './item.html' + arg
-                , area: ['400px', '435px']
+                , area: ['440px', '500px']
                 , btn: ['确定', '取消']
                 , yes: function (index, layero) {
                     layero.find('iframe').contents().find("#submit").click();
