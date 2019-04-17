@@ -1,6 +1,8 @@
 package com.morningcx.ms.blog.mapper;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.morningcx.ms.blog.entity.Article;
 import org.apache.ibatis.annotations.Param;
 
@@ -46,5 +48,13 @@ public interface ArticleMapper extends BaseMapper<Article> {
      */
     int recoverBatchIds(@Param("ids") Collection<Integer> ids, @Param("authorId") Integer authorId);
 
-    /*List<Article> listSimplePage(IPage<Tag> page, @Param("ew") Wrapper<Tag> wrapper);*/
+    /**
+     * 联表分页查询分类
+     *
+     *
+     * @param page
+     * @param wrapper
+     * @return
+     */
+    IPage<Article> listSimplePage(IPage<Article> page, @Param("ew") Wrapper<Article> wrapper);
 }

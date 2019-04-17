@@ -8,7 +8,7 @@ var ajax = {
         dataType: "json",
         mask: true, // 默认开启遮罩层
         beforeSend() {
-            layui.layer.load(2);
+            layui.layer.load(1);
         },
         complete() {
             layui.layer.closeAll('loading');

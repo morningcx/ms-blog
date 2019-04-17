@@ -3,11 +3,15 @@
 <mapper namespace="com.morningcx.ms.blog.mapper.ArticleMapper">
 
     <update id="updateViewsById">
-        update t_article set views = views + 1 where id = #{id} and deleted = 0
+        update t_article
+        set views = views + 1
+        where id = #{id} and deleted = 0
     </update>
 
     <update id="updateLikesById">
-        update t_article set likes = likes + 1 where id = #{id} and deleted = 0
+        update t_article
+        set likes = likes + 1
+        where id = #{id} and deleted = 0
     </update>
 
     <update id="recycleBatchIds">
@@ -25,4 +29,10 @@
             #{id}
         </foreach>
     </update>
+    <select id="listSimplePage" resultType="com.morningcx.ms.blog.entity.Article">
+        select a.*, c.`name` category from t_article a left JOIN t_category c on a.category_id = c.id
+        <where>
+            ${ew.sqlSegment}
+        </where>
+    </select>
 </mapper>

@@ -47,6 +47,12 @@ layui.use(["layer"], function () {
                         createCode();
                         layer.msg(data.responseJSON.msg);
                         loading = false;
+                    },
+                    beforeSend() {
+                        layer.load(1, {shade: [0.3, '#000']});
+                    },
+                    complete() {
+                        layer.closeAll('loading');
                     }
                 });
             }

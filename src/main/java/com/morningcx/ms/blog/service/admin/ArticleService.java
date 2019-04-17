@@ -33,6 +33,8 @@ public class ArticleService {
     private ArticleTagMapper articleTagMapper;
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private CategoryService categoryService;
 
     /**
      * 根据id查询文章元信息
@@ -165,7 +167,7 @@ public class ArticleService {
             tagName = tagName.trim();
             // 标签去重
             if (set.add(tagName)) {
-                Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("name", tagName));
+                Tag oldTag = tagMapper.selectOne(new QueryWrapper<Tag>().eq("name", tagName).select("id"));
                 // 若原标签不存在，则插入
                 if (oldTag == null) {
                     Tag newTag = new Tag();
@@ -194,6 +196,18 @@ public class ArticleService {
         // 当前登录用户未回收的文章，未删除mp将自动添加
         wrapper.eq("recycle", 0);
         wrapper.eq("author_id", ContextUtil.getLoginId());
+        // 分类条件
+        if (article.getCategoryId() != null) {
+            // 获取分类条件下所有子分类文章
+            Set<Object> childNodeIds = categoryService.getChildNodeIds(
+                    Collections.singletonList(article.getCategoryId()), new HashSet<>());
+            wrapper.in("category_id", childNodeIds);
+            article.setCategoryId(null);
+        }
+
+        // todo 标签条件
+        // select article_id
+        // from t_article_tag where tag_id in (54,53) GROUP BY article_id HAVING COUNT(article_id) = 2
         wrapper.setEntity(EntityUtil.removeEmptyString(article));
         wrapper.orderByDesc("create_time");
         IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit), wrapper);

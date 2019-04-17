@@ -50,6 +50,7 @@ public class WebUserService {
                         .in("article_id", publicArticleIds)
                         .select("DISTINCT tag_id"));
         // 非空公开分类，分类下没有文章或者没有公开文章则不算进内
+        // todo 公开也就公开了，反正没有文章点进去，修改url也看不到文章
         Integer categoryCount = articleMapper.selectCount(new QueryWrapper<Article>()
                 .eq("author_id", id)
                 .eq("modifier", 0)

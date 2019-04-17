@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author gcx
@@ -57,7 +56,18 @@ public class CategoryService {
         QueryWrapper<Category> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", ContextUtil.getLoginId());
         wrapper.setEntity(EntityUtil.removeEmptyString(category));
-        return categoryMapper.selectPage(new Page<>(page, limit), wrapper);
+        IPage<Category> categoryIPage = categoryMapper.selectPage(new Page<>(page, limit), wrapper);
+        // todo 分类下的文章数量，到时候添加一个listAll接口，和分页查询分开
+        /*List<Category> records = categoryIPage.getRecords();
+        List<Integer> categoryIds = records.stream().map(Category::getId).collect(Collectors.toList());
+        // 这里用views来代表分类下文章的数量
+        Map<Integer, Integer> acCount = articleMapper.selectList(new QueryWrapper<Article>()
+                .in("category_id", categoryIds)
+                .select("category_id", "count(category_id) as views")
+                .groupBy("category_id"))
+                .stream().collect(Collectors.toMap(Article::getCategoryId, Article::getViews));
+        records.forEach(c -> c.setCount(acCount.getOrDefault(c.getId(), 0)));*/
+        return categoryIPage;
     }
 
     /**
@@ -121,8 +131,7 @@ public class CategoryService {
             );
             BizException.throwIf(pidCount == 0, "上级分类不存在");
             // 上级分类不能是自己的子类
-            Set<Integer> childNodeSet = getChildNodeIds(
-                    Collections.singletonList(category.getId()), new HashSet<>());
+            Set<Object> childNodeSet = getChildNodeIds(Collections.singletonList(category.getId()), new HashSet<>());
             BizException.throwIf(childNodeSet.contains(category.getPid()), "上级分类不能为子分类");
         }
         // 检测是否存在同名分类
@@ -149,20 +158,19 @@ public class CategoryService {
      * @param pids
      * @return
      */
-    private Set<Integer> getChildNodeIds(List<Integer> pids, Set<Integer> set) {
+    public Set<Object> getChildNodeIds(List<Object> pids, Set<Object> set) {
         if (pids == null || pids.size() == 0) {
             return set;
         }
-        for (Integer pid : pids) {
+        for (Object pid : pids) {
             // 避免无限递归
             if (!set.add(pid)) {
                 return set;
             }
         }
-        List<Category> categories = categoryMapper.selectList(
+        List<Object> childIds = categoryMapper.selectObjs(
                 new QueryWrapper<Category>().in("pid", pids).select("id"));
-        List<Integer> collect = categories.stream().map(Category::getId).collect(Collectors.toList());
-        return getChildNodeIds(collect, set);
+        return getChildNodeIds(childIds, set);
     }
 
     /**

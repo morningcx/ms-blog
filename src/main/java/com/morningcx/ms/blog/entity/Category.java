@@ -34,4 +34,10 @@ public class Category implements Serializable {
     @TableField(select = false)
     private Integer deleted;
 
+    /**
+     * 分类下文章数量
+     */
+    @TableField(exist = false)
+    private Integer count;
+
 }

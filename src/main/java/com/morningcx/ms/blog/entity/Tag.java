@@ -18,6 +18,9 @@ public class Tag implements Serializable {
     private String name;
     private String description;
 
+    /**
+     * 文章数量
+     */
     @TableField(exist = false)
     private Integer count;
 }

@@ -26,6 +26,7 @@
             border-radius: 4px;
             margin: 10px auto;
         }
+
         #coverImage:hover {
             cursor: pointer;
         }
@@ -33,9 +34,11 @@
         .layui-form-item {
             margin-bottom: 10px;
         }
+
         .layui-form-item:last-of-type {
             margin-bottom: 0;
         }
+
         .layui-textarea {
             resize: none;
             min-height: 86px;
@@ -68,7 +71,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label required">分类描述</label>
         <div class="layui-input-block">
-                <textarea placeholder="请输入描述" lay-verify="required" class="layui-textarea" name="description"></textarea>
+            <textarea placeholder="请输入描述" lay-verify="required" class="layui-textarea" name="description"></textarea>
         </div>
     </div>
     <button lay-submit lay-filter="submit" id="submit" hidden></button>
@@ -130,6 +133,7 @@
         function refreshCover() {
             $("#coverImage").attr("src", $("input[name='cover']").val());
         }
+
         $("input[name='cover']").change(function () {
             refreshCover();
         });

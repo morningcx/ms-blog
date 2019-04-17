@@ -47,11 +47,19 @@ public class User implements Serializable {
     @TableField(select = false)
     private Integer deleted;
 
-
+    /**
+     * 文章数量
+     */
     @TableField(exist = false)
     private Integer articleCount;
+    /**
+     * 分类数量
+     */
     @TableField(exist = false)
     private Integer categoryCount;
+    /**
+     * 标签数量
+     */
     @TableField(exist = false)
     private Integer tagCount;
 }
