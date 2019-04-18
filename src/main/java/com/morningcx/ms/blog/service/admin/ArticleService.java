@@ -213,6 +213,9 @@ public class ArticleService {
         IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit), wrapper);
         // 查询分类
         List<Article> records = articleIPage.getRecords();
+        if (records.size() == 0) {
+            return new Page<>();
+        }
         Set<Integer> categoryIds = records.stream().map(Article::getCategoryId).collect(Collectors.toSet());
         Map<Integer, String> categoryMap = categoryMapper.selectList(new QueryWrapper<Category>()
                 .select("id", "name")

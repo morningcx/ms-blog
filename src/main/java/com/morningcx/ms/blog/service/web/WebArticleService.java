@@ -48,13 +48,26 @@ public class WebArticleService {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("recycle", 0);
         wrapper.eq("modifier", 0);
-        wrapper.eq("author_id", article.getAuthorId());
+        // 分类条件
         wrapper.eq(article.getCategoryId() != null, "category_id", article.getCategoryId());
+        // 单个标签条件
+        if (article.getTagNames() != null && article.getTagNames().size() != 0) {
+            List<Object> articleIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>().lambda()
+                    .eq(ArticleTag::getTagId, article.getTagNames().get(0))
+                    .select(ArticleTag::getArticleId));
+            if (articleIds.size() == 0) {
+                return new Page<>();
+            }
+            wrapper.in("id", articleIds);
+        }
         wrapper.select("id", "title", "introduction", "create_time", "category_id", "views", "likes");
         wrapper.orderByDesc("create_time");
         IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
         // 查询分类
         List<Article> records = articleIPage.getRecords();
+        if (records.size() == 0) {
+            return new Page<>();
+        }
         Set<Integer> categoryIds = records.stream().map(Article::getCategoryId).collect(Collectors.toSet());
         Map<Integer, Category> categoryMap = categoryMapper.selectList(new QueryWrapper<Category>()
                 .select("id", "name", "cover")
@@ -76,10 +89,19 @@ public class WebArticleService {
      */
     public List<Article> listHotArticles(Article article, Integer page, Integer limit) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
-        wrapper.eq("author_id", article.getAuthorId());
         wrapper.eq("modifier", 0);
         wrapper.eq("recycle", 0);
         wrapper.eq(article.getCategoryId() != null, "category_id", article.getCategoryId());
+        // 单个标签条件
+        if (article.getTagNames() != null && article.getTagNames().size() != 0) {
+            List<Object> articleIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>().lambda()
+                    .eq(ArticleTag::getTagId, article.getTagNames().get(0))
+                    .select(ArticleTag::getArticleId));
+            if (articleIds.size() == 0) {
+                return new Page<Article>().getRecords();
+            }
+            wrapper.in("id", articleIds);
+        }
         wrapper.orderByDesc("views");
         wrapper.select("id", "title", "create_time", "views");
         return articleMapper.selectPage(new Page<>(page, limit > 10 ? 10 : limit), wrapper).getRecords();
@@ -88,14 +110,12 @@ public class WebArticleService {
     /**
      * 查询归档信息
      *
-     * @param userId
      * @param page
      * @param limit
      * @return
      */
-    public IPage<Article> listArchives(Integer userId, Integer page, Integer limit) {
+    public IPage<Article> listArchives(Integer page, Integer limit) {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
-        wrapper.eq("author_id", userId);
         wrapper.eq("modifier", 0);
         wrapper.eq("recycle", 0);
         wrapper.select("id", "title", "create_time");

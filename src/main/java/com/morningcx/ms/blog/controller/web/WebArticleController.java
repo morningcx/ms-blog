@@ -34,8 +34,8 @@ public class WebArticleController {
     }
 
     @GetMapping("listArchives")
-    public Result listArchives(Integer userId, Integer page, Integer limit) {
-        return Result.ok(webArticleService.listArchives(userId, page, limit));
+    public Result listArchives(Integer page, Integer limit) {
+        return Result.ok(webArticleService.listArchives(page, limit));
     }
 
     /*@Cacheable*/

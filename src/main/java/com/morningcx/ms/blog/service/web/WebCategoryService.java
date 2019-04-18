@@ -31,7 +31,9 @@ public class WebCategoryService {
      * @return
      */
     public Category getById(Integer id) {
-        Category category = categoryMapper.selectById(id);
+        Category category = categoryMapper.selectOne(new QueryWrapper<Category>().lambda()
+                .eq(Category::getId, id)
+                .select(Category::getId, Category::getName, Category::getDescription, Category::getCover));
         BizException.throwIfNull(category, "分类不存在");
         return category;
     }
@@ -39,14 +41,12 @@ public class WebCategoryService {
     /**
      * 列举包含文章的分类(分类下没有可见文章的不显示)
      *
-     * @param userId
      * @return
      */
-    public List<Category> listAll(Integer userId) {
+    public List<Category> listAll() {
         QueryWrapper<Article> wrapper = new QueryWrapper<Article>()
                 .eq("modifier", 0)
                 .eq("recycle", 0)
-                .eq("author_id", userId)
                 .select("category_id")
                 .groupBy("category_id");
         List<Object> categoryIds = articleMapper.selectObjs(wrapper);
@@ -55,7 +55,6 @@ public class WebCategoryService {
             return new ArrayList<>();
         }
         return categoryMapper.selectList(new QueryWrapper<Category>()
-                .eq("user_id", userId)
                 .in("id", categoryIds)
                 .select("id", "name", "description"));
     }

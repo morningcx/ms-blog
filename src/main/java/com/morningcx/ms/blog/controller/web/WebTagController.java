@@ -1,7 +1,7 @@
 package com.morningcx.ms.blog.controller.web;
 
 import com.morningcx.ms.blog.base.result.Result;
-import com.morningcx.ms.blog.service.web.WebCategoryService;
+import com.morningcx.ms.blog.service.web.WebTagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,22 +10,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author gcx
- * @date 2019/4/7
+ * @date 2019/4/18
  */
 @RestController
-@RequestMapping(path = "web/category", name = "分类")
-public class WebCategoryController {
-
+@RequestMapping(path = "web/tag", name = "标签")
+public class WebTagController {
     @Autowired
-    private WebCategoryService webCategoryService;
+    private WebTagService webTagService;
 
     @GetMapping("{id}")
-    public Result getById(@PathVariable("id") Integer id) {
-        return Result.ok(webCategoryService.getById(id));
+    public Result getById(@PathVariable Integer id) {
+        return Result.ok(webTagService.getById(id));
     }
 
     @GetMapping("listAll")
     public Result listAll() {
-        return Result.ok(webCategoryService.listAll());
+        return Result.ok(webTagService.listAll());
     }
 }
