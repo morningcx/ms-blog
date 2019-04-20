@@ -145,7 +145,13 @@ public class ArticleService {
         article.setUpdateTime(now);
         article.setViews(0);
         article.setLikes(0);
+        // todo 是否推荐
+        article.setRecommend(0);
+        // 是否开启评论
+        article.setComment(1);
         article.setRecycle(0);
+        // 排序大小，是否置顶
+        article.setSort(0);
         article.setDeleted(0);
         articleMapper.insert(article);
         // 插入标签
@@ -209,6 +215,7 @@ public class ArticleService {
         // select article_id
         // from t_article_tag where tag_id in (54,53) GROUP BY article_id HAVING COUNT(article_id) = 2
         wrapper.setEntity(EntityUtil.removeEmptyString(article));
+        // "sort", "recommend",
         wrapper.orderByDesc("create_time");
         IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit), wrapper);
         // 查询分类

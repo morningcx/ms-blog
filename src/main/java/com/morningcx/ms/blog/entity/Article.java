@@ -39,7 +39,10 @@ public class Article implements Serializable {
     @NotNull(message = "类型不能为空")
     private Integer type;
     private Integer modifier;
+    private Integer recommend;
+    private Integer comment;
     private Integer recycle;
+    private Integer sort;
     @TableLogic
     @TableField(select = false)
     private Integer deleted;
