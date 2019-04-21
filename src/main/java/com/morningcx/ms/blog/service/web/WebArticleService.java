@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -60,23 +58,47 @@ public class WebArticleService {
             }
             wrapper.in("id", articleIds);
         }
-        wrapper.select("id", "title", "introduction", "create_time", "category_id", "views", "likes");
-        wrapper.orderByDesc("create_time");
+        wrapper.select("id", "title", "introduction", "create_time", "category_id", "views", "likes", "sort", "recommend", "type");
+        wrapper.orderByDesc("sort", "recommend", "create_time");
         IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
-        // 查询分类
+        // 列表为空则不需要进行分类和标签操作
         List<Article> records = articleIPage.getRecords();
         if (records.size() == 0) {
             return new Page<>();
         }
+        // 查询标签
+        List<Integer> articleIds = records.stream().map(Article::getId).collect(Collectors.toList());
+        StringBuilder orderBy = new StringBuilder();
+        articleIds.forEach(a -> orderBy.append(",").append(a));
+        List<Object> articleTagIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>()
+                .in("article_id", articleIds)
+                .groupBy("article_id")
+                // 按照in的顺序返回
+                .orderByAsc("field(article_id" + orderBy + ")")
+                .select("GROUP_CONCAT(CAST(tag_id AS char))"));
+        Set<String> allTagIds = new HashSet<>();
+        articleTagIds.forEach(at -> allTagIds.addAll(Arrays.asList(((String) at).split(","))));
+        Map<Integer, String> tagMap = tagMapper.selectList(new QueryWrapper<Tag>().in("id", allTagIds).select("id", "name"))
+                .stream().collect(Collectors.toMap(Tag::getId, Tag::getName));
+        for (int i = 0; i < records.size(); i++) {
+            String[] tagIds = ((String) articleTagIds.get(i)).split(",");
+            List<String> tags = new ArrayList<>(tagIds.length);
+            for (String tagId : tagIds) {
+                tags.add(tagId + "," + tagMap.get(Integer.parseInt(tagId)));
+            }
+            records.get(i).setTagNames(tags);
+        }
+        // 查询分类
         Set<Integer> categoryIds = records.stream().map(Article::getCategoryId).collect(Collectors.toSet());
         Map<Integer, Category> categoryMap = categoryMapper.selectList(new QueryWrapper<Category>()
-                .select("id", "name", "cover")
+                // cover
+                .select("id", "name")
                 .in("id", categoryIds))
                 .stream().collect(Collectors.toMap(Category::getId, Function.identity()));
         records.forEach(a -> {
             Category category = categoryMap.get(a.getCategoryId());
             a.setCategory(category.getName());
-            a.setCategoryCover(category.getCover());
+            // a.setCategoryCover(category.getCover());
         });
         return articleIPage;
     }
