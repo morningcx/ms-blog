@@ -38,6 +38,11 @@ public class WebArticleController {
         return Result.ok(webArticleService.listArchives(page, limit));
     }
 
+    @GetMapping("listRecommendArticles")
+    public Result listRecommendArticles() {
+        return Result.ok(webArticleService.listRecommendArticles());
+    }
+
     /*@Cacheable*/
     @GetMapping("getFullById")
     public Result getFullById(Integer id) {

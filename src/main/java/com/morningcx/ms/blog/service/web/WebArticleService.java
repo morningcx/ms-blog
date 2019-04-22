@@ -35,7 +35,7 @@ public class WebArticleService {
     private ContentMapper contentMapper;
 
     /**
-     * 分页查询文章
+     * 分页查询文章，包括分类条件查询、标签条件查询
      *
      * @param article
      * @param page
@@ -47,7 +47,12 @@ public class WebArticleService {
         wrapper.eq("recycle", 0);
         wrapper.eq("modifier", 0);
         // 分类条件
-        wrapper.eq(article.getCategoryId() != null, "category_id", article.getCategoryId());
+        if (article.getCategoryId() != null) {
+            // 获取分类条件下所有子分类文章
+            Set<Object> childNodeIds = getChildNodeIds(Collections.singletonList(article.getCategoryId()), new HashSet<>());
+            wrapper.in("category_id", childNodeIds);
+            article.setCategoryId(null);
+        }
         // 单个标签条件
         if (article.getTagNames() != null && article.getTagNames().size() != 0) {
             List<Object> articleIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>().lambda()
@@ -59,7 +64,7 @@ public class WebArticleService {
             wrapper.in("id", articleIds);
         }
         wrapper.select("id", "title", "introduction", "create_time", "category_id", "views", "likes", "sort", "recommend", "type");
-        wrapper.orderByDesc("sort", "recommend", "create_time");
+        wrapper.orderByDesc("sort", /*"recommend", */"create_time");
         IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
         // 列表为空则不需要进行分类和标签操作
         List<Article> records = articleIPage.getRecords();
@@ -91,15 +96,10 @@ public class WebArticleService {
         // 查询分类
         Set<Integer> categoryIds = records.stream().map(Article::getCategoryId).collect(Collectors.toSet());
         Map<Integer, Category> categoryMap = categoryMapper.selectList(new QueryWrapper<Category>()
-                // cover
                 .select("id", "name")
                 .in("id", categoryIds))
                 .stream().collect(Collectors.toMap(Category::getId, Function.identity()));
-        records.forEach(a -> {
-            Category category = categoryMap.get(a.getCategoryId());
-            a.setCategory(category.getName());
-            // a.setCategoryCover(category.getCover());
-        });
+        records.forEach(a -> a.setCategory(categoryMap.get(a.getCategoryId()).getName()));
         return articleIPage;
     }
 
@@ -113,7 +113,12 @@ public class WebArticleService {
         QueryWrapper<Article> wrapper = new QueryWrapper<>();
         wrapper.eq("modifier", 0);
         wrapper.eq("recycle", 0);
-        wrapper.eq(article.getCategoryId() != null, "category_id", article.getCategoryId());
+        if (article.getCategoryId() != null) {
+            // 获取分类条件下所有子分类文章
+            Set<Object> childNodeIds = getChildNodeIds(Collections.singletonList(article.getCategoryId()), new HashSet<>());
+            wrapper.in("category_id", childNodeIds);
+            article.setCategoryId(null);
+        }
         // 单个标签条件
         if (article.getTagNames() != null && article.getTagNames().size() != 0) {
             List<Object> articleIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>().lambda()
@@ -127,6 +132,42 @@ public class WebArticleService {
         wrapper.orderByDesc("views");
         wrapper.select("id", "title", "create_time", "views");
         return articleMapper.selectPage(new Page<>(page, limit > 10 ? 10 : limit), wrapper).getRecords();
+    }
+
+    /**
+     * 获取子分类id，BFS
+     *
+     * @param pids
+     * @return
+     */
+    private Set<Object> getChildNodeIds(List<Object> pids, Set<Object> set) {
+        if (pids == null || pids.size() == 0) {
+            return set;
+        }
+        for (Object pid : pids) {
+            // 避免无限递归
+            if (!set.add(pid)) {
+                return set;
+            }
+        }
+        List<Object> childIds = categoryMapper.selectObjs(
+                new QueryWrapper<Category>().in("pid", pids).select("id"));
+        return getChildNodeIds(childIds, set);
+    }
+
+    /**
+     * 列举最近的前6篇推荐文章
+     *
+     * @return
+     */
+    public List<Article> listRecommendArticles() {
+        return articleMapper.selectPage(new Page<>(1, 6), new QueryWrapper<Article>()
+                .eq("modifier", 0)
+                .eq("recycle", 0)
+                .eq("recommend", 1)
+                .select("id", "title", "introduction")
+                .orderByDesc("create_time"))
+                .getRecords();
     }
 
     /**

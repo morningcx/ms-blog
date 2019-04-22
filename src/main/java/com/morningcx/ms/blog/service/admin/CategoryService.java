@@ -158,7 +158,7 @@ public class CategoryService {
      * @param pids
      * @return
      */
-    public Set<Object> getChildNodeIds(List<Object> pids, Set<Object> set) {
+    private Set<Object> getChildNodeIds(List<Object> pids, Set<Object> set) {
         if (pids == null || pids.size() == 0) {
             return set;
         }

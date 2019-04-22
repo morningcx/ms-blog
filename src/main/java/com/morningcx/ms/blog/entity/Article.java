@@ -58,8 +58,6 @@ public class Article implements Serializable {
      */
     @TableField(exist = false)
     private String category;
-    @TableField(exist = false)
-    private String categoryCover;
     /**
      * 内容
      */

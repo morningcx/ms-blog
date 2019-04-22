@@ -205,8 +205,7 @@ public class ArticleService {
         // 分类条件
         if (article.getCategoryId() != null) {
             // 获取分类条件下所有子分类文章
-            Set<Object> childNodeIds = categoryService.getChildNodeIds(
-                    Collections.singletonList(article.getCategoryId()), new HashSet<>());
+            Set<Object> childNodeIds = getChildNodeIds(Collections.singletonList(article.getCategoryId()), new HashSet<>());
             wrapper.in("category_id", childNodeIds);
             article.setCategoryId(null);
         }
@@ -231,6 +230,28 @@ public class ArticleService {
         records.forEach(a -> a.setCategory(categoryMap.get(a.getCategoryId())));
         return articleIPage;
     }
+
+    /**
+     * 获取子分类id，BFS
+     *
+     * @param pids
+     * @return
+     */
+    private Set<Object> getChildNodeIds(List<Object> pids, Set<Object> set) {
+        if (pids == null || pids.size() == 0) {
+            return set;
+        }
+        for (Object pid : pids) {
+            // 避免无限递归
+            if (!set.add(pid)) {
+                return set;
+            }
+        }
+        List<Object> childIds = categoryMapper.selectObjs(
+                new QueryWrapper<Category>().in("pid", pids).select("id"));
+        return getChildNodeIds(childIds, set);
+    }
+
 
     /**
      * 回收站文章列表
