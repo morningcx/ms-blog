@@ -33,6 +33,11 @@ public class WebArticleController {
         return Result.ok(webArticleService.listHotArticles(article, page, limit));
     }
 
+    @GetMapping("listSimpleArticles")
+    public Result listSimpleArticles(Integer page, Integer limit) {
+        return Result.ok(webArticleService.listSimpleArticles(page, limit));
+    }
+
     @GetMapping("listArchives")
     public Result listArchives(Integer page, Integer limit) {
         return Result.ok(webArticleService.listArchives(page, limit));

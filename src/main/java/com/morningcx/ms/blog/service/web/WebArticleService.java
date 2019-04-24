@@ -63,8 +63,9 @@ public class WebArticleService {
             }
             wrapper.in("id", articleIds);
         }
-        wrapper.select("id", "title", "introduction", "create_time", "category_id", "views", "likes", "sort", "recommend", "type");
-        wrapper.orderByDesc("sort", /*"recommend", */"create_time");
+        wrapper.select("id", "title", "introduction", "create_time", "category_id", "views", "likes", "sort", "recommend");
+        // 先按置顶再按创建日期，推荐文章还是不要置顶了
+        wrapper.orderByDesc("sort", "create_time");
         IPage<Article> articleIPage = articleMapper.selectPage(new Page<>(page, limit > 20 ? 20 : limit), wrapper);
         // 列表为空则不需要进行分类和标签操作
         List<Article> records = articleIPage.getRecords();
@@ -156,12 +157,27 @@ public class WebArticleService {
     }
 
     /**
-     * 列举最近的前6篇推荐文章
+     * t_article单表分页，查询简单的文章信息(用于ArticleCell页面)
+     *
+     * @return
+     */
+    public IPage<Article> listSimpleArticles(Integer page, Integer limit) {
+        QueryWrapper<Article> wrapper = new QueryWrapper<>();
+        wrapper.eq("modifier", 0);
+        wrapper.eq("recycle", 0);
+        wrapper.select("id", "title", "introduction", "create_time", "views", "likes", "sort", "recommend");
+        // 先按置顶再按创建日期
+        wrapper.orderByDesc("sort", "create_time");
+        return articleMapper.selectPage(new Page<>(page, limit), wrapper);
+    }
+
+    /**
+     * 列举最近的前9篇推荐文章
      *
      * @return
      */
     public List<Article> listRecommendArticles() {
-        return articleMapper.selectPage(new Page<>(1, 6), new QueryWrapper<Article>()
+        return articleMapper.selectPage(new Page<>(1, 9), new QueryWrapper<Article>()
                 .eq("modifier", 0)
                 .eq("recycle", 0)
                 .eq("recommend", 1)
