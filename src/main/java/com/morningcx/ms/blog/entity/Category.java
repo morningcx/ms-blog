@@ -9,6 +9,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author gcx
@@ -28,6 +29,7 @@ public class Category implements Serializable {
     @TableField(condition = SqlCondition.LIKE)
     @NotBlank(message = "描述不能为空")
     private String description;
+    private Integer recommend;
     private Date createTime;
     private Date updateTime;
     @TableLogic
@@ -39,5 +41,10 @@ public class Category implements Serializable {
      */
     @TableField(exist = false)
     private Integer count;
+    /**
+     * 分类下的文章
+     */
+    @TableField(exist = false)
+    private List<Article> articleList;
 
 }

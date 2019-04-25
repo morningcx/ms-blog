@@ -209,6 +209,7 @@ public class WebArticleService {
      * @return
      */
     public Article getFullById(Integer id) {
+        // todo 带上config参数指向首页
         Article article = articleMapper.selectById(id);
         BizException.throwIfNull(article, "文章不存在");
         // 设置访问限制，用户未登录，或者用户登录但文章不属于自己，则只能访问公开并未回收的文章
@@ -225,12 +226,9 @@ public class WebArticleService {
                 .eq("id", article.getCategoryId())
                 .select("name"));
         article.setCategory(category == null ? "" : category.getName());
-        // 标签
-        List<Object> tagIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>()
-                .eq("article_id", article.getId())
-                .select("tag_id"));
+        // todo 附带上标签id 标签
         List<Tag> tags = tagMapper.selectList(new QueryWrapper<Tag>()
-                .in("id", tagIds)
+                .inSql("id", "select tag_id from t_article_tag where article_id=" + article.getId())
                 .select("name"));
         article.setTagNames(tags.stream().map(Tag::getName).collect(Collectors.toList()));
         // 内容

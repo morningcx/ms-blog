@@ -28,4 +28,9 @@ public class WebCategoryController {
     public Result listAll() {
         return Result.ok(webCategoryService.listAll());
     }
+
+    @GetMapping("listRecommendCategories")
+    public Result listRecommendCategories() {
+        return Result.ok(webCategoryService.listRecommendCategories());
+    }
 }

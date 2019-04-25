@@ -49,13 +49,18 @@
                             <th lay-data="{field:'pid', width: '6%'}">PID</th>
                             <th lay-data="{field:'name'}">名称</th>
                             <th lay-data="{field:'description'}">描述</th>
+                            <th lay-data="{templet: '#recommendTpl', width: '10%', align:'center', field: 'recommend'}">推荐</th>
                             <th lay-data="{field:'createTime', width: '16%'}">创建时间</th>
                             <th lay-data="{field:'updateTime', width: '16%'}">修改时间</th>
                             <th lay-data="{fixed: 'right', toolbar: '#operation', width: '16%', align:'center'}">操作</th>
                         </tr>
                         </thead>
                     </table>
-
+                    <!--推荐-->
+                    <script type="text/html" id="recommendTpl">
+                        <input type="checkbox" name="recommend" lay-skin="switch" lay-text="推荐|不推荐" lay-filter="recommend"
+                               value="{{ d.id }}" data-title="{{ d.title }}" {{ d.recommend== 1 ? 'checked' : '' }}>
+                    </script>
                     <!--操作栏-->
                     <script type="text/html" id="operation">
                         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">查看</a>

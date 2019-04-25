@@ -2,16 +2,12 @@ package com.morningcx.ms.blog.service.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.morningcx.ms.blog.base.exception.BizException;
-import com.morningcx.ms.blog.entity.Article;
-import com.morningcx.ms.blog.entity.ArticleTag;
 import com.morningcx.ms.blog.entity.User;
 import com.morningcx.ms.blog.mapper.ArticleMapper;
 import com.morningcx.ms.blog.mapper.ArticleTagMapper;
 import com.morningcx.ms.blog.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author gcx
@@ -36,10 +32,10 @@ public class WebUserService {
         User user = userMapper.selectOne(new QueryWrapper<User>()
                 .eq("id", id)
                 .select("id", "name", "github", "zhihu", "wechat", "qq",
-                        "email", "signature", "head_image_url"));
+                        "email", "signature", "head_image_url", "gender"));
         BizException.throwIfNull(user, "用户不存在");
         // 公开文章的数量
-        List<Object> publicArticleIds = articleMapper.selectObjs(new QueryWrapper<Article>()
+        /*List<Object> publicArticleIds = articleMapper.selectObjs(new QueryWrapper<Article>()
                 .eq("author_id", id)
                 .eq("modifier", 0)
                 .eq("recycle", 0)
@@ -58,7 +54,7 @@ public class WebUserService {
                 .select("DISTINCT category_id"));
         user.setArticleCount(publicArticleIds.size());
         user.setTagCount(tagCount);
-        user.setCategoryCount(categoryCount);
+        user.setCategoryCount(categoryCount);*/
         return user;
     }
 }

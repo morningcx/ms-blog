@@ -100,6 +100,8 @@ public class CategoryService {
         category.setUserId(userId);
         category.setCreateTime(now);
         category.setUpdateTime(now);
+        // 默认不推荐
+        category.setRecommend(0);
         category.setDeleted(0);
         categoryMapper.insert(category);
         return category.getId();
@@ -115,11 +117,11 @@ public class CategoryService {
     public Integer update(Category category) {
         Integer userId = ContextUtil.getLoginId();
         // 只能更新自己的分类
-        Integer selectCount = categoryMapper.selectCount(new QueryWrapper<Category>()
+        /*Integer selectCount = categoryMapper.selectCount(new QueryWrapper<Category>()
                 .eq("id", category.getId())
                 .eq("user_id", userId)
         );
-        BizException.throwIf(selectCount == 0, "分类不存在");
+        BizException.throwIf(selectCount == 0, "分类不存在");*/
         // 检测父类
         if (category.getPid() == null) {
             category.setPid(0);
@@ -234,7 +236,7 @@ public class CategoryService {
             categories.forEach(category -> {
                 Map<String, Object> map = new HashMap<>(5);
                 map.put("id", category.getId());
-                map.put("name", category.getName());
+                map.put("name", category.getName() + (category.getRecommend() == 0 ? "" : "(推荐)"));
                 map.put("pId", category.getPid());
                 map.put("isParent", true);
                 map.put("open", true);
