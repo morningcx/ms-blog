@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网站信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
+    <style>
+        .layui-form-item .layui-input-inline {
+            width: 40%;
+        }
+        .layui-form-label:before {
+            position: relative;
+            left: -4px;
+            content: "*";
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">网站信息</div>
+                <div class="layui-card-body" pad20>
+                    <!--wid100设置左边长度-->
+                    <div class="layui-form" wid100 lay-filter="websiteForm">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="websiteName" class="layui-input" lay-verify="required">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux"></div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">网站标题</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="websiteTitle" class="layui-input" lay-verify="required">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux"></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站地址</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="websiteUrl" class="layui-input" lay-verify="url">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux"></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站图标</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="websiteIcon" class="layui-input" lay-verify="url">
+                            </div>
+                            <div class="layui-form-mid layui-word-aux"></div>
+                        </div>
+
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">META关键词</label>
+                            <div class="layui-input-inline">
+                                <textarea name="websiteMetaKeywords" class="layui-textarea" lay-verify="required"></textarea>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux"></div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">META描述</label>
+                            <div class="layui-input-inline">
+                                <textarea name="websiteMetaDescription" class="layui-textarea" lay-verify="required"></textarea>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux"></div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">版权信息</label>
+                            <div class="layui-input-inline">
+                                <textarea name="websiteCopyright" class="layui-textarea" lay-verify="required"></textarea>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux"></div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="submit">确认保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../library/layuiAdmin/layui/layui.js"></script>
+<script src="../../base/js/ajax.js"></script>
+<script>
+    layui.use(["form", "jquery", "layer"], function () {
+        var $ = layui.$, layer = layui.layer, form = layui.form;
+        var keyword = "website";
+        ajax.get({
+           url: "/config/getConfigGroup?keyword=" + keyword,
+           success: function (res) {
+               form.val("websiteForm", res.data);
+           }
+        });
+        form.on('submit(submit)', function (data) {
+            /*ajax.post({
+                url: "/config/test",
+                data: JSON.stringify(data.field),
+                contentType: "application/json",
+                success: function (res) {
+                    console.log(res);
+                }
+            });*/
+            return false;
+        });
+    });
+</script>
+</body>
+</html>
