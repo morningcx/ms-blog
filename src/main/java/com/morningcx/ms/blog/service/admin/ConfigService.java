@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author gcx
@@ -21,16 +20,36 @@ public class ConfigService {
     private ConfigMapper configMapper;
 
     /**
+     * 获取所有配置组信息
+     *
+     * @return
+     */
+    public List<Config> listConfigParent() {
+        return configMapper.selectList(new QueryWrapper<Config>().lambda()
+                .eq(Config::getPid, 0)
+                .select(Config::getKeyword, Config::getName, Config::getId));
+    }
+
+    /**
      * 通过父级关键字查询该模块的所有配置信息
      *
      * @param parentKeyword
      * @return
      */
-    public Map<String, String> getConfigGroupByParentKeyword(String parentKeyword) {
-        Object pid = configMapper.selectObjs(new QueryWrapper<Config>().lambda()
-                .eq(Config::getKeyword, parentKeyword).select(Config::getId)).get(0);
-        List<Config> configs = configMapper.selectList(
-                new QueryWrapper<Config>().lambda().eq(Config::getPid, pid));
-        return configs.stream().collect(Collectors.toMap(Config::getKeyword, Config::getValue));
+    public List<Config> listConfigGroupByParentKeyword(String parentKeyword) {
+        return configMapper.selectList(new QueryWrapper<Config>().lambda()
+                .inSql(Config::getPid, "select id from t_config where keyword='" + parentKeyword + "'"));
     }
+
+    /**
+     * 根据keyword修改value
+     *
+     * @param configMap
+     * @return
+     */
+    public int updateConfigGroupByKeyword(Map<String, String> configMap) {
+        configMap.forEach((k, v) -> configMapper.updateValue(k, v));
+        return configMap.size();
+    }
+
 }

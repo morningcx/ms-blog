@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.base.util.QiNiuUtil;
+import com.morningcx.ms.blog.entity.Config;
 import com.morningcx.ms.blog.entity.Image;
+import com.morningcx.ms.blog.mapper.ConfigMapper;
 import com.morningcx.ms.blog.mapper.ImageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author gcx
@@ -25,19 +28,20 @@ import java.util.Map;
 public class ImageService {
     @Autowired
     private ImageMapper imageMapper;
+    @Autowired
+    private ConfigMapper configMapper;
 
     /**
      * markdown上传图片到七牛
      *
-     * @param file
+     * @param imageFile
      * @return
      */
     @Transactional
     public Map<String, Object> mdImageUpload(MultipartFile imageFile) {
-        checkImage(imageFile);
         Map<String, Object> result = new HashMap<>(3);
         try {
-            Image image = QiNiuUtil.uploadImage(imageFile);
+            Image image = QiNiuUtil.uploadImage(imageFile, getOssConfig());
             imageMapper.insert(image);
             result.put("success", 1);
             result.put("message", "上传成功");
@@ -58,8 +62,7 @@ public class ImageService {
      */
     @Transactional
     public String imageUpload(MultipartFile imageFile) throws IOException {
-        checkImage(imageFile);
-        Image image = QiNiuUtil.uploadImage(imageFile);
+        Image image = QiNiuUtil.uploadImage(imageFile, getOssConfig());
         imageMapper.insert(image);
         return image.getPath();
     }
@@ -112,29 +115,26 @@ public class ImageService {
         List<Image> images = imageMapper.selectList(new QueryWrapper<Image>()
                 .in("id", deleteIds)
                 .select("id", "bucket", "fkey"));
+        Map<String, String> ossConfig = getOssConfig();
         for (Image image : images) {
-            QiNiuUtil.deletedImage(image.getBucket(), image.getFkey());
+            QiNiuUtil.deletedImage(image.getBucket(), image.getFkey(), ossConfig);
             imageMapper.deleteById(image.getId());
         }
         return images.size();
     }
 
 
-
     /**
-     * 检测文件类型，并返回后缀名
+     * 获取对象存储配置
      *
-     * @param imageFile
      * @return
      */
-    private static void checkImage(MultipartFile imageFile) {
-        BizException.throwIf(imageFile == null || imageFile.isEmpty(), "上传图片不能为空");
-        String fileName = imageFile.getOriginalFilename();
-        String fileType = fileName.substring(fileName.lastIndexOf("."), fileName.length()).toLowerCase();
-        if (!(".jpg".equals(fileType) || ".jpeg".equals(fileType)
-                || ".gif".equals(fileType) || ".png".equals(fileType))) {
-            BizException.throwBy("上传图片类型只支持jpg、jpeg、gif、png");
-        }
+    private Map<String, String> getOssConfig() {
+        // todo redis
+        return configMapper.selectList(new QueryWrapper<Config>().lambda()
+                .inSql(Config::getPid, "select id from t_config where keyword='oss'")
+                .select(Config::getKeyword, Config::getValue))
+                .stream().collect(Collectors.toMap(Config::getKeyword, Config::getValue));
     }
 
 }

@@ -116,14 +116,13 @@ public class IpUtil {
      * 根据ip获取地理位置和运营商
      *
      * @param ip
+     * @param dbPath
      * @return
      */
-    public static String ip2region(String ip) {
+    public static String ip2region(String ip, String dbPath) {
         if (ip == null) {
             return null;
         }
-        // todo 数据库存储信息，更新时可以动态改变
-        String dbPath = "F:\\ip-library\\lionsoul-ip2region-master\\ip2region\\data\\ip2region.db";
         DbSearcher searcher = null;
         try {
             searcher = new DbSearcher(new DbConfig(), dbPath);

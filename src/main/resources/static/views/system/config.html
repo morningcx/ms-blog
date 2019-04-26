@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>系统配置</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../library/layuiAdmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../library/layuiAdmin/style/admin.css" media="all">
+    <style>
+        .layui-form-item .layui-input-inline {
+            width: 40%;
+        }
+
+        .layui-form-label:before {
+            position: relative;
+            left: -4px;
+            content: "*";
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">系统配置</div>
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief" lay-filter="configTabs">
+                        <ul class="layui-tab-title" id="tabs">
+                        </ul>
+                        <div class="layui-tab-content"></div>
+                    </div>
+                    <!--wid100设置左边长度-->
+                    <div class="layui-form" wid100 id="configForm"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../../library/layuiAdmin/layui/layui.js"></script>
+<script src="../../base/js/ajax.js"></script>
+<script>
+    layui.use(["form", "jquery", "layer", 'element'], function () {
+        var $ = layui.$, layer = layui.layer, form = layui.form, element = layui.element;
+        ajax.get({
+            url: "/config/listConfigParent",
+            async: false,
+            success: function (res) {
+                var nav = "";
+                $.each(res.data, function (index, item) {
+                    nav += "<li " + (index === 0 ? "class=\"layui-this\"" : "") +
+                        " data-id='" + item.id + "' data-key=\"" + item.keyword + "\">" + item.name + "</li>";
+                });
+                $("#tabs").append(nav);
+            }
+        });
+        load();
+        element.on('tab(configTabs)', load);
+        form.on('submit(submit)', function (data) {
+            ajax.post({
+                url: "/config/updateConfigGroup",
+                data: JSON.stringify(data.field),
+                contentType: "application/json",
+                success: function () {
+                    layer.alert("配置信息成功", {icon: 1}, function (index) {
+                        layer.close(index);
+                        load();
+                    });
+                }
+            });
+            return false;
+        });
+
+        function load() {
+            var keyword = $("#tabs .layui-this").data("key");
+            ajax.get({
+                url: "/config/listConfigGroup?keyword=" + keyword,
+                success: function (res) {
+                    var form = "";
+                    $.each(res.data, function (index, item) {
+                        form += "<div class=\"layui-form-item layui-form-text\">\n" +
+                            "<label class=\"layui-form-label\">" + item.name + "</label>\n" +
+                            "<div class=\"layui-input-inline\">\n" +
+                            "<input name=\"" + item.keyword + "\" class=\"layui-input\" placeholder='" + item.description + "' value='" + item.value + "' lay-verify=\"required\">\n" +
+                            "</div>\n" +
+                            "<div class=\"layui-form-mid layui-word-aux\">" + item.description + "</div>\n" +
+                            "</div>";
+                    });
+                    form += "<div class=\"layui-form-item\">\n" +
+                        "<div class=\"layui-input-block\">\n" +
+                        "<button class=\"layui-btn\" lay-submit lay-filter=\"submit\">确认保存</button>\n" +
+                        "</div>\n" +
+                        "</div>";
+                    $("#configForm").empty().append(form);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

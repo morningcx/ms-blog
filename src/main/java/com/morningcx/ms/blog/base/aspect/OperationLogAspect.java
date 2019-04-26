@@ -4,6 +4,7 @@ import com.morningcx.ms.blog.base.annotation.Log;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.base.util.IpUtil;
 import com.morningcx.ms.blog.entity.OperationLog;
+import com.morningcx.ms.blog.mapper.ConfigMapper;
 import com.morningcx.ms.blog.mapper.OperationLogMapper;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.OperatingSystem;
@@ -36,6 +37,8 @@ public class OperationLogAspect {
 
     @Autowired
     private OperationLogMapper operationLogMapper;
+    @Autowired
+    private ConfigMapper configMapper;
 
     @Pointcut("execution(public * com.morningcx.ms.blog.controller.admin..*.*(..)))")
     public void pointCut() {
@@ -60,8 +63,8 @@ public class OperationLogAspect {
         operationLog.setUserId(ContextUtil.getLoginId());
         // 获取真实ip
         operationLog.setIp(IpUtil.getRealIp(request));
-        // 解析ip地理位置
-        String ipRegion = IpUtil.ip2region(operationLog.getIp());
+        // 解析ip地理位置 todo redis
+        String ipRegion = IpUtil.ip2region(operationLog.getIp(), configMapper.getValue("ip2regionDbPath"));
         if (ipRegion == null) {
             operationLog.setCountry("");
             operationLog.setProvince("");

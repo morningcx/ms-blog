@@ -7,7 +7,6 @@ import com.morningcx.ms.blog.service.admin.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -21,18 +20,22 @@ public class ConfigController {
     @Autowired
     private ConfigService configService;
 
-    @PostMapping("test")
-    public Map<String, Object> sss(@RequestBody Map<String, String> map) {
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("title", 123);
-        return map2;
+    @GetMapping("listConfigParent")
+    @Log(type = LogTypeEnum.READ, desc = "获取所有配置组信息")
+    public Result listConfigParent() {
+        return Result.ok(configService.listConfigParent());
     }
 
-    @GetMapping("getConfigGroup")
+    @GetMapping("listConfigGroup")
     @Log(type = LogTypeEnum.READ, desc = "获取关键字{keyword}下的所有配置信息")
-    public Result getConfigGroup(String keyword) {
-        return Result.ok(configService.getConfigGroupByParentKeyword(keyword));
+    public Result listConfigGroup(String keyword) {
+        return Result.ok(configService.listConfigGroupByParentKeyword(keyword));
     }
 
+    @PostMapping("updateConfigGroup")
+    @Log(type = LogTypeEnum.UPDATE, desc = "更新配置信息")
+    public Result updateConfigGroup(@RequestBody Map<String, String> configMap) {
+        return Result.ok(configService.updateConfigGroupByKeyword(configMap));
+    }
 
 }
