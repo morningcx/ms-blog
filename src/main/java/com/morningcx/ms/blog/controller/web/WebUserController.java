@@ -1,5 +1,7 @@
 package com.morningcx.ms.blog.controller.web;
 
+import com.morningcx.ms.blog.base.annotation.Log;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.service.web.WebUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class WebUserController {
     @Autowired
     private WebUserService webUserService;
 
+    @Log(type = LogTypeEnum.READ, desc = "查询用户信息[id:{id}]")
     @GetMapping("{id}")
     public Result getUserInfo(@PathVariable("id") Integer id) {
         return Result.ok(webUserService.getUserInfo(id));

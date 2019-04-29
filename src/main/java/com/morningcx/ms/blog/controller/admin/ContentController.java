@@ -21,13 +21,13 @@ public class ContentController {
     @Autowired
     private ContentService contentService;
 
-    @Log(type = LogTypeEnum.READ, desc = "根据文章ID查询内容和标题")
+    @Log(type = LogTypeEnum.READ, desc = "查询文章{articleId}的内容和标题")
     @GetMapping("getByArticleId")
     public Result getByArticleId(Integer articleId) {
         return Result.ok(contentService.getByArticleId(articleId));
     }
 
-    @Log(type = LogTypeEnum.UPDATE, desc = "根据文章ID修改内容")
+    @Log(type = LogTypeEnum.UPDATE, desc = "修改文章{articleId}的内容")
     @PostMapping("updateByArticleId")
     public Result updateByArticleId(Integer articleId, String content) {
         return Result.ok(contentService.updateByArticleId(articleId, content));

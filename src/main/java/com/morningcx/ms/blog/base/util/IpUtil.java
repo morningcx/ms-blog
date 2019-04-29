@@ -1,6 +1,7 @@
 package com.morningcx.ms.blog.base.util;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.DbConfig;
 import org.lionsoul.ip2region.DbMakerConfigException;
 import org.lionsoul.ip2region.DbSearcher;
@@ -15,8 +16,10 @@ import java.util.regex.Pattern;
  * @author gcx
  * @date 2019/3/9
  */
+@Slf4j
 public class IpUtil {
 
+    private final static String EMPTY_REGION = "0|0|0|0|0";
     private static Pattern pattern = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
 
     private IpUtil() {
@@ -121,7 +124,7 @@ public class IpUtil {
      */
     public static String ip2region(String ip, String dbPath) {
         if (ip == null) {
-            return null;
+            return EMPTY_REGION;
         }
         DbSearcher searcher = null;
         try {
@@ -129,7 +132,7 @@ public class IpUtil {
             // 只要ip不为null，即使格式错误也不会报错(显示内网ip)
             return searcher.btreeSearch(ip).getRegion();
         } catch (IOException | DbMakerConfigException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         } finally {
             if (searcher != null) {
                 try {
@@ -139,6 +142,6 @@ public class IpUtil {
                 }
             }
         }
-        return null;
+        return EMPTY_REGION;
     }
 }

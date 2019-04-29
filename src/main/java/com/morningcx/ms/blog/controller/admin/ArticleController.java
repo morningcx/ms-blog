@@ -28,7 +28,7 @@ public class ArticleController {
         return Result.ok(articleService.getMetaById(id));
     }
 
-    @Log(type = LogTypeEnum.UPDATE, desc = "更新文章id:{id}的元信息")
+    @Log(type = LogTypeEnum.UPDATE, desc = "更新文章id:{article.id}的元信息")
     @PostMapping("updateMeta")
     public Result updateMeta(@Valid @RequestBody Article article) {
         return Result.ok(articleService.updateMeta(article));
@@ -40,37 +40,37 @@ public class ArticleController {
         return Result.ok(articleService.updateModifier(id, modifier));
     }
 
-    @Log(type = LogTypeEnum.CREATE, desc = "新增文章id:{article.id}")
+    @Log(type = LogTypeEnum.CREATE, desc = "新增文章{article.id}:{article.title}")
     @PostMapping("insertArticle")
     public Result insertArticle(@RequestBody @Valid Article article) {
         return Result.ok(articleService.insertArticle(article));
     }
 
-    @Log(type = LogTypeEnum.PAGE, desc = "分页查询文章")
+    @Log(type = LogTypeEnum.PAGE, desc = "分页查询文章 页码：{page} 页量：{limit}")
     @GetMapping("listArticle")
     public Result listArticle(Article article, Integer page, Integer limit) {
         return Result.ok(articleService.listArticle(article, page, limit));
     }
 
-    @Log(type = LogTypeEnum.PAGE, desc = "分页查询回收站")
+    @Log(type = LogTypeEnum.PAGE, desc = "分页查询回收站 页码：{page} 页量：{limit}")
     @GetMapping("listRecycleBin")
     public Result listRecycleBin(Article article, Integer page, Integer limit) {
         return Result.ok(articleService.listRecycleBin(article, page, limit));
     }
 
-    @Log(type = LogTypeEnum.RECYCLE, desc = "回收文章")
+    @Log(type = LogTypeEnum.RECYCLE, desc = "回收文章{recycleIds}")
     @PostMapping("recycleArticle")
     public Result recycleArticle(@RequestBody List<Integer> recycleIds) {
         return Result.ok(articleService.recycleArticle(recycleIds));
     }
 
-    @Log(type = LogTypeEnum.RECOVER, desc = "恢复文章")
+    @Log(type = LogTypeEnum.RECOVER, desc = "恢复文章{recoverIds}")
     @PostMapping("recoverArticle")
     public Result recoverArticle(@RequestBody List<Integer> recoverIds) {
         return Result.ok(articleService.recoverArticle(recoverIds));
     }
 
-    @Log(type = LogTypeEnum.DELETE, desc = "彻底删除文章")
+    @Log(type = LogTypeEnum.DELETE, desc = "彻底删除文章{deleteIds}")
     @PostMapping("deleteArticle")
     public Result deleteArticle(@RequestBody List<Integer> deleteIds) {
         return Result.ok(articleService.deleteArticle(deleteIds));

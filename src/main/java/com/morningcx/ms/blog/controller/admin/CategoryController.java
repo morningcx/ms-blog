@@ -21,7 +21,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Log(type = LogTypeEnum.READ, desc = "根据ID查询分类信息")
+    @Log(type = LogTypeEnum.READ, desc = "查询分类id:{id}信息")
     @GetMapping("getById")
     public Result getById(Integer id) {
         return Result.ok(categoryService.getById(id));
@@ -33,7 +33,7 @@ public class CategoryController {
         return Result.ok(categoryService.listPage(category, page, limit));
     }
 
-    @Log(type = LogTypeEnum.CREATE, desc = "新增分类")
+    @Log(type = LogTypeEnum.CREATE, desc = "新增分类{category.id}:{category.name}")
     @PostMapping("insert")
     public Result insert(@Valid Category category) {
         return Result.ok(categoryService.insert(category));

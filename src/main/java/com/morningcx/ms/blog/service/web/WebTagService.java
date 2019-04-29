@@ -26,7 +26,7 @@ public class WebTagService {
      */
     public Tag getById(Integer id) {
         Tag tag = tagMapper.selectById(id);
-        BizException.throwIfNull(tag, "标签不存在");
+        BizException.throwIfNull(tag, "标签" + id + "不存在");
         return tag;
     }
 

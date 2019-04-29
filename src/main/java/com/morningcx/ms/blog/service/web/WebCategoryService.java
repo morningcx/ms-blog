@@ -34,7 +34,7 @@ public class WebCategoryService {
         Category category = categoryMapper.selectOne(new QueryWrapper<Category>().lambda()
                 .eq(Category::getId, id)
                 .select(Category::getId, Category::getName, Category::getDescription, Category::getCover));
-        BizException.throwIfNull(category, "分类不存在");
+        BizException.throwIfNull(category, "分类" + id + "不存在");
         return category;
     }
 

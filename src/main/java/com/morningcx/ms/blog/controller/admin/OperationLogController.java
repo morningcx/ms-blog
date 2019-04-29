@@ -20,7 +20,7 @@ public class OperationLogController {
     @Autowired
     private OperationLogService operationLogService;
 
-    @Log(type = LogTypeEnum.PAGE, desc = "页码：{page} 页量：{limit}")
+    @Log(type = LogTypeEnum.PAGE, desc = "分页查询操作日志 页码：{page} 页量：{limit}")
     @GetMapping("listPage")
     public Result listPage(OperationLog operationLog, Integer page, Integer limit) {
         return Result.ok(operationLogService.listPage(operationLog, page, limit));

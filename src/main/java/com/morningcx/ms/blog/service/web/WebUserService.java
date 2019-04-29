@@ -33,7 +33,7 @@ public class WebUserService {
                 .eq("id", id)
                 .select("id", "name", "github", "zhihu", "wechat", "qq",
                         "email", "signature", "head_image_url", "gender"));
-        BizException.throwIfNull(user, "用户不存在");
+        BizException.throwIfNull(user, "用户" + id + "不存在");
         // 公开文章的数量
         /*List<Object> publicArticleIds = articleMapper.selectObjs(new QueryWrapper<Article>()
                 .eq("author_id", id)

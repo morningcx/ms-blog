@@ -21,7 +21,7 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    @Log(type = LogTypeEnum.PAGE, desc = "分页查询引用标签")
+    @Log(type = LogTypeEnum.PAGE, desc = "分页查询引用标签 页码：{page} 页量：{limit}")
     @GetMapping("listReferencePage")
     public Result listReferenceByPage(Tag tag, Integer page, Integer limit) {
         return Result.ok(tagService.listReferencePage(tag, page, limit));

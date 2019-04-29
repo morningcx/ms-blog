@@ -15,14 +15,13 @@ import java.util.List;
 public class UserAgentUtil {
 
     public static void main(String[] args) throws IOException {
-        System.out.println(" " + null + " ");
         for (String str : getWorthAgent()) {
             System.out.println("--------------------------------------");
             UserAgent userAgent = UserAgent.parseUserAgentString(str);
 
             OperatingSystem operatingSystem = userAgent.getOperatingSystem();
             System.out.println("-----操作系统家族：" + operatingSystem.getGroup().getName());
-            System.out.println("-----操作系统：" + operatingSystem.getName());
+            /*System.out.println("-----操作系统：" + operatingSystem.getName());*/
             System.out.println("-----设备类型：" + operatingSystem.getDeviceType().getName());
             System.out.println("~");
 
@@ -30,9 +29,9 @@ public class UserAgentUtil {
             Browser browser = userAgent.getBrowser();
             System.out.println("-----浏览器家族：" + browser.getGroup().getName());
             // 浏览器名称+主要版本
-            System.out.println("浏览器名称：" + userAgent.getBrowser().getName());
+            /*System.out.println("浏览器名称：" + userAgent.getBrowser().getName());
             System.out.println("-----浏览器版本：" + userAgent.getBrowserVersion());
-            System.out.println("浏览器类型：" + browser.getBrowserType().getName());
+            System.out.println("浏览器类型：" + browser.getBrowserType().getName());*/
 
             int i = 0;
         }

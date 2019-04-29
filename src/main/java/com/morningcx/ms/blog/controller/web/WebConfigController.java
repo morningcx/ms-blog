@@ -1,5 +1,7 @@
 package com.morningcx.ms.blog.controller.web;
 
+import com.morningcx.ms.blog.base.annotation.Log;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.service.web.WebConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ public class WebConfigController {
     @Autowired
     private WebConfigService webConfigService;
 
+    @Log(type = LogTypeEnum.READ, desc = "查询网站信息")
     @GetMapping("getWebsiteConfig")
     public Result getWebsiteConfig() {
         return Result.ok(webConfigService.getWebsiteConfig());

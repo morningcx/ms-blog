@@ -211,7 +211,7 @@ public class WebArticleService {
     public Article getFullById(Integer id) {
         // todo 带上config参数指向首页
         Article article = articleMapper.selectById(id);
-        BizException.throwIfNull(article, "文章不存在");
+        BizException.throwIfNull(article, "文章" + id + "不存在");
         // 设置访问限制，用户未登录，或者用户登录但文章不属于自己，则只能访问公开并未回收的文章
         if (!article.getAuthorId().equals(getLoginId())) {
             BizException.throwIf(article.getModifier() == 1 || article.getRecycle() == 1, "文章不存在");

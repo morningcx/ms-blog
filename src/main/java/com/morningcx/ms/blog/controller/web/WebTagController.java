@@ -1,5 +1,7 @@
 package com.morningcx.ms.blog.controller.web;
 
+import com.morningcx.ms.blog.base.annotation.Log;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.service.web.WebTagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +20,13 @@ public class WebTagController {
     @Autowired
     private WebTagService webTagService;
 
+    @Log(type = LogTypeEnum.READ, desc = "查询标签[id:{id}]")
     @GetMapping("{id}")
     public Result getById(@PathVariable Integer id) {
         return Result.ok(webTagService.getById(id));
     }
 
+    @Log(type = LogTypeEnum.READ, desc = "查询所有标签")
     @GetMapping("listAll")
     public Result listAll() {
         return Result.ok(webTagService.listAll());

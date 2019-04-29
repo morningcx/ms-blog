@@ -1,5 +1,7 @@
 package com.morningcx.ms.blog.controller.web;
 
+import com.morningcx.ms.blog.base.annotation.Log;
+import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.service.web.WebCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +21,19 @@ public class WebCategoryController {
     @Autowired
     private WebCategoryService webCategoryService;
 
+    @Log(type = LogTypeEnum.READ, desc = "查询分类[id:{id}]")
     @GetMapping("{id}")
     public Result getById(@PathVariable("id") Integer id) {
         return Result.ok(webCategoryService.getById(id));
     }
 
+    @Log(type = LogTypeEnum.READ, desc = "查询所有分类")
     @GetMapping("listAll")
     public Result listAll() {
         return Result.ok(webCategoryService.listAll());
     }
 
+    @Log(type = LogTypeEnum.READ, desc = "查询推荐分类")
     @GetMapping("listRecommendCategories")
     public Result listRecommendCategories() {
         return Result.ok(webCategoryService.listRecommendCategories());

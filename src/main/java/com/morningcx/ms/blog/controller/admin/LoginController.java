@@ -23,7 +23,7 @@ public class LoginController {
 
     @FreeAuth
     @PostMapping("login")
-    @Log(type = LogTypeEnum.LOGIN, desc = "用户登录")
+    @Log(type = LogTypeEnum.LOGIN, desc = "用户登录{account}")
     public Result login(String account, String password) {
         return Result.ok(loginService.login(account, password));
     }
