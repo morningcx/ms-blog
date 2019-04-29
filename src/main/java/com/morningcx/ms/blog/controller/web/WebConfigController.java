@@ -19,7 +19,7 @@ public class WebConfigController {
     @Autowired
     private WebConfigService webConfigService;
 
-    @Log(type = LogTypeEnum.READ, desc = "查询网站信息")
+    @Log(type = LogTypeEnum.Query, desc = "查询网站信息")
     @GetMapping("getWebsiteConfig")
     public Result getWebsiteConfig() {
         return Result.ok(webConfigService.getWebsiteConfig());

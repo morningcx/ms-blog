@@ -21,13 +21,13 @@ public class ConfigController {
     private ConfigService configService;
 
     @GetMapping("listConfigParent")
-    @Log(type = LogTypeEnum.READ, desc = "获取所有配置组信息")
+    @Log(type = LogTypeEnum.Query, desc = "获取所有配置组信息")
     public Result listConfigParent() {
         return Result.ok(configService.listConfigParent());
     }
 
     @GetMapping("listConfigGroup")
-    @Log(type = LogTypeEnum.READ, desc = "获取关键字{keyword}下的所有配置信息")
+    @Log(type = LogTypeEnum.Query, desc = "获取关键字{keyword}下的所有配置信息")
     public Result listConfigGroup(String keyword) {
         return Result.ok(configService.listConfigGroupByParentKeyword(keyword));
     }

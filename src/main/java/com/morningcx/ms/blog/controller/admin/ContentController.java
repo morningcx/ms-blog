@@ -21,7 +21,7 @@ public class ContentController {
     @Autowired
     private ContentService contentService;
 
-    @Log(type = LogTypeEnum.READ, desc = "查询文章{articleId}的内容和标题")
+    @Log(type = LogTypeEnum.Query, desc = "查询文章{articleId}的内容和标题")
     @GetMapping("getByArticleId")
     public Result getByArticleId(Integer articleId) {
         return Result.ok(contentService.getByArticleId(articleId));

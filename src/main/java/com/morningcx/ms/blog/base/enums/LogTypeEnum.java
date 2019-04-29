@@ -11,7 +11,7 @@ public enum LogTypeEnum {
      */
     CREATE("新增"),
     UPDATE("更新"),
-    READ("查询"),
+    Query("查询"),
     PAGE("分页"),
     DELETE("删除"),
     RECYCLE("回收"),

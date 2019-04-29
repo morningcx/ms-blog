@@ -20,14 +20,14 @@ public class ConsoleController {
     private ConsoleService consoleService;
 
     @GetMapping("getModuleCount")
-    @Log(type = LogTypeEnum.READ, desc = "获取控制台模块统计数据")
+    @Log(type = LogTypeEnum.Query, desc = "获取控制台模块统计数据")
     public Result getModuleCount() {
         return Result.ok(consoleService.getModuleCount());
     }
 
 
     @GetMapping("listTopViewArticle")
-    @Log(type = LogTypeEnum.READ, desc = "获取控制台文章点击排行")
+    @Log(type = LogTypeEnum.Query, desc = "获取控制台文章点击排行")
     public Result listTopViewArticle() {
         return Result.ok(consoleService.listTopViewArticle());
     }

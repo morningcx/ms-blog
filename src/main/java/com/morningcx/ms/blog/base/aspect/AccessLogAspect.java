@@ -39,12 +39,18 @@ public class AccessLogAspect {
 
     @Around(value = "pointCut() && @annotation(logAnnotation)")
     public Object around(ProceedingJoinPoint joinPoint, Log logAnnotation) throws Throwable {
+        Object obj = null;
+        Exception exception = null;
+
         AccessLog accessLog = new AccessLog();
         // 开始执行时间
         accessLog.setTime(new Date());
 
-        // 可能会发生异常，所以日志处理放在proceed后面
-        Object obj = joinPoint.proceed();
+        try {
+            obj = joinPoint.proceed();
+        } catch (Exception e) {
+            exception = e;
+        }
 
         // 处理请求信息
         ServletRequestAttributes attributes = ContextUtil.getAttributes();
@@ -77,12 +83,18 @@ public class AccessLogAspect {
         // 操作类型
         accessLog.setType(logAnnotation.type().getName());
         // 解析操作描述信息
-        accessLog.setContent(LogUtil.parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs()));
+        String content = (exception != null ? "error[" + exception.getMessage() + "]-" : "") +
+                LogUtil.parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs());
+        accessLog.setContent(content);
         // 执行的方法
         accessLog.setMethod(type.getName() + "." + method.getName());
         // 总耗时
         accessLog.setCost(System.currentTimeMillis() - accessLog.getTime().getTime());
         accessLogMapper.insert(accessLog);
+        // 若发生异常则抛出
+        if (exception != null) {
+            throw exception;
+        }
         return obj;
     }
 

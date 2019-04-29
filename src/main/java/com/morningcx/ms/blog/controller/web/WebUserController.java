@@ -23,7 +23,7 @@ public class WebUserController {
     @Autowired
     private WebUserService webUserService;
 
-    @Log(type = LogTypeEnum.READ, desc = "查询用户信息[id:{id}]")
+    @Log(type = LogTypeEnum.Query, desc = "查询用户信息[id:{id}]")
     @GetMapping("{id}")
     public Result getUserInfo(@PathVariable("id") Integer id) {
         return Result.ok(webUserService.getUserInfo(id));

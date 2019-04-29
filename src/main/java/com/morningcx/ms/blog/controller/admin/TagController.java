@@ -27,7 +27,7 @@ public class TagController {
         return Result.ok(tagService.listReferencePage(tag, page, limit));
     }
 
-    @Log(type = LogTypeEnum.READ, desc = "查询所有标签名称")
+    @Log(type = LogTypeEnum.Query, desc = "查询所有标签名称")
     @GetMapping("listAllTagsName")
     public Result listAllTagsName() {
         return Result.ok(tagService.listAllTagsName());

@@ -42,12 +42,18 @@ public class OperationLogAspect {
 
     @Around(value = "pointCut() && @annotation(logAnnotation)")
     public Object around(ProceedingJoinPoint joinPoint, Log logAnnotation) throws Throwable {
+        Object obj = null;
+        Exception exception = null;
         OperationLog operationLog = new OperationLog();
         // 开始执行时间
         operationLog.setTime(new Date());
 
-        // 可能会发生异常，所以日志处理放在proceed后面
-        Object obj = joinPoint.proceed();
+
+        try {
+            obj = joinPoint.proceed();
+        } catch (Exception e) {
+            exception = e;
+        }
 
         // 处理请求信息
         ServletRequestAttributes attributes = ContextUtil.getAttributes();
@@ -82,7 +88,9 @@ public class OperationLogAspect {
         // 操作类型
         operationLog.setType(logAnnotation.type().getName());
         // 解析操作描述信息
-        operationLog.setContent(LogUtil.parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs()));
+        String content = (exception != null ? "error[" + exception.getMessage() + "]-" : "") +
+                LogUtil.parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs());
+        operationLog.setContent(content);
         // 执行的方法
         operationLog.setMethod(type.getName() + "." + method.getName());
         // session id
@@ -90,6 +98,10 @@ public class OperationLogAspect {
         // 总耗时
         operationLog.setCost(System.currentTimeMillis() - operationLog.getTime().getTime());
         operationLogMapper.insert(operationLog);
+        // 若发生异常则抛出
+        if (exception != null) {
+            throw exception;
+        }
         return obj;
     }
 }

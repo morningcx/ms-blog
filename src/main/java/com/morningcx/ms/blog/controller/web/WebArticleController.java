@@ -49,20 +49,20 @@ public class WebArticleController {
         return Result.ok(webArticleService.listArchives(page, limit));
     }
 
-    @Log(type = LogTypeEnum.READ, desc = "查询推荐文章")
+    @Log(type = LogTypeEnum.Query, desc = "查询推荐文章")
     @GetMapping("listRecommendArticles")
     public Result listRecommendArticles() {
         return Result.ok(webArticleService.listRecommendArticles());
     }
 
     /*@Cacheable*/
-    @Log(type = LogTypeEnum.READ, desc = "浏览文章[id:{id}]")
+    @Log(type = LogTypeEnum.Query, desc = "浏览文章[id:{id}]")
     @GetMapping("getFullById")
     public Result getFullById(Integer id) {
         return Result.ok(webArticleService.getFullById(id));
     }
 
-    @Log(type = LogTypeEnum.READ, desc = "喜欢文章[id:{id}]")
+    @Log(type = LogTypeEnum.Query, desc = "喜欢文章[id:{id}]")
     @PostMapping("like")
     public Result updateLikes(Integer id) {
         return Result.ok(webArticleService.updateLikesById(id));

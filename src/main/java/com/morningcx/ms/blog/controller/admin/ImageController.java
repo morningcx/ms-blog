@@ -36,7 +36,7 @@ public class ImageController {
     }
 
     @GetMapping("getById")
-    @Log(type = LogTypeEnum.READ, desc = "查询图片{id}")
+    @Log(type = LogTypeEnum.Query, desc = "查询图片{id}")
     public Result getById(Integer id) {
         return Result.ok(imageService.getById(id));
     }

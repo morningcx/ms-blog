@@ -1,5 +1,7 @@
 package com.morningcx.ms.blog.entity;
 
+import com.baomidou.mybatisplus.annotation.SqlCondition;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -17,6 +19,7 @@ public class AccessLog implements Serializable {
     private String ip;
     private String module;
     private String type;
+    @TableField(condition = SqlCondition.LIKE)
     private String content;
     private String agent;
     private String browser;

@@ -21,7 +21,7 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @Log(type = LogTypeEnum.READ, desc = "查询分类id:{id}信息")
+    @Log(type = LogTypeEnum.Query, desc = "查询分类id:{id}信息")
     @GetMapping("getById")
     public Result getById(Integer id) {
         return Result.ok(categoryService.getById(id));
@@ -51,7 +51,7 @@ public class CategoryController {
         return Result.ok(categoryService.delete(deleteIds));
     }
 
-    @Log(type = LogTypeEnum.READ, desc = "查询分类树")
+    @Log(type = LogTypeEnum.Query, desc = "查询分类树")
     @GetMapping("getTree")
     public Result getCategoryTree() {
         return Result.ok(categoryService.getCategoryTree());

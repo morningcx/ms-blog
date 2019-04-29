@@ -20,13 +20,13 @@ public class WebTagController {
     @Autowired
     private WebTagService webTagService;
 
-    @Log(type = LogTypeEnum.READ, desc = "查询标签[id:{id}]")
+    @Log(type = LogTypeEnum.Query, desc = "查询标签[id:{id}]")
     @GetMapping("{id}")
     public Result getById(@PathVariable Integer id) {
         return Result.ok(webTagService.getById(id));
     }
 
-    @Log(type = LogTypeEnum.READ, desc = "查询所有标签")
+    @Log(type = LogTypeEnum.Query, desc = "查询所有标签")
     @GetMapping("listAll")
     public Result listAll() {
         return Result.ok(webTagService.listAll());

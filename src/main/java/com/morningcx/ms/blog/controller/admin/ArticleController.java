@@ -22,7 +22,7 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @Log(type = LogTypeEnum.READ, desc = "查询文章id:{id}的元信息")
+    @Log(type = LogTypeEnum.Query, desc = "查询文章id:{id}的元信息")
     @GetMapping("getMetaById")
     public Result getMetaById(Integer id) {
         return Result.ok(articleService.getMetaById(id));
