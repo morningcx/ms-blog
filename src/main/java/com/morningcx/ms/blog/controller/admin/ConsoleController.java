@@ -31,4 +31,16 @@ public class ConsoleController {
     public Result listTopViewArticle() {
         return Result.ok(consoleService.listTopViewArticle());
     }
+
+    @GetMapping("getBrowserDistribution")
+    @Log(type = LogTypeEnum.Query, desc = "获取访客浏览器分布")
+    public Result getBrowserDistribution() {
+        return Result.ok(consoleService.getBrowserDistribution());
+    }
+
+    @GetMapping("getOsDistribution")
+    @Log(type = LogTypeEnum.Query, desc = "获取访客操作系统分布")
+    public Result getOsDistribution() {
+        return Result.ok(consoleService.getOsDistribution());
+    }
 }

@@ -25,4 +25,10 @@ public class AccessLogController {
     public Result listPage(AccessLog accessLog, Integer page, Integer limit) {
         return Result.ok(accessLogService.listPage(accessLog, page, limit));
     }
+
+    @Log(type = LogTypeEnum.PAGE, desc = "分页查询文章{articleId}日志{type} 页码：{page} 页量：{limit}")
+    @GetMapping("listArticleLog")
+    public Result listArticleLog(Integer page, Integer limit, Integer articleId, Integer type) {
+        return Result.ok(accessLogService.listArticleLog(page, limit, articleId, type));
+    }
 }

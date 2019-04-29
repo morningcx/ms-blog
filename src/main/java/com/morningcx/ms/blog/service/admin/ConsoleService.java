@@ -2,6 +2,7 @@ package com.morningcx.ms.blog.service.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.morningcx.ms.blog.entity.AccessLog;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.entity.Category;
 import com.morningcx.ms.blog.entity.Image;
@@ -30,6 +31,8 @@ public class ConsoleService {
     private ArticleTagMapper articleTagMapper;
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private AccessLogMapper accessLogMapper;
 
     /**
      * 统计文章、分类、标签、图片四个模块的数据总数
@@ -68,5 +71,28 @@ public class ConsoleService {
                 .select("title", "views", "likes")
                 .orderByDesc("views"))
                 .getRecords();
+    }
+
+    /**
+     * 获取访客浏览器分布
+     *
+     * @return
+     */
+    public List<Map<String, Object>> getBrowserDistribution() {
+        return accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
+                .select("count(0) as value", "browser as name")
+                .groupBy("browser")
+                .orderByDesc("value"));
+    }
+
+    /**
+     * 获取访客操作系统分布
+     * @return
+     */
+    public List<Map<String, Object>> getOsDistribution() {
+        return accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
+                .select("count(0) as value", "os as name")
+                .groupBy("os")
+                .orderByDesc("value"));
     }
 }

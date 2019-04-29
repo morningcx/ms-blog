@@ -1,7 +1,6 @@
 package com.morningcx.ms.blog.service.web;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BizException;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.entity.Category;
@@ -66,21 +65,23 @@ public class WebCategoryService {
      */
     public List<Category> listRecommendCategories() {
         // todo 优化
-        List<Category> records = categoryMapper.selectPage(new Page<>(1, 4), new QueryWrapper<Category>()
+        List<Category> records = categoryMapper.selectList(new QueryWrapper<Category>()
                 .eq("recommend", 1)
                 .select("id", "name")
-                .orderByDesc("update_time")).getRecords();
+                .orderByDesc("update_time")
+                .last("limit 4"));
         if (records == null || records.size() == 0) {
             return records;
         }
         records.forEach(category -> {
             Set<Object> childNodeIds = getChildNodeIds(Collections.singletonList(category.getId()), new HashSet<>());
-            List<Article> articleList = articleMapper.selectPage(new Page<>(1, 9), new QueryWrapper<Article>()
+            List<Article> articleList = articleMapper.selectList(new QueryWrapper<Article>()
                     .eq("modifier", 0)
                     .eq("recycle", 0)
                     .in("category_id", childNodeIds)
                     .select("id", "title", "create_time")
-                    .orderByDesc("create_time")).getRecords();
+                    .orderByDesc("create_time")
+                    .last("limit 9"));
             category.setArticleList(articleList);
         });
         return records;

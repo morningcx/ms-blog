@@ -177,13 +177,13 @@ public class WebArticleService {
      * @return
      */
     public List<Article> listRecommendArticles() {
-        return articleMapper.selectPage(new Page<>(1, 9), new QueryWrapper<Article>()
+        return articleMapper.selectList(new QueryWrapper<Article>()
                 .eq("modifier", 0)
                 .eq("recycle", 0)
                 .eq("recommend", 1)
                 .select("id", "title", "introduction")
-                .orderByDesc("create_time"))
-                .getRecords();
+                .orderByDesc("create_time")
+                .last("limit 9"));
     }
 
     /**
