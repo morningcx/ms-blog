@@ -80,19 +80,33 @@ public class ConsoleService {
      */
     public List<Map<String, Object>> getBrowserDistribution() {
         return accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
-                .select("count(0) as value", "browser as name")
+                .select("count(DISTINCT ip) as value", "browser as name")
                 .groupBy("browser")
                 .orderByDesc("value"));
     }
 
     /**
      * 获取访客操作系统分布
+     *
      * @return
      */
     public List<Map<String, Object>> getOsDistribution() {
         return accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
-                .select("count(0) as value", "os as name")
+                .select("count(DISTINCT ip) as value", "os as name")
                 .groupBy("os")
+                .orderByDesc("value"));
+    }
+
+    /**
+     * 获取国内访客地理位置分布获取国内访客地理位置分布
+     *
+     * @return
+     */
+    public List<Map<String, Object>> getChinaDistribution() {
+        return accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
+                .select("count(DISTINCT ip) as value", "province as name")
+                .eq("country", "中国")
+                .groupBy("province")
                 .orderByDesc("value"));
     }
 }

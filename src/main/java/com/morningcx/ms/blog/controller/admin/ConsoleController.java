@@ -25,7 +25,6 @@ public class ConsoleController {
         return Result.ok(consoleService.getModuleCount());
     }
 
-
     @GetMapping("listTopViewArticle")
     @Log(type = LogTypeEnum.Query, desc = "获取控制台文章点击排行")
     public Result listTopViewArticle() {
@@ -42,5 +41,11 @@ public class ConsoleController {
     @Log(type = LogTypeEnum.Query, desc = "获取访客操作系统分布")
     public Result getOsDistribution() {
         return Result.ok(consoleService.getOsDistribution());
+    }
+
+    @GetMapping("getChinaDistribution")
+    @Log(type = LogTypeEnum.Query, desc = "获取国内访客地理位置分布")
+    public Result getChinaDistribution() {
+        return Result.ok(consoleService.getChinaDistribution());
     }
 }
