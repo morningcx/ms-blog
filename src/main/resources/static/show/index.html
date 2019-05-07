@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../library/layuiAdmin/layui/css/layui.css">
+    <link rel="stylesheet" href="xianyan-1.0/res/static/css/main.css">
+</head>
+<body class="lay-blog">
+<div class="header">
+    <div class="header-wrap">
+        <h1 class="logo pull-left">
+            <a href="javascript:;">
+                <img src="xianyan-1.0/res/static/images/logo.png" alt="" class="logo-img">
+                <img src="xianyan-1.0/res/static/images/logo-text.png" alt="" class="logo-text">
+            </a>
+        </h1>
+        <div class="layui-form blog-seach pull-left">
+            <div class="layui-form-item blog-sewrap">
+                <div class="layui-input-block blog-sebox">
+                    <i class="layui-icon layui-icon-search"></i>
+                    <input type="text" name="title" lay-verify="title" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="blog-nav pull-right">
+            <ul class="layui-nav pull-left">
+                <li class="layui-nav-item layui-this"><a href="javascript:;">首页</a></li>
+            </ul>
+            <a href="javascript:;" class="personal pull-left">
+                <i class="layui-icon layui-icon-username"></i>
+            </a>
+        </div>
+        <div class="mobile-nav pull-right" id="mobile-nav">
+            <a href="javascript:;">
+                <i class="layui-icon layui-icon-more"></i>
+            </a>
+        </div>
+    </div>
+    <ul class="pop-nav" id="pop-nav">
+        <li><a href="index.html">首页</a></li>
+    </ul>
+</div>
+<div class="container-wrap">
+    <div class="container">
+        <div class="contar-wrap">
+            <h4 class="item-title">
+                <p><i class="layui-icon layui-icon-speaker"></i>公告：<span>引用一下闲言页面做一下测试，不是最终展示的页面哦</span></p>
+            </h4>
+            <div id="articleContainer">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <p>
+        <span>&copy; 2019</span>
+        <span><a href="http://www.morningcx.com" target="_blank">morningcx.com</a></span>
+    </p>
+    <p><span>浙公网安备 33011002013782号</span></p>
+</div>
+<script src="../library/layuiAdmin/layui/layui.js"></script>
+<script>
+    layui.use(['jquery'], function () {
+        var $ = layui.$;
+        $.ajax({
+            url: "/web/article/listSimpleArticles?page=1&limit=20",
+            type: "get",
+            dataType: "json",
+            success: function (res) {
+                var list = res.data, items = "";
+                for (var i = 0; i < list.length; ++i) {
+                    var a = list[i];
+                    items += "<div class=\"item\">\n" +
+                        "                <div class=\"item-box  layer-photos-demo1 layer-photos-demo\">\n" +
+                        "                    <h3><a href=\"../views/editor/preview.html?id=" + a.id + "\" target='_blank'>" + a.title + "</a></h3>\n" +
+                        "                    <h5>发布于：<span>" + a.createTime.substring(0, 10) + "</span></h5>\n" +
+                        "                    <p>" + a.introduction + "</p>\n" +
+                        "                </div>\n" +
+                        "                <div class=\"comment count\">\n" +
+                        "                    <a href=\"javascript:;\">浏览 " + a.views + "</a>\n" +
+                        "                    <a href=\"javascript:;\" class=\"like\">喜欢 " + a.likes + "</a>\n" +
+                        "                </div>\n" +
+                        "            </div>";
+                }
+                $("#articleContainer").append(items);
+            }
+        });
+    });
+</script>
+</body>
+</html>

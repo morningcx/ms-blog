@@ -4,7 +4,6 @@ import com.morningcx.ms.blog.base.annotation.Log;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.base.util.IpUtil;
 import com.morningcx.ms.blog.base.util.LogUtil;
-import com.morningcx.ms.blog.base.util.UserAgentUtil;
 import com.morningcx.ms.blog.entity.AccessLog;
 import com.morningcx.ms.blog.mapper.AccessLogMapper;
 import com.morningcx.ms.blog.mapper.ConfigMapper;
@@ -21,7 +20,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.Random;
 
 /**
  * @author gcx
@@ -44,10 +42,6 @@ public class AccessLogAspect {
         Object obj = null;
         Exception exception = null;
 
-        Long r = new Random().nextLong();
-        String ua = UserAgentUtil.getRandomAgent();
-
-
         AccessLog accessLog = new AccessLog();
         // 开始执行时间
         accessLog.setTime(new Date());
@@ -64,10 +58,8 @@ public class AccessLogAspect {
         MethodSignature method = (MethodSignature) joinPoint.getSignature();
         Class<?> type = method.getDeclaringType();
 
-        // 获取真实ip todo randown
-        String randomIp = IpUtil.ipNum2Str(r);
-        /*accessLog.setIp(IpUtil.getRealIp(request));*/
-        accessLog.setIp(randomIp);
+        // 获取真实ip
+        accessLog.setIp(IpUtil.getRealIp(request));
         // 解析ip地理位置 todo redis
         String ipRegion = IpUtil.ip2region(accessLog.getIp(), configMapper.getValue("ip2regionDbPath"));
         String empty = "0";
@@ -76,9 +68,8 @@ public class AccessLogAspect {
         accessLog.setProvince(empty.equals(args[2]) ? "" : args[2]);
         accessLog.setCity(empty.equals(args[3]) ? "" : args[3]);
         accessLog.setIsp(empty.equals(args[4]) ? "" : args[4]);
-        // agent todo 随机agent
-        /*accessLog.setAgent(request.getHeader("user-agent"));*/
-        accessLog.setAgent(ua);
+        // agent
+        accessLog.setAgent(request.getHeader("user-agent"));
         // agent解析
         UserAgent userAgent = UserAgent.parseUserAgentString(accessLog.getAgent());
         accessLog.setOs(userAgent.getOperatingSystem().getGroup().getName());

@@ -48,7 +48,6 @@ public class OperationLogAspect {
         // 开始执行时间
         operationLog.setTime(new Date());
 
-
         try {
             obj = joinPoint.proceed();
         } catch (Exception e) {
@@ -61,7 +60,7 @@ public class OperationLogAspect {
         MethodSignature method = (MethodSignature) joinPoint.getSignature();
         Class<?> type = method.getDeclaringType();
 
-        // 操作人id
+        // 操作人id todo 密码错误插入操作日志就会报错
         operationLog.setUserId(ContextUtil.getLoginId());
         // 获取真实ip
         operationLog.setIp(IpUtil.getRealIp(request));
