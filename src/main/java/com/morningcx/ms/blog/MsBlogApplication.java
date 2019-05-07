@@ -30,6 +30,7 @@ public class MsBlogApplication {
     public String admin() {
         return "/login/login.html";
     }
+
     /**
      * fast json
      *
