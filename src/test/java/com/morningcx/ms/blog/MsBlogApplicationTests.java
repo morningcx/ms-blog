@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -26,12 +25,13 @@ public class MsBlogApplicationTests {
 
     @Test
     public void contextLoads() {
-        redisTemplate.opsForValue().set("springboot2", "hello");
-        System.out.println(redisTemplate.opsForValue().get("springboot"));
+        /*redisTemplate.opsForValue().set("springboot2", "hello");
+        System.out.println(redisTemplate.opsForValue().get("springboot"));*/
 
     }
 
-    @Test
+
+   /* @Test
     public void simpleMailTest() {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(mailFrom); // 发送人的邮箱要和user name一致
@@ -39,7 +39,7 @@ public class MsBlogApplicationTests {
         message.setTo("877690699@qq.com"); //发给谁  对方邮箱
         message.setText("1"); //内容
         mailSender.send(message); //发送
-    }
+    }*/
 
 }
 
