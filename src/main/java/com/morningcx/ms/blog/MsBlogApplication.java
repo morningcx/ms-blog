@@ -25,12 +25,6 @@ public class MsBlogApplication {
     public String index() {
         return "/show/index.html";
     }
-
-    @GetMapping("/admin")
-    public String admin() {
-        return "/login/login.html";
-    }
-
     /**
      * fast json
      *
