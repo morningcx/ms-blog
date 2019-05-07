@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 指定根目录，请按实际修改
-BLOG_DIR="/www/ms-blog"
+BLOG_DIR="/www/ms-blog/ms-blog"
 # 拉取最新的源码
 # git pull
 echo "代码拉取完毕！"
@@ -13,7 +13,7 @@ cd $BLOG_DIR
 sh $BLOG_DIR/bin/blog.sh stop
 
 # 执行打包
-mvn clean package -Pprod -Dmaven.test.skip=true
+mvn clean package -Dmaven.test.skip=true
 echo "代码拉取完毕！"
 
 # 进入打包好的目录
