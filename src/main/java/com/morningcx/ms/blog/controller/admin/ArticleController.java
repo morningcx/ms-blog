@@ -40,7 +40,7 @@ public class ArticleController {
         return Result.ok(articleService.updateModifier(id, modifier));
     }
 
-    @Log(type = LogTypeEnum.CREATE, desc = "新增文章{article.id}:{article.title}")
+    @Log(type = LogTypeEnum.CREATE, desc = "新增文章 ID：{article.id} , 标题：《{article.title}》")
     @PostMapping("insertArticle")
     public Result insertArticle(@RequestBody @Valid Article article) {
         return Result.ok(articleService.insertArticle(article));

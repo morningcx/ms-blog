@@ -19,7 +19,6 @@ import java.util.regex.Pattern;
 @Slf4j
 public class IpUtil {
 
-    private final static String EMPTY_REGION = "0|0|0|0|0";
     private static Pattern pattern = Pattern.compile("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$");
 
     private IpUtil() {
@@ -124,7 +123,7 @@ public class IpUtil {
      */
     public static String ip2region(String ip, String dbPath) {
         if (ip == null) {
-            return EMPTY_REGION;
+            return "0|0|0|0|0";
         }
         DbSearcher searcher = null;
         try {
@@ -142,6 +141,6 @@ public class IpUtil {
                 }
             }
         }
-        return EMPTY_REGION;
+        return "0|0|0|0|0";
     }
 }
