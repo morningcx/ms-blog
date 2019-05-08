@@ -23,25 +23,7 @@ public class MsBlogApplication {
 
     @GetMapping("/")
     public String index() {
-        return "/show/index.html";
+        return "redirect:/show/index.html";
     }
-    /**
-     * fast json
-     *
-     * @return
-     */
-    /*@Bean
-    public HttpMessageConverters fastJsonConfig() {
-        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
-        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
-        // 日期格式化，需要PrettyFormat支持
-        fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
-        converter.setFastJsonConfig(fastJsonConfig);
-        // 解决返回json中文乱码
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON_UTF8));
-        return new HttpMessageConverters(converter);
-    }*/
-
 }
 
