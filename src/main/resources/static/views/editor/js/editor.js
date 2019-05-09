@@ -27,18 +27,15 @@ layui.use(["jquery", "layer", "form"], function () {
             emoji: true,
             searchReplace: false,
             tocm: true,
-            /*theme : "dark",
-            previewTheme : "dark",
-            editorTheme : "pastel-on-dark",*/
             taskList: true, // 任务列表，未完成已完成
             tex: true,  // 科学公式，默认不解析
             flowChart: true,  // 流程图，默认不解析
             sequenceDiagram: true,  // 序列图，默认不解析
-            /*codeFold: true, // 每一个标题或者代码行折叠*/
             imageUpload: true, // 禁止本地上传图片
             imageFormats: ["jpg", "jpeg", "gif", "png"],
             imageUploadURL: "/image/mdImageUpload?articleId=" + articleId,
             syncScrolling: "single", // 单向绑定
+            /*codeFold: true, // 每一个标题或者代码行折叠*/
             toolbarIcons: function () {
                 // Or return editormd.toolbarModes[name]; // full, simple, mini
                 // Using "||" set icons align right.

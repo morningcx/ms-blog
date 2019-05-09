@@ -11,11 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Slf4j
+@Controller
 @MapperScan("com.morningcx.ms.blog.mapper")
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-@Controller
 public class MsBlogApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(MsBlogApplication.class, args);
         log.info("========================启动成功========================");
@@ -23,7 +22,8 @@ public class MsBlogApplication {
 
     @GetMapping("/")
     public String index() {
-        return "redirect:/show/index.html";
+        /*return "redirect:/show/index.html";*/
+        return "redirect:/login/login.html";
     }
 }
 
