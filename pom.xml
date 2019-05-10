@@ -133,7 +133,6 @@
         </dependency>
 
 
-
         <!-- google图片处理 和七牛不太契合-->
         <!--<dependency>
             <groupId>net.coobird</groupId>
@@ -149,6 +148,14 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+        </resources>
         <!-- 如果不添加此节点mybatis的mapper.xml文件都会被漏掉。 -->
         <!--<resources>
             <resource>
@@ -163,6 +170,7 @@
                 <includes>
                     <include>**/**</include>
                 </includes>
+                &lt;!&ndash;用来替换配置文件中${value}&ndash;&gt;
                 <filtering>false</filtering>
             </resource>
         </resources>-->
