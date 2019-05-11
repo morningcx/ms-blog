@@ -80,7 +80,6 @@
                             <th lay-data="{templet: '#commentTpl', width: '10%', align:'center', field: 'comment'}">评论</th>
                             <th lay-data="{field:'createTime', width: '16%'}">创建时间</th>
                             <th lay-data="{field:'updateTime', width: '16%'}">修改时间</th>
-
                             <th lay-data="{fixed: 'right', toolbar: '#operation', width: '20%', align:'center'}">操作</th>
                         </tr>
                         </thead>
@@ -88,23 +87,23 @@
 
                     <!--修饰符-->
                     <script type="text/html" id="modifierTpl">
-                        <input type="checkbox" name="modifier" lay-skin="switch" lay-text="公开|私密" lay-filter="modifier"
-                               value="{{ d.id }}" data-title="{{ d.title }}" {{ d.modifier== 0 ? 'checked' : '' }}>
+                        <input type="checkbox" lay-skin="switch" lay-text="公开|私密" lay-filter="level" value="{{ d.id }}"
+                               data-key="modifier" data-value="0|1" {{ d.modifier == 0 ? 'checked' : '' }}>
                     </script>
                     <!--推荐-->
                     <script type="text/html" id="recommendTpl">
-                        <input type="checkbox" name="recommend" lay-skin="switch" lay-text="推荐|不推荐" lay-filter="recommend"
-                               value="{{ d.id }}" data-title="{{ d.title }}" {{ d.recommend== 1 ? 'checked' : '' }}>
+                        <input type="checkbox" lay-skin="switch" lay-text="推荐|正常" lay-filter="level" value="{{ d.id }}"
+                               data-key="recommend" data-value="1|0" {{ d.recommend == 1 ? 'checked' : '' }}>
                     </script>
                     <!--评论-->
                     <script type="text/html" id="commentTpl">
-                        <input type="checkbox" name="comment" lay-skin="switch" lay-text="开启|关闭" lay-filter="comment"
-                               value="{{ d.id }}" data-title="{{ d.title }}" {{ d.comment== 1 ? 'checked' : '' }}>
+                        <input type="checkbox" lay-skin="switch" lay-text="开启|关闭" lay-filter="level" value="{{ d.id }}"
+                               data-key="comment" data-value="1|0" {{ d.comment == 1 ? 'checked' : '' }}>
                     </script>
                     <!--置顶-->
                     <script type="text/html" id="sortTpl">
-                        <input type="checkbox" name="sort" lay-skin="switch" lay-text="置顶|不置顶" lay-filter="sort"
-                               value="{{ d.id }}" data-title="{{ d.title }}" {{ d.sort== 2147483647 ? 'checked' : '' }}>
+                        <input type="checkbox" lay-skin="switch" lay-text="置顶|正常" lay-filter="level" value="{{ d.id }}"
+                               data-key="sort" data-value="2147483647|0" {{ d.sort == 2147483647 ? 'checked' : '' }}>
                     </script>
 
                     <!--操作栏-->
@@ -147,14 +146,19 @@
             return false;
         });
 
-        // 修饰符
-        form.on('switch(modifier)', function (data) {
-            var title = $(this).data("title");
+        // 文章级别
+        form.on('switch(level)', function (data) {
+            var value = $(this).data("value").split("|");
+            var key = $(this).data("key");
             ajax.post({
-                url: "/article/updateModifier",
-                data: {id: this.value, modifier: data.elem.checked ? 0 : 1},
+                url: "/article/updateLevel",
+                data: {
+                    id: this.value,
+                    level: key,
+                    value: data.elem.checked ? value[0] : value[1]
+                },
                 success: function () {
-                    layer.msg("文章《 " + title + " 》已设为" + (data.elem.checked ? "公开" : "私密"));
+                    layer.msg("设置成功");
                 }
             });
             return false;

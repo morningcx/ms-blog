@@ -34,10 +34,10 @@ public class ArticleController {
         return Result.ok(articleService.updateMeta(article));
     }
 
-    @Log(type = LogTypeEnum.UPDATE, desc = "更新文章id:{id}修饰符{modifier}")
-    @PostMapping("updateModifier")
-    public Result updateModifier(Integer id, Integer modifier) {
-        return Result.ok(articleService.updateModifier(id, modifier));
+    @Log(type = LogTypeEnum.UPDATE, desc = "更新文章id:{id}的{level}为{value}")
+    @PostMapping("updateLevel")
+    public Result updateLevel(Integer id, String level, Integer value) {
+        return Result.ok(articleService.updateLevel(id, level, value));
     }
 
     @Log(type = LogTypeEnum.CREATE, desc = "新增文章 ID：{article.id} , 标题：《{article.title}》")

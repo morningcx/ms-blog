@@ -1,6 +1,7 @@
 package com.morningcx.ms.blog.service.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BizException;
@@ -33,8 +34,6 @@ public class ArticleService {
     private ArticleTagMapper articleTagMapper;
     @Autowired
     private CategoryMapper categoryMapper;
-    @Autowired
-    private CategoryService categoryService;
 
     /**
      * 根据id查询文章元信息
@@ -61,27 +60,23 @@ public class ArticleService {
     }
 
     /**
-     * 修改文章修饰符
+     * 修改文章等级（修饰符、推荐、置顶、评论）
      *
      * @param id
+     * @param level
+     * @param value
      * @return
      */
     @Transactional
-    public int updateModifier(Integer id, Integer modifier) {
-        BizException.throwIfNull(modifier, "修饰符不能为空");
-        BizException.throwIf(modifier < 0 || modifier > 1, "修饰符错误");
-        QueryWrapper<Article> wrapper = new QueryWrapper<>();
-        wrapper.eq("id", id);
-        wrapper.eq("recycle", 0);
-        wrapper.eq("author_id", ContextUtil.getLoginId());
-        Integer count = articleMapper.selectCount(wrapper);
-        BizException.throwIf(count == 0, "文章不存在");
-        Article article = new Article();
-        article.setId(id);
-        article.setModifier(modifier);
-        article.setUpdateTime(new Date());
-        return articleMapper.updateById(article);
+    public int updateLevel(Integer id, String level, Integer value) {
+        UpdateWrapper<Article> updateWrapper = new UpdateWrapper<Article>()
+                .set(level, value)
+                .set("update_time", new Date())
+                .eq("id", id)
+                .eq("recycle", 0);
+        return articleMapper.update(null, updateWrapper);
     }
+
 
     /**
      * 根据id更新文章元信息
