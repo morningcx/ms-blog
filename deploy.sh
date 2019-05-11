@@ -19,7 +19,7 @@ echo "代码拉取完毕！"
 # 进入打包好的目录
 cd $BLOG_DIR/target
 
-# 运行jar       2>&1 是将标准出错重定向到标准输出，这里指输出全部扔掉
-nohup java -server -Xms256m -Xmx512m -jar `find ./ -name "ms-blog*.jar"` &
+# 运行jar  2>&1 是将标准出错重定向到标准输出，/dev/null是linux垃圾桶，这里指输出全部扔掉，因为有logback.xml
+nohup java -server -Xms256m -Xmx512m -jar `find ./ -name "ms-blog*.jar"` > /dev/null 2>&1 &
 
 echo "ms-blog部署完毕"

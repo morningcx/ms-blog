@@ -1,6 +1,7 @@
 package com.morningcx.ms.blog.base.exception;
 
 import com.morningcx.ms.blog.base.result.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ import java.util.Set;
  * @author gcx
  * @date 2019/2/18
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -33,7 +35,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result handleBindException(Exception e) {
-        e.printStackTrace();
+        log.error(e.getMessage(), e);
         BindingResult bindingResult;
         // valid验证集合中的元素时可能会重复报错，需要去重
         Set<String> set = new HashSet<>();
@@ -62,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result exceptionHandler(Exception e) {
-        e.printStackTrace();
+        log.error(e.getMessage(), e);
         return Result.fail(e.getMessage());
     }
 

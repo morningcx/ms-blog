@@ -166,15 +166,16 @@
                     <include>**/*.xml</include>
                 </includes>
             </resource>
-            <!--配置文件过滤-->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
                     <include>application.properties</include>
+                    <include>logback.xml</include>
                 </includes>
+                <!--配置文件过滤，默认false-->
                 <filtering>true</filtering>
             </resource>
-            <!--font-awesome在进行过滤时可能会破坏二进制文件的结构，所以这里需要隔离-->
+            <!--font-awesome在进行filter时可能会破坏二进制文件的结构，所以这里需要隔离-->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>

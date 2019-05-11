@@ -27,7 +27,6 @@ public class MsBlogApplication {
 
     @GetMapping("/")
     public String index() {
-        /*return "redirect:/show/index.html";*/
         return "redirect:/login/login.html";
     }
 
