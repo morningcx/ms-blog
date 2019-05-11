@@ -1,12 +1,12 @@
 package com.morningcx.ms.blog.base.aspect;
 
 import com.morningcx.ms.blog.base.annotation.Log;
+import com.morningcx.ms.blog.base.util.ConfigUtil;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.base.util.IpUtil;
 import com.morningcx.ms.blog.base.util.LogUtil;
 import com.morningcx.ms.blog.entity.AccessLog;
 import com.morningcx.ms.blog.mapper.AccessLogMapper;
-import com.morningcx.ms.blog.mapper.ConfigMapper;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,6 +14,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -26,12 +27,13 @@ import java.util.Date;
  * @date 2019/4/29
  */
 @Aspect
+@Order(2)
 @Component
 public class AccessLogAspect {
     @Autowired
     private AccessLogMapper accessLogMapper;
     @Autowired
-    private ConfigMapper configMapper;
+    private ConfigUtil configUtil;
 
     @Pointcut("execution(public * com.morningcx.ms.blog.controller.web..*.*(..)))")
     public void pointCut() {
@@ -60,8 +62,8 @@ public class AccessLogAspect {
 
         // 获取真实ip
         accessLog.setIp(IpUtil.getRealIp(request));
-        // 解析ip地理位置 todo redis
-        String ipRegion = IpUtil.ip2region(accessLog.getIp(), configMapper.getValue("ip2regionDbPath"));
+        // 解析ip地理位置
+        String ipRegion = IpUtil.ip2region(accessLog.getIp(), configUtil.getConfig("ip2regionDbPath"));
         String empty = "0";
         String[] args = ipRegion.split("\\|");
         accessLog.setCountry(empty.equals(args[0]) ? "" : args[0]);

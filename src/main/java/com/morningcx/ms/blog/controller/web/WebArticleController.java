@@ -7,6 +7,7 @@ import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.service.web.WebArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author gcx
  * @date 2019/3/27
  */
+@Cacheable
 @CacheConfig(cacheNames = "article")
 @RestController
 @RequestMapping(path = "web/article", name = "文章")
@@ -24,7 +26,6 @@ public class WebArticleController {
     @Autowired
     private WebArticleService webArticleService;
 
-    /*@Cacheable*/
     @Log(type = LogTypeEnum.PAGE, desc = "分页查询文章列表[页码：{page}, 页量：{limit}]")
     @GetMapping("listArticle")
     public Result listArticle(Article article, Integer page, Integer limit) {

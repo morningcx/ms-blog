@@ -1,11 +1,11 @@
 package com.morningcx.ms.blog.base.aspect;
 
 import com.morningcx.ms.blog.base.annotation.Log;
+import com.morningcx.ms.blog.base.util.ConfigUtil;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import com.morningcx.ms.blog.base.util.IpUtil;
 import com.morningcx.ms.blog.base.util.LogUtil;
 import com.morningcx.ms.blog.entity.OperationLog;
-import com.morningcx.ms.blog.mapper.ConfigMapper;
 import com.morningcx.ms.blog.mapper.OperationLogMapper;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -34,7 +34,7 @@ public class OperationLogAspect {
     @Autowired
     private OperationLogMapper operationLogMapper;
     @Autowired
-    private ConfigMapper configMapper;
+    private ConfigUtil configUtil;
 
     @Pointcut("execution(public * com.morningcx.ms.blog.controller.admin..*.*(..)))")
     public void pointCut() {
@@ -64,8 +64,8 @@ public class OperationLogAspect {
         operationLog.setUserId(ContextUtil.getLoginId());
         // 获取真实ip
         operationLog.setIp(IpUtil.getRealIp(request));
-        // 解析ip地理位置 todo redis
-        String ipRegion = IpUtil.ip2region(operationLog.getIp(), configMapper.getValue("ip2regionDbPath"));
+        // 解析ip地理位置
+        String ipRegion = IpUtil.ip2region(operationLog.getIp(), configUtil.getConfig("ip2regionDbPath"));
         String empty = "0";
         String[] args = ipRegion.split("\\|");
         operationLog.setCountry(empty.equals(args[0]) ? "" : args[0]);

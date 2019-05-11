@@ -5,6 +5,8 @@ import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.service.web.WebConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author gcx
  * @date 2019/4/26
  */
+@Cacheable
+@CacheConfig(cacheNames = "config")
 @RestController
 @RequestMapping(path = "web/config", name = "配置")
 public class WebConfigController {
