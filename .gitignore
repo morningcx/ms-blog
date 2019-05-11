@@ -12,10 +12,10 @@
 
 ### IntelliJ IDEA ###
 .idea
-.logs
 *.iws
 *.iml
 *.ipr
+.logs
 
 ### NetBeans ###
 /nbproject/private/
