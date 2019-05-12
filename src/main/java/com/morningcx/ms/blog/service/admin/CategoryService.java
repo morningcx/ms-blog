@@ -1,6 +1,7 @@
 package com.morningcx.ms.blog.service.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.exception.BizException;
@@ -105,6 +106,23 @@ public class CategoryService {
         category.setDeleted(0);
         categoryMapper.insert(category);
         return category.getId();
+    }
+
+    /**
+     * 是否分类推荐
+     *
+     * @param id
+     * @param level
+     * @param value
+     * @return
+     */
+    @Transactional
+    public int updateLevel(Integer id, String level, Integer value) {
+        UpdateWrapper<Category> updateWrapper = new UpdateWrapper<Category>()
+                .set(level, value)
+                .set("update_time", new Date())
+                .eq("id", id);
+        return categoryMapper.update(null, updateWrapper);
     }
 
     /**

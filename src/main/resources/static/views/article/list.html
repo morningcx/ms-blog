@@ -92,7 +92,7 @@
                     </script>
                     <!--推荐-->
                     <script type="text/html" id="recommendTpl">
-                        <input type="checkbox" lay-skin="switch" lay-text="推荐|正常" lay-filter="level" value="{{ d.id }}"
+                        <input type="checkbox" lay-skin="switch" lay-text="推荐|普通" lay-filter="level" value="{{ d.id }}"
                                data-key="recommend" data-value="1|0" {{ d.recommend == 1 ? 'checked' : '' }}>
                     </script>
                     <!--评论-->
@@ -102,7 +102,7 @@
                     </script>
                     <!--置顶-->
                     <script type="text/html" id="sortTpl">
-                        <input type="checkbox" lay-skin="switch" lay-text="置顶|正常" lay-filter="level" value="{{ d.id }}"
+                        <input type="checkbox" lay-skin="switch" lay-text="置顶|普通" lay-filter="level" value="{{ d.id }}"
                                data-key="sort" data-value="2147483647|0" {{ d.sort == 2147483647 ? 'checked' : '' }}>
                     </script>
 

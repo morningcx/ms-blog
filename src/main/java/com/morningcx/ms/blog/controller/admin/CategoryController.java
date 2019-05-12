@@ -39,6 +39,12 @@ public class CategoryController {
         return Result.ok(categoryService.insert(category));
     }
 
+    @Log(type = LogTypeEnum.UPDATE, desc = "更新分类id:{id}的{level}为{value}")
+    @PostMapping("updateLevel")
+    public Result updateLevel(Integer id, String level, Integer value) {
+        return Result.ok(categoryService.updateLevel(id, level, value));
+    }
+
     @Log(type = LogTypeEnum.UPDATE, desc = "修改ID为{category.id}的分类")
     @PostMapping("update")
     public Result update(@Valid Category category) {

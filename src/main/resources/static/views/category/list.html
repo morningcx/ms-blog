@@ -58,8 +58,8 @@
                     </table>
                     <!--推荐-->
                     <script type="text/html" id="recommendTpl">
-                        <input type="checkbox" name="recommend" lay-skin="switch" lay-text="推荐|不推荐" lay-filter="recommend"
-                               value="{{ d.id }}" data-title="{{ d.title }}" {{ d.recommend== 1 ? 'checked' : '' }}>
+                        <input type="checkbox" lay-skin="switch" lay-text="推荐|普通" lay-filter="level" value="{{ d.id }}"
+                               data-key="recommend" data-value="1|0" {{ d.recommend == 1 ? 'checked' : '' }}>
                     </script>
                     <!--操作栏-->
                     <script type="text/html" id="operation">
@@ -146,6 +146,24 @@
                 });
             });
         }
+
+        // 分类推荐
+        form.on('switch(level)', function (data) {
+            var value = $(this).data("value").split("|");
+            var key = $(this).data("key");
+            ajax.post({
+                url: "/category/updateLevel",
+                data: {
+                    id: this.value,
+                    level: key,
+                    value: data.elem.checked ? value[0] : value[1]
+                },
+                success: function () {
+                    layer.msg("设置成功");
+                }
+            });
+            return false;
+        });
 
         function openItem(id) {
             var arg = id ? ("?id=" + id) : "";
