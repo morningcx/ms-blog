@@ -75,7 +75,7 @@ a:hover, a:visited, a:link, a:active {
     right: 3%;
 }
 
-.tool #like:before {
+.tool #like:before, .tool #download:before {
     position: relative;
     top: 2px;
 }
@@ -199,23 +199,6 @@ a:hover, a:visited, a:link, a:active {
 @media screen and (max-width: 600px) {
     .main {
         width: 90%;
-    }
-
-    .tool .toolBtn {
-        transition: opacity .2s, background .1s;
-        display: block;
-        cursor: pointer;
-        text-align: center;
-        width: 1.8em;
-        height: 1.8em;
-        color: #fff;
-        font-size: 18px;
-        line-height: 1.8em;
-        background: #91979d;
-        opacity: 0.8;
-        border-radius: 20%;
-        margin-top: 5px;
-        z-index: 999;
     }
 }
 

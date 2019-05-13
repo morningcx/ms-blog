@@ -40,7 +40,8 @@ public class AuthAspect {
     public void doBefore(JoinPoint joinPoint) {
         MethodSignature sign = (MethodSignature) joinPoint.getSignature();
         // 如果没有免登录注解，则需要登录认证
-        if (!sign.getMethod().isAnnotationPresent(FreeAuth.class)) {
+        if (!sign.getMethod().isAnnotationPresent(FreeAuth.class) &&
+                !sign.getDeclaringType().isAnnotationPresent(FreeAuth.class)) {
             ContextUtil.getLoginId();
         }
     }

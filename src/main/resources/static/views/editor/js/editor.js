@@ -46,7 +46,7 @@ layui.use(["jquery", "layer", "form"], function () {
                     "list-ul", "list-ol", "hr", "|",
                     "link", "reference-link", "image", "code", "preformatted-text", "code-block", "table", "datetime", "emoji", "html-entities", "pagebreak", "|",
                     /*"goto-line",*/ "watch", "preview", "|", "night", "see"/*, "fullscreen", "clear"*//*, "search"*/,
-                    /*"help", "info",*/ "save", "history", "meta", "|",
+                    /*"help", "info",*/ "save", "download", "meta", "|",
                     "publish"
                 ];
             },
@@ -63,7 +63,7 @@ layui.use(["jquery", "layer", "form"], function () {
             toolbarIconsClass: {
                 see: "fa-file-text-o",
                 save: "fa-save",
-                history: "fa-history",
+                download: "fa-download",
                 meta: "fa-book",
                 night: "fa-moon-o",
                 publish: "fa-mail-forward"
@@ -71,9 +71,7 @@ layui.use(["jquery", "layer", "form"], function () {
             toolbarHandlers: {
                 see: see,
                 save: saveArticle,
-                history() {
-                    alert("历史")
-                },
+                download: download,
                 publish: publish,
                 night: night,
                 meta: saveMeta
@@ -104,6 +102,12 @@ layui.use(["jquery", "layer", "form"], function () {
             editorTheme : "pastel-on-dark"*/
         });
 
+        // 下载Markdown
+        function download() {
+            var blob = new Blob([editor.getMarkdown()], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, $(document).attr("title") + ".md");
+        }
+
         // 预览文章
         function see() {
             window.open("preview.html?id=" + articleId);
@@ -129,8 +133,8 @@ layui.use(["jquery", "layer", "form"], function () {
             // 先执行保存，再发布
             saveArticle(function () {
                 ajax.post({
-                    url: "/article/updateModifier",
-                    data: {id: articleId, modifier: 0},
+                    url: "/article/updateLevel",
+                    data: {id: articleId, level: "modifier", value: 0},
                     success: function () {
                         layer.msg("发布成功！");
                     }

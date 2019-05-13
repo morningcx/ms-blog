@@ -1,5 +1,10 @@
 layui.use(["layer"], function () {
+
     var layer = layui.layer, loading = false;
+    particleground(document.getElementById('particles'), {
+        dotColor: '#65b4e6',
+        lineColor: '#65b4e6'
+    });
     var code = {
         seed: ['abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', '0123456789'],
         container: $("#code"),
@@ -11,13 +16,20 @@ layui.use(["layer"], function () {
             $("#btn").click();
         }
     });
-
-    particleground(document.getElementById('particles'), {
-        dotColor: '#65b4e6',
-        lineColor: '#65b4e6'
-    });
     createCode();
     code.container.click(createCode);
+
+   /* $.ajax({
+        url: "/isLogin",
+        type: "GET",
+        dataType: "json",
+        success: function (res) {
+            if (res.data) {
+                window.location.href = "../views/index.html";
+            }
+        }
+    });*/
+
 
     $("#btn").click(function () {
         var account = $("#username");

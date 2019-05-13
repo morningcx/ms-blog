@@ -56,7 +56,6 @@ public class WebArticleController {
         return Result.ok(webArticleService.listRecommendArticles());
     }
 
-    /*@Cacheable*/
     @Log(type = LogTypeEnum.Query, desc = "浏览文章[id:{id}]")
     @GetMapping("getFullById")
     public Result getFullById(Integer id) {
@@ -68,6 +67,4 @@ public class WebArticleController {
     public Result updateLikes(Integer id) {
         return Result.ok(webArticleService.updateLikesById(id));
     }
-
-
 }

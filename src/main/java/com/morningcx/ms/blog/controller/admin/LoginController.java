@@ -6,6 +6,7 @@ import com.morningcx.ms.blog.base.enums.LogTypeEnum;
 import com.morningcx.ms.blog.base.result.Result;
 import com.morningcx.ms.blog.service.admin.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author gcx
  * @date 2019/2/27
  */
+@FreeAuth
 @RestController
 @RequestMapping(name = "登录")
 public class LoginController {
@@ -21,7 +23,11 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @FreeAuth
+    @GetMapping("isLogin")
+    public Result isLogin() {
+        return Result.ok(loginService.isLogin());
+    }
+
     @PostMapping("login")
     @Log(type = LogTypeEnum.LOGIN, desc = "用户登录{account}")
     public Result login(String account, String password) {

@@ -9,6 +9,8 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
+
 /**
  * @author gcx
  * @date 2019/4/11
@@ -17,6 +19,16 @@ import org.springframework.stereotype.Service;
 public class LoginService {
     @Autowired
     private UserMapper userMapper;
+
+    /**
+     * 登录界面判断用户是否登录
+     *
+     * @return
+     */
+    public boolean isLogin() {
+        HttpSession s = ContextUtil.getAttributes().getRequest().getSession(false);
+        return s != null && s.getAttribute(ContextUtil.LOGIN_USER_ID) != null;
+    }
 
     /**
      * 用户登录

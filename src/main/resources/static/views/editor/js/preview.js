@@ -11,7 +11,7 @@ layui.use(["jquery", "layer"], function () {
     ajax.get({
         url: "/web/article/getFullById?id=" + articleId,
         success: function (res) {
-            generateTool();
+            generateTool(res.data.content.content);
             generateHeader(res.data);
             generateViewer(res.data.content.content);
         }
@@ -20,13 +20,17 @@ layui.use(["jquery", "layer"], function () {
     /**
      * 生成右下角悬浮工具栏
      */
-    function generateTool() {
+    function generateTool(md) {
         var like = false;
         $(".tool #toTop").click(function () {
             $("html").animate({scrollTop: 0}, 500);
         });
         $(".tool #toc").click(function () {
             $("#tocContainer").toggle(180);
+        });
+        $(".tool #download").click(function () {
+            var blob = new Blob([md], {type: "text/plain;charset=utf-8"});
+            saveAs(blob, $(document).attr("title") + ".md");
         });
         $(".tool #like").click(function () {
             if (!like) {
