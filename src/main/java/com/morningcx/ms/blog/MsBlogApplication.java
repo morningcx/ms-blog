@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @Slf4j
 @MapperScan("com.morningcx.ms.blog.mapper")
-@SpringBootApplication()
+@SpringBootApplication
 public class MsBlogApplication {
     public static void main(String[] args) {
         SpringApplication.run(MsBlogApplication.class, args);

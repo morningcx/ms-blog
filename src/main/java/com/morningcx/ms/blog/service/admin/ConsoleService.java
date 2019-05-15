@@ -10,10 +10,8 @@ import com.morningcx.ms.blog.mapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author gcx
@@ -108,5 +106,21 @@ public class ConsoleService {
                 .eq("country", "中国")
                 .groupBy("province")
                 .orderByDesc("value"));
+    }
+
+    /**
+     * 获取一周内访客数量
+     *
+     * @return
+     */
+    public List<Map<String, Object>> getVisitorCount() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -6);
+        String passWeek = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+        return accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
+                .select("DATE_FORMAT(time,'%Y-%m-%d') as days", "count(DISTINCT ip) as count")
+                .ge("time", passWeek)
+                .groupBy("days")
+        );
     }
 }

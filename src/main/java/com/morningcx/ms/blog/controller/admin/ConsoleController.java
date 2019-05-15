@@ -48,4 +48,10 @@ public class ConsoleController {
     public Result getChinaDistribution() {
         return Result.ok(consoleService.getChinaDistribution());
     }
+
+    @GetMapping("getVisitorCount")
+    @Log(type = LogTypeEnum.Query, desc = "获取一周内访客数量")
+    public Result getVisitorCount() {
+        return Result.ok(consoleService.getVisitorCount());
+    }
 }

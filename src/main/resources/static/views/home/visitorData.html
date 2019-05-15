@@ -14,6 +14,7 @@
             width: 100%;
             height: 100%;
         }
+
         .layui-table tr:first-of-type td:nth-of-type(2) {
             color: #FF5722;
         }
@@ -30,6 +31,51 @@
 <body>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
+        <div class="layui-col-sm12">
+            <div class="layui-card">
+                <div class="layui-card-header">
+                    访问量
+                    <div class="layui-btn-group layuiadmin-btn-group">
+                        <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">去年</a>
+                        <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">今年</a>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <div class="layui-row">
+                        <div class="layui-col-sm8">
+                            <div class="layadmin-dataview">
+                                <div id="visitorCount" class="ms-chart">
+                                    <i class="layui-icon layui-icon-loading1 layadmin-loading"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-sm4">
+                            <div class="layuiadmin-card-list">
+                                <p class="layuiadmin-normal-font">月访问数</p>
+                                <span>同上期增长</span>
+                                <div class="layui-progress layui-progress-big" lay-showPercent="yes">
+                                    <div class="layui-progress-bar" lay-percent="30%"></div>
+                                </div>
+                            </div>
+                            <div class="layuiadmin-card-list">
+                                <p class="layuiadmin-normal-font">月下载数</p>
+                                <span>同上期增长</span>
+                                <div class="layui-progress layui-progress-big" lay-showPercent="yes">
+                                    <div class="layui-progress-bar" lay-percent="20%"></div>
+                                </div>
+                            </div>
+                            <div class="layuiadmin-card-list">
+                                <p class="layuiadmin-normal-font">月收入</p>
+                                <span>同上期增长</span>
+                                <div class="layui-progress layui-progress-big" lay-showPercent="yes">
+                                    <div class="layui-progress-bar" lay-percent="25%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="layui-col-sm6">
             <div class="layui-card">
                 <div class="layui-card-header">浏览器信息</div>
@@ -95,6 +141,42 @@
         index: 'lib/index' //主入口模块
     }).use(['index', 'echarts'], function () {
         var $ = layui.$, echarts = layui.echarts;
+        var visitorCount = echarts.init($("#visitorCount")[0], layui.echartsTheme);
+        ajax.get({
+            url: "/console/getVisitorCount",
+            success: function (res) {
+                var list = res.data, date = [], count = [];
+                for (var i = 0; i < list.length; ++i) {
+                    date.push(list[i].days);
+                    count.push(list[i].count);
+                }
+                visitorCount.setOption({
+                    tooltip: {
+                        trigger: 'axis',
+                        showDelay: 5
+                    },
+                    calculable: true,
+                    legend: {
+                        data: ['访问量']
+                    },
+                    xAxis: [{
+                        type: 'category',
+                        data: date
+                    }],
+                    yAxis: [{
+                        type: 'value'
+                    }],
+                    series: [
+                        {
+                            name: '访问量',
+                            type: 'line',
+                            data: count
+                        }
+                    ]
+                });
+            }
+        });
+
         var userAgent = echarts.init($("#userAgent")[0], layui.echartsTheme);
         ajax.get({
             url: "/console/getBrowserDistribution",
