@@ -65,6 +65,7 @@ public class AccessLogService {
             wrapper.likeRight("content", "喜欢文章" + key);
         }
         wrapper.orderByDesc("time");
+        wrapper.select("ip", "content", "browser", "os", "device", "country", "province", "city", "isp", "time");
         IPage<AccessLog> articleLogPage = accessLogMapper.selectPage(new Page<>(page, limit), wrapper);
         List<AccessLog> records = articleLogPage.getRecords();
         if (records.size() == 0) {
@@ -78,12 +79,12 @@ public class AccessLogService {
         Map<Integer, String> articleMap = articleMapper.selectList(new QueryWrapper<Article>()
                 .in("id", articleIds).select("id", "title"))
                 .stream().collect(Collectors.toMap(Article::getId, Article::getTitle));
-        /*records.forEach(accessLog -> {
+        records.forEach(accessLog -> {
             String content = accessLog.getContent();
             String operation = content.substring(0, 2);
             String id = content.substring(content.indexOf(":") + 1, content.length() - 1);
             accessLog.setContent(operation + "了文章《" + articleMap.get(Integer.parseInt(id)) + "》");
-        });*/
+        });
         return articleLogPage;
     }
 }

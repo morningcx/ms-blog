@@ -3332,11 +3332,10 @@ li.L9 {
 .editormd-preview-container pre.prettyprint, .editormd-html-preview pre.prettyprint {
   padding: 10px;
   border: 1px solid #ddd;
-  white-space: pre-wrap;
-  word-wrap: break-word;
 }
 .editormd-preview-container ol.linenums, .editormd-html-preview ol.linenums {
   color: #999;
+  display: inline-block;
   padding-left: 2.5em;
 }
 .editormd-preview-container ol.linenums li, .editormd-html-preview ol.linenums li {

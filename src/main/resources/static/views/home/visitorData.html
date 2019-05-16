@@ -35,21 +35,21 @@
             <div class="layui-card">
                 <div class="layui-card-header">
                     访问量
-                    <div class="layui-btn-group layuiadmin-btn-group">
+                    <!--<div class="layui-btn-group layuiadmin-btn-group">
                         <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">去年</a>
                         <a href="javascript:;" class="layui-btn layui-btn-primary layui-btn-xs">今年</a>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="layui-card-body">
                     <div class="layui-row">
-                        <div class="layui-col-sm8">
+                        <div class="layui-col-sm12">
                             <div class="layadmin-dataview">
                                 <div id="visitorCount" class="ms-chart">
                                     <i class="layui-icon layui-icon-loading1 layadmin-loading"></i>
                                 </div>
                             </div>
                         </div>
-                        <div class="layui-col-sm4">
+                        <!--<div class="layui-col-sm4">
                             <div class="layuiadmin-card-list">
                                 <p class="layuiadmin-normal-font">月访问数</p>
                                 <span>同上期增长</span>
@@ -71,7 +71,7 @@
                                     <div class="layui-progress-bar" lay-percent="25%"></div>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
@@ -147,16 +147,24 @@
             success: function (res) {
                 var list = res.data, date = [], count = [];
                 for (var i = 0; i < list.length; ++i) {
-                    date.push(list[i].days);
+                    date.push(list[i].days.substring(5));
                     count.push(list[i].count);
                 }
                 visitorCount.setOption({
+                    title: {
+                        text: '最近一周访问量',
+                        x: 'center',
+                        textStyle: {
+                            fontSize: 14
+                        }
+                    },
                     tooltip: {
                         trigger: 'axis',
                         showDelay: 5
                     },
                     calculable: true,
                     legend: {
+                        x: 'right',
                         data: ['访问量']
                     },
                     xAxis: [{
