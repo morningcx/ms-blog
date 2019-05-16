@@ -3326,7 +3326,7 @@ li.L3,
 li.L5,
 li.L7,
 li.L9 {
-  background: #eee;
+/*  background: #eee;*/
 }
 
 .editormd-preview-container pre.prettyprint, .editormd-html-preview pre.prettyprint {
@@ -3335,7 +3335,6 @@ li.L9 {
 }
 .editormd-preview-container ol.linenums, .editormd-html-preview ol.linenums {
   color: #999;
-  display: inline-block;
   padding-left: 2.5em;
 }
 .editormd-preview-container ol.linenums li, .editormd-html-preview ol.linenums li {
