@@ -6,10 +6,10 @@ BLOG_DIR="/www/ms-blog/ms-blog"
 git pull
 echo "代码拉取完毕！"
 
-# 进入SENS根目录
+# 进入根目录
 cd $BLOG_DIR
 
-# 停止SENS
+# 停止
 sh $BLOG_DIR/bin/blog.sh stop
 
 # 执行打包

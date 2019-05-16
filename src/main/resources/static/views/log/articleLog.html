@@ -37,7 +37,7 @@
 <script src="../../base/js/ajax.js"></script>
 <script>
     layui.use(['flow'], function () {
-        var flow = layui.flow, $ = layui.$;
+        var flow = layui.flow;
         var limit = 15;
         // 信息流
         flow.load({
@@ -56,7 +56,7 @@
                                 "                            <i class=\"layui-icon layui-timeline-axis\"></i>\n" +
                                 "                            <div class=\"layui-timeline-content layui-text\">\n" +
                                 "                                <div class=\"layui-timeline-title\">\n" +
-                                "                                    <span>" + item.time + "</span>\n" +
+                                "                                    <span title='" + item.time + "' style='color: #993333'>" + getDate(item.time) + "</span>\n" +
                                 "                                    IP为\n" +
                                 "                                    <span style='color: rgb(255, 87, 34)'>" + item.ip + "</span>\n" +
                                 "                                    来自\n" +
@@ -78,26 +78,39 @@
                 });
             }
         });
-        /*list += "<li class=\"layui-timeline-item\">\n" +
-            "                            <i class=\"layui-icon layui-timeline-axis\"></i>\n" +
-            "                            <div class=\"layui-timeline-content layui-text\">\n" +
-            "                                <div class=\"layui-timeline-title\">\n" +
-            "                                    <span class=\"layui-badge-rim\">" + item.time + "</span>\n" +
-            "                                    IP为\n" +
-            "                                    <span class=\"layui-badge\">" + item.ip + "</span>\n" +
-            "                                    来自\n" +
-            "                                    <span class=\"layui-badge\" style='background: #FF9900'>" + region + "</span>\n" +
-            "                                    的网友在\n" +
-            "                                    <span class=\"layui-badge layui-bg-orange\">" + item.os + "</span>\n" +
-            "                                    <span class=\"layui-badge layui-bg-green\">" + item.device + "</span>\n" +
-            "                                    上使用了\n" +
-            "                                    <span class=\"layui-badge layui-bg-blue\">" + item.browser + "</span>\n" +
-            "                                    <span class=\"layui-badge\" style='background: #996699'>" + action + "</span>" +
-            "                                    了文章\n" +
-            "                                    <span class=\"layui-badge\" style='background: #CC9966'>" + target + "</span>\n" +
-            "                                </div>\n" +
-            "                            </div>\n" +
-            "                        </li>";*/
+
+        function getDate(dateStr) {
+            var result;
+            var dateTimeStamp = Date.parse(dateStr.replace(/-/gi, "/"));
+            var minute = 1000 * 60;
+            var hour = minute * 60;
+            var day = hour * 24;
+            var month = day * 30;
+            var now = new Date().getTime();
+            var diffValue = now - dateTimeStamp;
+            if (diffValue < 0) {
+                return;
+            }
+            var monthC = diffValue / month;
+            var weekC = diffValue / (7 * day);
+            var dayC = diffValue / day;
+            var hourC = diffValue / hour;
+            var minC = diffValue / minute;
+            if (monthC >= 1) {
+                result = parseInt(monthC) + "月前";
+            } else if (weekC >= 1) {
+                result = parseInt(weekC) + "周前";
+            } else if (dayC >= 1) {
+                result = parseInt(dayC) + "天前";
+            } else if (hourC >= 1) {
+                result = parseInt(hourC) + "小时前";
+            } else if (minC >= 1) {
+                result = parseInt(minC) + "分钟前";
+            } else {
+                result = "刚刚";
+            }
+            return result;
+        }
     });
 </script>
 </body>
