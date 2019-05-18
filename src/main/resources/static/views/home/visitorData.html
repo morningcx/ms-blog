@@ -158,6 +158,7 @@
                         todayCount = visitList[i].count;
                     }
                 }
+
                 function getActivity(d) {
                     var activityList = res.data.activity;
                     for (var i = 0; i < activityList.length; ++i) {
@@ -167,9 +168,10 @@
                     }
                     return 0;
                 }
-                $("#todayPercent").attr("lay-percent", (todayCount / totalCount).toFixed(4) * 100 + '%');
-                $("#chinaPercent").attr("lay-percent", (res.data.chinaCount / totalCount).toFixed(4) * 100 + '%');
-                $("#mobilePercent").attr("lay-percent", (res.data.mobileCount / totalCount).toFixed(4) * 100 + '%');
+
+                $("#todayPercent").attr("lay-percent", parseInt(todayCount  * 100 / totalCount) + '%');
+                $("#chinaPercent").attr("lay-percent", parseInt(res.data.chinaCount * 100 / totalCount) + '%');
+                $("#mobilePercent").attr("lay-percent", parseInt(res.data.mobileCount * 100 / totalCount) + '%');
                 element.render('progress');
                 visitorCount.setOption({
                     tooltip: {
