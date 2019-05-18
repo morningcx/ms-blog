@@ -113,14 +113,36 @@ public class ConsoleService {
      *
      * @return
      */
-    public List<Map<String, Object>> getVisitorCount() {
+    public Map<String, Object> getVisitorCount() {
+        Map<String, Object> result = new HashMap<>();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -6);
         String passWeek = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-        return accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
+        List<Map<String, Object>> visit = accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
                 .select("DATE_FORMAT(time,'%Y-%m-%d') as days", "count(DISTINCT ip) as count")
                 .ge("time", passWeek)
                 .groupBy("days")
         );
+        List<Map<String, Object>> activity = accessLogMapper.selectMaps(new QueryWrapper<AccessLog>()
+                .select("DATE_FORMAT(time,'%Y-%m-%d') as days", "count(0) as count")
+                .likeRight("content", "浏览文章")
+                .ge("time", passWeek)
+                .groupBy("days")
+        );
+        Integer chinaCount = accessLogMapper.selectCount(new QueryWrapper<AccessLog>()
+                .select("DISTINCT ip")
+                .eq("country", "中国")
+                .ge("time", passWeek)
+        );
+        Integer mobileCount = accessLogMapper.selectCount(new QueryWrapper<AccessLog>()
+                .select("DISTINCT ip")
+                .eq("device", "Mobile")
+                .ge("time", passWeek)
+        );
+        result.put("chinaCount", chinaCount);
+        result.put("mobileCount", mobileCount);
+        result.put("visit", visit);
+        result.put("activity", activity);
+        return result;
     }
 }

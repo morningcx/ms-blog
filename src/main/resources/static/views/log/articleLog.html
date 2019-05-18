@@ -107,7 +107,7 @@
             } else if (minC >= 1) {
                 result = parseInt(minC) + "分钟前";
             } else {
-                result = "刚刚";
+                result = parseInt(diffValue / 1000) + "秒前";
             }
             return result;
         }
