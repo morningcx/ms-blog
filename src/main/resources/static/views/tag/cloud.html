@@ -55,16 +55,13 @@
                     as += "<a style=\"font-size: " + fontSize + "px\">" + tagList[i].name + " </a>";
                 }
                 content.append(as);
-                /*var data = ["JAVA", "SpringBoot", "Spring", "Mybatis", "JPA",
-                    "C++", "Python", "SpringCloud", "MVC", "Angular"];
-                var content = $("#tagContent");
-                for (var i = 0; i < 100; ++i) {
-                    var fontSize = Math.random() * 8 + 12;
-                    var fontData = data[Math.floor(Math.random() * 10)];
-                    tags.push({label: fontData});
-                    content.append("<a href=\"\" style=\"font-size: " + fontSize + "px\">" + fontData + " </a>");
-                }*/
-
+                top.layui.layer.open({
+                    type: 2,
+                    title: "文章列表",
+                    closeBtn: 1,
+                    area: ["80%", "80%"],
+                    content: './article/commonList.html?tagId=' + obj.data.id
+                });
                 var settings = {
                     entries: tags,
                     width: '100%',

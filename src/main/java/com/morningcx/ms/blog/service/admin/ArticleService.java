@@ -204,8 +204,17 @@ public class ArticleService {
             wrapper.in("category_id", childNodeIds);
             article.setCategoryId(null);
         }
-
-        // todo 标签条件
+        // 单个标签条件
+        if (article.getTagNames() != null && article.getTagNames().size() != 0) {
+            List<Object> articleIds = articleTagMapper.selectObjs(new QueryWrapper<ArticleTag>().lambda()
+                    .eq(ArticleTag::getTagId, article.getTagNames().get(0))
+                    .select(ArticleTag::getArticleId));
+            if (articleIds.size() == 0) {
+                return new Page<>();
+            }
+            wrapper.in("id", articleIds);
+        }
+        // 标签条件
         // select article_id
         // from t_article_tag where tag_id in (54,53) GROUP BY article_id HAVING COUNT(article_id) = 2
         wrapper.setEntity(EntityUtil.removeEmptyString(article));

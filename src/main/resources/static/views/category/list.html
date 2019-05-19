@@ -117,7 +117,13 @@
         // 操作按钮点击事件
         var operationActive = {
             detail: function (obj) {
-
+                top.layui.layer.open({
+                    type: 2,
+                    title: "文章列表",
+                    closeBtn: 1,
+                    area: ["80%", "80%"],
+                    content: './article/commonList.html?categoryId=' + obj.data.id
+                });
             },
             edit: function (obj) {
                 openItem(obj.data.id);

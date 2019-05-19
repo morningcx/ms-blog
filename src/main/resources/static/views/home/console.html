@@ -112,16 +112,23 @@
         </div>
         <div class="layui-col-sm8">
             <div class="layui-card">
-                <div class="layui-card-header">文章信息</div>
+                <div class="layui-card-header">
+                    访客数据
+                </div>
                 <div class="layui-card-body">
-                    <div class="layadmin-dataview">
-                        <div id="newArticleChart" class="ms-chart">
-                            <i class="layui-icon layui-icon-loading1 layadmin-loading"></i>
+                    <div class="layui-row">
+                        <div class="layui-col-sm12">
+                            <div class="layadmin-dataview">
+                                <div id="visitorCount" class="ms-chart">
+                                    <i class="layui-icon layui-icon-loading1 layadmin-loading"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="layui-col-sm4">
             <div class="layui-card">
                 <div class="layui-card-header">文章点击排行</div>
@@ -150,7 +157,7 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['index', 'echarts', 'table'], function () {
-        var $ = layui.$, echarts = layui.echarts, table = layui.table;
+        var $ = layui.$, echarts = layui.echarts, table = layui.table, element = layui.element;
         table.init('topViewArticleList', {url: '/console/listTopViewArticle'});
         ajax.get({
             url: "/console/getModuleCount",
@@ -172,33 +179,63 @@
 
             }
         });
-        var newArticleChart = echarts.init($("#newArticleChart")[0], layui.echartsTheme);
-        newArticleChart.setOption({
-            title: {
-                text: '最近一周新增文章',
-                x: 'center',
-                textStyle: {
-                    fontSize: 14
+        var visitorCount = echarts.init($("#visitorCount")[0], layui.echartsTheme);
+        ajax.get({
+            url: "/console/getVisitorCount",
+            success: function (res) {
+                var visitList = res.data.visit, date = [], visitCount = [], activityCount = [];
+                for (var i = 0; i < visitList.length; ++i) {
+                    date.push(visitList[i].days.substring(5));
+                    visitCount.push(visitList[i].count);
+                    activityCount.push(getActivity(visitList[i].days));
                 }
-            },
-            tooltip: { //提示框
-                trigger: 'axis',
-                formatter: "{b}<br>新增文章：{c}",
-                showDelay: 15
-            },
-            xAxis: [{ //X轴
-                type: 'category',
-                data: ['11-07', '11-08', '11-09', '11-10', '11-11', '11-12', '11-13']
-            }],
-            yAxis: [{  //Y轴
-                type: 'value'
-            }],
-            series: [{ //内容
-                type: 'line',
-                data: [200, 300, 400, 610, 150, 270, 380]
-            }]
-        });
 
+                function getActivity(d) {
+                    var activityList = res.data.activity;
+                    for (var i = 0; i < activityList.length; ++i) {
+                        if (activityList[i].days === d) {
+                            return activityList[i].count;
+                        }
+                    }
+                    return 0;
+                }
+
+                visitorCount.setOption({
+                    tooltip: {
+                        trigger: 'axis',
+                        showDelay: 5
+                    },
+                    calculable: true,
+                    legend: {
+                        data: ['访问量', '活跃度']
+                    },
+                    xAxis: [{
+                        type: 'category',
+                        data: date
+                    }],
+                    yAxis: [{
+                        type: 'value',
+                        name: '访问量'
+                    }, {
+                        type: 'value',
+                        name: '活跃度'
+                    }],
+                    series: [
+                        {
+                            name: '访问量',
+                            type: 'line',
+                            data: visitCount
+                        },
+                        {
+                            name: '活跃度',
+                            type: 'line',
+                            yAxisIndex: 1,
+                            data: activityCount
+                        }
+                    ]
+                });
+            }
+        });
     });
 </script>
 </body>
