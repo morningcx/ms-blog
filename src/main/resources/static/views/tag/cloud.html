@@ -55,13 +55,6 @@
                     as += "<a style=\"font-size: " + fontSize + "px\">" + tagList[i].name + " </a>";
                 }
                 content.append(as);
-                top.layui.layer.open({
-                    type: 2,
-                    title: "文章列表",
-                    closeBtn: 1,
-                    area: ["80%", "80%"],
-                    content: './article/commonList.html?tagId=' + obj.data.id
-                });
                 var settings = {
                     entries: tags,
                     width: '100%',
