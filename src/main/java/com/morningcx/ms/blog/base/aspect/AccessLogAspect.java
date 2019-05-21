@@ -7,7 +7,7 @@ import com.morningcx.ms.blog.base.util.IpUtil;
 import com.morningcx.ms.blog.base.util.LogUtil;
 import com.morningcx.ms.blog.entity.AccessLog;
 import com.morningcx.ms.blog.mapper.AccessLogMapper;
-import eu.bitwalker.useragentutils.UserAgent;
+import com.morningcx.useragentutils.UserAgent;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

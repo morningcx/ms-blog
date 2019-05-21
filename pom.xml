@@ -83,10 +83,16 @@
 
         <!-- user agent -->
         <dependency>
+            <groupId>com.morningcx</groupId>
+            <artifactId>user-agent-utils-plus</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <!--<dependency>
             <groupId>eu.bitwalker</groupId>
             <artifactId>UserAgentUtils</artifactId>
             <version>1.21</version>
-        </dependency>
+        </dependency>-->
+
 
         <!--mail-->
         <dependency>
