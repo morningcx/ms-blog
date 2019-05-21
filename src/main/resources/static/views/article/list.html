@@ -245,17 +245,13 @@
         }
     });
     // 解析特殊字段
-    var typeString = ["原创", "转载"];
-    var modifierString = ["公开", "私密"];
     var parse = {
         type: function (d) {
-            return typeString[d.type];
-        },
-        modifier: function (d) {
-            return modifierString[d.modifier];
-        },
-        category: function (d) {
-            return "<a href='../category/item.html?id=" + d.categoryId + "'>" + d.category + "</a>";
+            if (d.type === 0) {
+                return "原创"
+            } else {
+                return "转载"
+            }
         }
     }
 </script>
