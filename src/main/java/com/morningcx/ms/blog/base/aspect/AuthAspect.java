@@ -3,6 +3,7 @@ package com.morningcx.ms.blog.base.aspect;
 import com.morningcx.ms.blog.base.annotation.FreeAuth;
 import com.morningcx.ms.blog.base.util.ContextUtil;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
@@ -38,8 +39,9 @@ public class AuthAspect {
 
     @Before(value = "pointCut()")
     public void doBefore(JoinPoint joinPoint) {
-        if (joinPoint.getSignature() instanceof MethodSignature) {
-            MethodSignature sign = (MethodSignature) joinPoint.getSignature();
+        Signature signature = joinPoint.getSignature();
+        if (signature instanceof MethodSignature) {
+            MethodSignature sign = (MethodSignature) signature;
             // 如果没有免登录注解，则需要登录认证
             if (!sign.getMethod().isAnnotationPresent(FreeAuth.class) &&
                     !sign.getDeclaringType().isAnnotationPresent(FreeAuth.class)) {

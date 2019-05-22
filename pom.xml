@@ -11,7 +11,6 @@
     <groupId>com.morningcx</groupId>
     <artifactId>ms-blog</artifactId>
     <version>0.0.1</version>
-    <!--<packaging>war</packaging>-->
     <name>ms-blog</name>
     <description>ms blog</description>
 
@@ -164,12 +163,7 @@
             <filter>src/main/resources/filter/${env}.properties</filter>
         </filters>
         <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.xml</include>
-                </includes>
-            </resource>
+            <!--资源文件和logback-->
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
@@ -191,18 +185,19 @@
                     </exclude>
                 </excludes>
             </resource>
+            <!--mybatis xml-->
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
         </resources>
         <plugins>
             <!-- 解决@xx@无法解析的问题 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <configuration>
-                    <delimiters>
-                        <delimiter>@</delimiter>
-                    </delimiters>
-                    <useDefaultDelimiters>false</useDefaultDelimiters>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

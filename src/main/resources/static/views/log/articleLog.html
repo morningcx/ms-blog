@@ -13,6 +13,9 @@
         .layui-timeline-title span {
             font-weight: bold;
         }
+        .ip:hover {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body style="overflow-y: scroll">
@@ -37,7 +40,7 @@
 <script src="../../base/js/ajax.js"></script>
 <script>
     layui.use(['flow'], function () {
-        var flow = layui.flow;
+        var flow = layui.flow, $ = layui.$;
         var limit = 15;
         // 信息流
         flow.load({
@@ -58,7 +61,7 @@
                                 "                                <div class=\"layui-timeline-title\">\n" +
                                 "                                    <span title='" + item.time + "' style='color: #993333'>" + getDate(item.time) + "</span>\n" +
                                 "                                    IP为\n" +
-                                "                                    <span style='color: rgb(255, 87, 34)'>" + item.ip + "</span>\n" +
+                                "                                    <span style='color: rgb(255, 87, 34)' class='ip'>" + item.ip + "</span>\n" +
                                 "                                    来自\n" +
                                 "                                    <span style='color: #FF9900;'>" + region + "</span>\n" +
                                 "                                    的网友在\n" +
@@ -77,6 +80,16 @@
                     }
                 });
             }
+        });
+        // IP探活
+        $(document).on("click", ".ip", function () {
+            var ip = $(this).text();
+            ajax.get({
+                url: "/accessLog/isAlive?ip=" + ip,
+                success: function (res) {
+                    layer.msg(ip + "<br>" + (res.data === "true" ? "在线" : "离线"));
+                }
+            });
         });
 
         function getDate(dateStr) {

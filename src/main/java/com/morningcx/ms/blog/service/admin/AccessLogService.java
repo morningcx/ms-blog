@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.morningcx.ms.blog.base.util.EntityUtil;
+import com.morningcx.ms.blog.base.util.NmapUtil;
 import com.morningcx.ms.blog.entity.AccessLog;
 import com.morningcx.ms.blog.entity.Article;
 import com.morningcx.ms.blog.mapper.AccessLogMapper;
 import com.morningcx.ms.blog.mapper.ArticleMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
  * @author gcx
  * @date 2019/4/29
  */
+@Slf4j
 @Service
 public class AccessLogService {
     @Autowired
@@ -86,5 +89,15 @@ public class AccessLogService {
             accessLog.setContent(operation + "了文章《" + articleMap.get(Integer.parseInt(id)) + "》");
         });
         return articleLogPage;
+    }
+
+    /**
+     * ip探活
+     *
+     * @param ip
+     * @return
+     */
+    public boolean isAlive(String ip) throws Exception {
+        return NmapUtil.hostDiscovery(ip);
     }
 }

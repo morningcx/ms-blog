@@ -84,7 +84,7 @@ layui.use(["layer"], function () {
     }
 
     function createCode() {
-        var len = 5;
+        var len = 4;
         var idx, i, result = '';
         for (i = 0; i < len; i++) {
             idx = Math.floor(Math.random() * 3);

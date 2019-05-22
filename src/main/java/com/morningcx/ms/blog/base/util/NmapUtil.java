@@ -25,7 +25,7 @@ public class NmapUtil {
     }
 
     /**
-     * 主机发现
+     * 批量主机发现
      *
      * @param hosts
      * @throws Exception
@@ -38,6 +38,19 @@ public class NmapUtil {
             }
         }
         return hostDiscoveryExec("-v -n -sn -oX -", sb.toString());
+    }
+
+    /**
+     * 单个主机发现
+     *
+     * @param host
+     * @throws Exception
+     */
+    public static boolean hostDiscovery(String host) throws Exception {
+        if (IpUtil.isValidIp(host)) {
+            return hostDiscoveryExec("-v -n -sn -oX -", host).containsKey("up");
+        }
+        return false;
     }
 
     /**
@@ -81,9 +94,10 @@ public class NmapUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        Map<String, List<String>> stringListMap = hostDiscovery(Arrays.asList("120.78.197.77", "120.78.197.78"));
+        /*Map<String, List<String>> stringListMap = hostDiscovery(Arrays.asList("120.78.197.77", "120.78.197.78"));
         for (Map.Entry<String, List<String>> entry : stringListMap.entrySet()) {
             System.out.println(entry.getKey() + entry.getValue());
-        }
+        }*/
+        System.out.println(hostDiscovery("120.78.197.77"));
     }
 }

@@ -18,7 +18,8 @@ public enum LogTypeEnum {
     RECOVER("恢复"),
     DOWNLOAD("下载"),
     UPLOAD("上传"),
-    LOGIN("登录");
+    LOGIN("登录"),
+    DISCOVERY("探活");
 
     private String name;
 

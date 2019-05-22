@@ -31,4 +31,11 @@ public class AccessLogController {
     public Result listArticleLog(Integer page, Integer limit, Integer articleId, Integer type) {
         return Result.ok(accessLogService.listArticleLog(page, limit, articleId, type));
     }
+
+    @Log(type = LogTypeEnum.DISCOVERY, desc = "IP探活：{ip}")
+    @GetMapping("isAlive")
+    public Result isAlive(String ip) throws Exception {
+        return Result.ok(accessLogService.isAlive(ip));
+    }
+
 }
