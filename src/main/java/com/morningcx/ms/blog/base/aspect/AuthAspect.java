@@ -38,11 +38,13 @@ public class AuthAspect {
 
     @Before(value = "pointCut()")
     public void doBefore(JoinPoint joinPoint) {
-        MethodSignature sign = (MethodSignature) joinPoint.getSignature();
-        // 如果没有免登录注解，则需要登录认证
-        if (!sign.getMethod().isAnnotationPresent(FreeAuth.class) &&
-                !sign.getDeclaringType().isAnnotationPresent(FreeAuth.class)) {
-            ContextUtil.getLoginId();
+        if (joinPoint.getSignature() instanceof MethodSignature) {
+            MethodSignature sign = (MethodSignature) joinPoint.getSignature();
+            // 如果没有免登录注解，则需要登录认证
+            if (!sign.getMethod().isAnnotationPresent(FreeAuth.class) &&
+                    !sign.getDeclaringType().isAnnotationPresent(FreeAuth.class)) {
+                ContextUtil.getLoginId();
+            }
         }
     }
 }
