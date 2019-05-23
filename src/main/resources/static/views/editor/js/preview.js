@@ -23,7 +23,7 @@ layui.use(["jquery", "layer"], function () {
     function generateTool(md) {
         var like = false;
         $(".tool #toTop").click(function () {
-            $("html").animate({scrollTop: 0}, 500);
+            $("html,body").animate({scrollTop: 0}, 500);
         });
         $(".tool #toc").click(function () {
             $("#tocContainer").toggle(180);
