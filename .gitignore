@@ -16,6 +16,7 @@
 *.iml
 *.ipr
 logs
+reference
 
 ### NetBeans ###
 /nbproject/private/

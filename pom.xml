@@ -179,11 +179,6 @@
                 <includes>
                     <include>static/**</include>
                 </includes>
-                <excludes>
-                    <exclude>
-                        static/layuiAdmin/**
-                    </exclude>
-                </excludes>
             </resource>
             <!--mybatis xml-->
             <resource>
