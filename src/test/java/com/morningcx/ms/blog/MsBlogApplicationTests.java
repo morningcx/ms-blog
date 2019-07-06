@@ -27,6 +27,15 @@ public class MsBlogApplicationTests {
     public void contextLoads() {
         /*redisTemplate.opsForValue().set("springboot2", "hello");
         System.out.println(redisTemplate.opsForValue().get("springboot"));*/
+        /*InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(new InputStream() {
+            @Override
+            public int read() throws IOException {
+                return 0;
+            }
+        });
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        sqlSession.getMapper();*/
 
     }
 

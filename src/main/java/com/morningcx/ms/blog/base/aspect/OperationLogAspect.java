@@ -87,7 +87,7 @@ public class OperationLogAspect {
         // 操作类型
         operationLog.setType(logAnnotation.type().getName());
         // 解析操作描述信息
-        String content = (exception != null ? "error[" + exception.getMessage() + "]-" : "") +
+        String content = (exception != null ? "error[]-" : "") +
                 LogUtil.parseDesc(logAnnotation.desc(), method.getParameterNames(), joinPoint.getArgs());
         operationLog.setContent(content);
         // 执行的方法
